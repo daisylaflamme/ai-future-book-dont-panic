@@ -99,8 +99,8 @@ export async function generateBookPdf() {
   pdf.setFillColor(18, 22, 40);
   pdf.rect(0, 0, SPREAD_W, SPREAD_H, "F");
 
-  if (coverDataUrl) {
-    drawImageContained(pdf, coverDataUrl, 0, 0, SPREAD_W, SPREAD_H);
+  if (coverLoaded) {
+    drawImageContained(pdf, coverLoaded.dataUrl, 0, 0, SPREAD_W, SPREAD_H, coverLoaded.width, coverLoaded.height);
     // Dark overlay
     pdf.setFillColor(10, 12, 25);
     pdf.setGState(new (pdf as any).GState({ opacity: 0.6 }));
