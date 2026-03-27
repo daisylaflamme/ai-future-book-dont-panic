@@ -36,11 +36,11 @@ const BookCover = ({ coverImage }: BookCoverProps) => {
         }}
       />
 
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-10 py-16 max-w-2xl w-full h-full">
-        {/* Top spacer */}
-        <div className="flex-1" />
+      <div className="relative z-10 flex flex-col items-center text-center px-10 py-12 max-w-2xl w-full h-full">
+        {/* Small top spacer to push title toward top dark area */}
+        <div className="h-[8%]" />
 
-        {/* Title — single combined line */}
+        {/* Main title */}
         <h1
           className="font-display text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold leading-tight tracking-tight"
           style={{
@@ -48,8 +48,19 @@ const BookCover = ({ coverImage }: BookCoverProps) => {
             textShadow: "0 2px 16px rgba(0,0,0,1), 0 4px 32px rgba(0,0,0,0.8), 0 0 60px rgba(0,0,0,0.5)",
           }}
         >
-          {BOOK_META.title} — {BOOK_META.subtitle}
+          {BOOK_META.title}
         </h1>
+
+        {/* Don't Panic — separated below */}
+        <p
+          className="font-display text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold italic mt-4"
+          style={{
+            color: "hsl(38 70% 65%)",
+            textShadow: "0 2px 16px rgba(0,0,0,1), 0 4px 32px rgba(0,0,0,0.8)",
+          }}
+        >
+          — {BOOK_META.subtitle}
+        </p>
 
         {/* Divider */}
         <div className="w-20 h-0.5 my-6" style={{ background: "hsl(38 70% 55%)" }} />
