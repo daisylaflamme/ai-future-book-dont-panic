@@ -51,13 +51,11 @@ export const stories: Story[] = [
     id: 1,
     section: "near-future",
     title: "Meet the Family — 2052",
-    text: `It is the year 2052. The house is still dark, but something wonderful is already happening. Fresh coffee drifts through the hallway. Warm bread is baking.
+    text: `It is the year 2052. Fresh coffee drifts through the hallway. Warm bread is baking.
 
-Milo, the family's home robot, has everything under control — organizing schedules, brewing coffee, and laying out breakfast without a sound.
+Milo, the family's home robot, has everything under control — organizing schedules and laying out breakfast without a sound.
 
-One by one, the family wakes up. Maya stretches. Nate fumbles for his glasses. Zoe buries her face in the pillow. Cody is already running downstairs.
-
-Mondays are fun now. Schools teach kids to build robots. Family life is still messy — but the invisible load is lighter.
+One by one, the family wakes up. Maya stretches. Nate fumbles for his glasses. Cody is already running downstairs.
 
 Milo's Note: The fights are the same. They just have better logistics.`,
     imagePrompt: `A warm futuristic kitchen bathed in golden morning light, year 2052. ${CHARACTER_PROMPT} Scene: The whole family in their morning routine — Maya pouring coffee, Nate reaching for glasses, Zoe half-asleep at the door, Cody running toward breakfast, Milo cheerfully managing the kitchen. ${STYLE_PROMPT}`,
