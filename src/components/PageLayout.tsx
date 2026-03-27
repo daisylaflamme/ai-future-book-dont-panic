@@ -1,42 +1,45 @@
 import type { ReactNode } from "react";
 
-/** Section-specific background gradients with subtle texture feel */
+/**
+ * Dreamy gradient background matching the mockup:
+ * Frosted glass pages over a warm-to-cool cosmic gradient with sparkle accents.
+ * Section tints are subtle shifts on top of the base.
+ */
 const SECTION_BACKGROUNDS: Record<string, string> = {
   "near-future": `
-    linear-gradient(165deg, hsl(42 40% 98%) 0%, hsl(38 30% 95%) 25%, hsl(35 35% 91%) 60%, hsl(32 28% 94%) 100%),
-    radial-gradient(ellipse at 15% 85%, hsl(38 50% 90% / 0.35) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 15%, hsl(48 55% 93% / 0.4) 0%, transparent 45%),
-    radial-gradient(circle at 50% 50%, hsl(40 30% 96% / 0.15) 0%, transparent 70%)
+    linear-gradient(170deg,
+      hsl(220 20% 94% / 0.95) 0%,
+      hsl(230 18% 92% / 0.9) 30%,
+      hsl(260 15% 90% / 0.85) 60%,
+      hsl(30 30% 92% / 0.9) 100%
+    ),
+    radial-gradient(ellipse at 20% 90%, hsl(30 50% 88% / 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 10%, hsl(220 30% 92% / 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, hsl(0 0% 100% / 0.15) 0%, transparent 70%)
   `,
   "expanding-world": `
-    linear-gradient(165deg, hsl(215 25% 98%) 0%, hsl(220 18% 95%) 25%, hsl(205 22% 92%) 60%, hsl(210 15% 95%) 100%),
-    radial-gradient(ellipse at 10% 90%, hsl(215 35% 92% / 0.35) 0%, transparent 55%),
-    radial-gradient(ellipse at 90% 10%, hsl(195 40% 93% / 0.4) 0%, transparent 45%),
-    radial-gradient(circle at 60% 40%, hsl(210 20% 96% / 0.2) 0%, transparent 60%)
+    linear-gradient(170deg,
+      hsl(220 22% 93% / 0.95) 0%,
+      hsl(230 20% 91% / 0.9) 30%,
+      hsl(250 18% 89% / 0.85) 60%,
+      hsl(215 25% 91% / 0.9) 100%
+    ),
+    radial-gradient(ellipse at 15% 85%, hsl(220 35% 88% / 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 15%, hsl(200 30% 92% / 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 60% 40%, hsl(0 0% 100% / 0.12) 0%, transparent 65%)
   `,
   "far-future": `
-    linear-gradient(165deg, hsl(265 18% 98%) 0%, hsl(255 14% 95%) 25%, hsl(275 12% 92%) 60%, hsl(260 10% 95%) 100%),
-    radial-gradient(ellipse at 10% 85%, hsl(265 25% 92% / 0.35) 0%, transparent 55%),
-    radial-gradient(ellipse at 90% 15%, hsl(280 20% 94% / 0.3) 0%, transparent 45%),
-    radial-gradient(circle at 40% 60%, hsl(255 15% 96% / 0.2) 0%, transparent 60%)
+    linear-gradient(170deg,
+      hsl(250 18% 94% / 0.95) 0%,
+      hsl(260 15% 91% / 0.9) 30%,
+      hsl(270 12% 89% / 0.85) 60%,
+      hsl(280 15% 91% / 0.9) 100%
+    ),
+    radial-gradient(ellipse at 10% 80%, hsl(260 25% 88% / 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 20%, hsl(280 20% 92% / 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, hsl(0 0% 100% / 0.12) 0%, transparent 65%)
   `,
 };
-
-/** Pixel-precise spacing scale */
-const SPACING = {
-  pagePadding: "p-5 md:p-6 lg:p-7",
-  imageHeight: "36%",
-  /** 24–32px gap from image to title */
-  imageToTitle: "pt-6 md:pt-7 lg:pt-8",
-  /** 12–16px gap from title to body */
-  titleToBody: "mb-3 md:mb-4",
-  /** Generous line height */
-  bodyLineHeight: "leading-[2.15]",
-  /** Paragraph spacing */
-  paragraphGap: "space-y-3 md:space-y-3.5",
-  /** Body to page number */
-  pageNumberTop: "pt-4 md:pt-5",
-} as const;
 
 interface PageLayoutProps {
   section: string;
@@ -52,38 +55,44 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
 
   return (
     <div
-      className={`flex flex-col h-full ${SPACING.pagePadding} ${side === "left" ? "border-r border-border/30" : ""}`}
+      className={`relative flex flex-col h-full p-5 md:p-7 lg:p-8 ${
+        side === "left" ? "border-r border-border/20" : ""
+      }`}
       style={{ backgroundImage: bg }}
     >
-      {/* Image container — breathing room via rounded frame + subtle shadow */}
+      {/* Image container with border frame like mockup */}
       <div
-        className="relative w-full flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center"
+        className="relative w-full flex-shrink-0 rounded-md overflow-hidden"
         style={{
-          height: SPACING.imageHeight,
-          background: "hsl(220 15% 95% / 0.3)",
-          boxShadow: "0 4px 20px hsl(var(--book-shadow) / 0.1)",
+          height: "36%",
+          border: "3px solid hsl(220 15% 88% / 0.6)",
+          boxShadow: "0 4px 24px hsl(220 30% 30% / 0.08), inset 0 0 0 1px hsl(0 0% 100% / 0.3)",
         }}
       >
         {image}
       </div>
 
-      {/* Text content — vertically balanced with justify-between */}
-      <div className={`flex-1 flex flex-col min-h-0 ${SPACING.imageToTitle}`}>
-        <div className="flex-1 overflow-y-auto pr-1 flex flex-col justify-start">
-          <div className={SPACING.titleToBody}>{title}</div>
-          <div className={`${SPACING.bodyLineHeight} ${SPACING.paragraphGap}`}>{body}</div>
+      {/* Title — centered, larger, bold serif like mockup */}
+      <div className="pt-5 md:pt-6 lg:pt-7 pb-3 md:pb-4">
+        {title}
+      </div>
+
+      {/* Body text — well-spaced paragraphs */}
+      <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+        <div className="leading-[2.0] md:leading-[2.1] space-y-3 md:space-y-3.5">
+          {body}
         </div>
       </div>
 
-      {/* Page number — pinned bottom */}
-      <div className={`flex-shrink-0 ${SPACING.pageNumberTop}`}>
-        <p className="font-ui text-[10px] md:text-[11px] text-muted-foreground/60 text-center tracking-wider">
-          — {pageNumber} —
+      {/* Page number — pinned bottom, muted */}
+      <div className="flex-shrink-0 pt-4 md:pt-5">
+        <p className="font-ui text-[10px] md:text-[11px] text-muted-foreground/50 text-center tracking-widest">
+          {pageNumber}
         </p>
       </div>
     </div>
   );
 };
 
-export { SECTION_BACKGROUNDS, SPACING };
+export { SECTION_BACKGROUNDS };
 export default PageLayout;
