@@ -42,12 +42,12 @@ function drawImageContained(
   x: number,
   y: number,
   maxW: number,
-  maxH: number
+  maxH: number,
+  naturalW?: number,
+  naturalH?: number
 ) {
-  const img = new Image();
-  img.src = dataUrl;
-  const imgW = img.naturalWidth || maxW;
-  const imgH = img.naturalHeight || maxH;
+  const imgW = naturalW && naturalW > 0 ? naturalW : maxW;
+  const imgH = naturalH && naturalH > 0 ? naturalH : maxH;
   const scale = Math.min(maxW / imgW, maxH / imgH);
   const drawW = imgW * scale;
   const drawH = imgH * scale;

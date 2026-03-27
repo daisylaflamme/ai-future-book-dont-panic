@@ -56,8 +56,8 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
       </div>
 
       {/* Story content */}
-      <div className="flex-1 flex flex-col justify-between min-h-0 overflow-hidden">
-        <div className="overflow-y-auto pr-1">
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+        <div className="overflow-y-auto pr-1 flex-1">
           <h3 className="font-display text-sm md:text-base lg:text-lg font-semibold text-foreground mb-2 leading-snug">
             {story.title}
           </h3>
@@ -65,13 +65,13 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
             {story.text}
           </p>
         </div>
+      </div>
 
-        {/* Page number — pinned to bottom */}
-        <div className="mt-auto pt-2 flex-shrink-0">
-          <p className="font-ui text-[10px] md:text-[11px] text-muted-foreground/60 text-center tracking-wider">
-            — {pageNumber} —
-          </p>
-        </div>
+      {/* Page number — always visible at bottom */}
+      <div className="flex-shrink-0 pt-1 pb-1">
+        <p className="font-ui text-[10px] md:text-[11px] text-muted-foreground/60 text-center tracking-wider">
+          — {pageNumber} —
+        </p>
       </div>
     </div>
   );
