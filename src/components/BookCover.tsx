@@ -44,8 +44,8 @@ const BookCover = ({ coverImage }: BookCoverProps) => {
         <h1
           className="font-display text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold leading-tight tracking-tight"
           style={{
-            color: "hsl(40 30% 95%)",
-            textShadow: "0 3px 24px rgba(0,0,0,0.9), 0 6px 48px rgba(0,0,0,0.6)",
+            color: "hsl(40 30% 98%)",
+            textShadow: "0 2px 16px rgba(0,0,0,1), 0 4px 32px rgba(0,0,0,0.8), 0 0 60px rgba(0,0,0,0.5)",
           }}
         >
           {BOOK_META.title} — {BOOK_META.subtitle}
