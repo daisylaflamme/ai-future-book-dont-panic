@@ -11,8 +11,8 @@ const TitlePage = () => {
         <p className="font-display text-lg md:text-xl italic text-book-gold mb-8">
           — {BOOK_META.subtitle}
         </p>
-        <p className="font-body text-sm md:text-base text-muted-foreground mb-12">
-          {BOOK_META.fullSubtitle}
+        <p className="font-body text-sm md:text-base text-muted-foreground mb-12 text-center">
+          Stories from a Future Where<br />Families and AI Grow Together
         </p>
         <div className="w-8 h-0.5 mx-auto mb-12 bg-border" />
         <p className="font-ui text-xs md:text-sm tracking-widest uppercase text-muted-foreground">
