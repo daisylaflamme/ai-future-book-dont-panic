@@ -1,33 +1,10 @@
 import type { ReactNode } from "react";
+import pageBackground from "@/assets/page-background.png";
 
-/**
- * Warm, elegant book page background.
- * Base: #F7F4EF warm off-white
- * Gradient: top-left #F2EDE7 → bottom-right #FAF7F2
- * Subtle radial glow + faint noise texture for print realism.
- * Consistent across all sections with very subtle section tints.
- */
-const BASE_BACKGROUND = `
-  linear-gradient(135deg, #F2EDE7 0%, #F7F4EF 45%, #FAF7F2 100%),
-  radial-gradient(ellipse at 25% 75%, hsl(35 40% 92% / 0.25) 0%, transparent 55%),
-  radial-gradient(ellipse at 75% 25%, hsl(40 30% 95% / 0.2) 0%, transparent 50%)
-`;
+const SECTION_TINTS: Record<string, string> = {};
 
-const SECTION_TINTS: Record<string, string> = {
-  "near-future": `
-    radial-gradient(ellipse at 60% 30%, hsl(38 45% 92% / 0.15) 0%, transparent 60%)
-  `,
-  "expanding-world": `
-    radial-gradient(ellipse at 60% 30%, hsl(215 30% 93% / 0.15) 0%, transparent 60%)
-  `,
-  "far-future": `
-    radial-gradient(ellipse at 60% 30%, hsl(260 20% 93% / 0.15) 0%, transparent 60%)
-  `,
-};
-
-function getSectionBackground(section: string): string {
-  const tint = SECTION_TINTS[section] || SECTION_TINTS["near-future"];
-  return `${tint}, ${BASE_BACKGROUND}`;
+function getSectionBackground(_section: string): string {
+  return `url(${pageBackground})`;
 }
 
 interface PageLayoutProps {
@@ -48,8 +25,9 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
         side === "left" ? "border-r border-border/20" : ""
       }`}
       style={{
-        backgroundImage: bg,
-        backgroundColor: "#F7F4EF",
+        backgroundImage: `url(${pageBackground})`,
+        backgroundSize: "cover",
+        backgroundPosition: side === "left" ? "left center" : "right center",
       }}
     >
       {/* Image container with border frame like mockup */}
