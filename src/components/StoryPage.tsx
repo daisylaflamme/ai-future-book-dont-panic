@@ -34,7 +34,7 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
     >
       {/* Illustration — object-contain to prevent stretching */}
       <div
-        className="relative w-full flex-shrink-0 mb-3 rounded-lg overflow-hidden flex items-center justify-center"
+        className="relative w-full flex-shrink-0 mb-5 rounded-lg overflow-hidden flex items-center justify-center"
         style={{
           height: "40%",
           background: "hsl(220 15% 95% / 0.3)",
