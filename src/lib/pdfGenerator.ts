@@ -109,15 +109,12 @@ export async function generateBookPdf() {
   }
 
   pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(28);
+  pdf.setFontSize(24);
   pdf.setTextColor(235, 225, 205);
-  const titleLines = pdf.splitTextToSize(BOOK_META.title, SPREAD_W - 80);
-  pdf.text(titleLines, SPREAD_W / 2, 70, { align: "center" });
-
-  pdf.setFont("helvetica", "italic");
-  pdf.setFontSize(18);
-  pdf.setTextColor(210, 175, 100);
-  pdf.text(`— ${BOOK_META.subtitle}`, SPREAD_W / 2, 95, { align: "center" });
+  const fullTitle = `${BOOK_META.title} — ${BOOK_META.subtitle}`;
+  const titleLines = pdf.splitTextToSize(fullTitle, SPREAD_W - 60);
+  const titleBlockH = titleLines.length * 10;
+  pdf.text(titleLines, SPREAD_W / 2, SPREAD_H / 2 - titleBlockH, { align: "center" });
 
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(11);
