@@ -3,13 +3,13 @@ import BookCover from "./BookCover";
 import TitlePage from "./TitlePage";
 import BackCover from "./BackCover";
 import BookSpread from "./BookSpread";
+import SectionDivider from "./SectionDivider";
 import BookNavigation from "./BookNavigation";
 import { getSpreadPages, stories, BOOK_META } from "@/data/bookData";
 import { storyImages, coverImage } from "@/data/bookImages";
 import { useToast } from "@/hooks/use-toast";
 
 const BookViewer = () => {
-  // Attach images to stories
   useMemo(() => {
     stories.forEach((story) => {
       if (storyImages[story.id]) {
@@ -19,7 +19,9 @@ const BookViewer = () => {
   }, []);
 
   const spreads = getSpreadPages();
-  const totalSpreads = 2 + spreads.length + 1;
+  // Pages: cover, title, section1-divider, spreads 0-9 (stories 1-20), section2-divider, spreads 10-18 (stories 21-38), section3-divider, spreads 19-24 (stories 39-50), back-cover
+  // For simplicity, let's use a flat page array
+  const totalSpreads = 2 + spreads.length + 1; // cover + title + story spreads + back cover
   const [currentSpread, setCurrentSpread] = useState(0);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const { toast } = useToast();
@@ -31,6 +33,10 @@ const BookViewer = () => {
   const handleNext = useCallback(() => {
     setCurrentSpread((s) => Math.min(totalSpreads - 1, s + 1));
   }, [totalSpreads]);
+
+  const handleGoToCover = useCallback(() => {
+    setCurrentSpread(0);
+  }, []);
 
   const handleDownloadPdf = useCallback(async () => {
     setIsGeneratingPdf(true);
@@ -62,26 +68,57 @@ const BookViewer = () => {
     const spreadIndex = currentSpread - 2;
     const spread = spreads[spreadIndex];
     if (!spread) return null;
-    return <BookSpread left={spread.left} right={spread.right} spreadIndex={spreadIndex} />;
+
+    // Check if this spread starts a new section
+    const leftSection = spread.left.section;
+    const prevSpread = spreadIndex > 0 ? spreads[spreadIndex - 1] : null;
+    const isNewSection = spreadIndex === 0 || (prevSpread && prevSpread.right.section !== leftSection);
+
+    return (
+      <BookSpread
+        left={spread.left}
+        right={spread.right}
+        spreadIndex={spreadIndex}
+        sectionTitle={isNewSection ? getSectionTitle(leftSection) : undefined}
+      />
+    );
+  };
+
+  const getSectionTitle = (section: string) => {
+    const s = BOOK_META.sections.find(sec => sec.id === section);
+    return s ? s.title : undefined;
   };
 
   return (
     <div className="flex flex-col h-screen bg-background" onKeyDown={handleKeyDown} tabIndex={0}>
       <header className="flex items-center justify-center px-4 py-2 border-b border-border bg-card">
-        <h1 className="font-display text-sm md:text-base text-foreground truncate">
+        <button
+          onClick={handleGoToCover}
+          className="font-display text-sm md:text-base text-foreground truncate hover:text-accent transition-colors cursor-pointer bg-transparent border-none"
+        >
           {BOOK_META.title} — <span className="italic text-accent">{BOOK_META.subtitle}</span>
-        </h1>
+        </button>
       </header>
       <div className="flex-1 flex items-center justify-center p-2 md:p-6 overflow-hidden">
-        <div className="w-full max-w-6xl rounded-lg overflow-hidden shadow-xl border border-border/50"
-          style={{ aspectRatio: "16 / 10", maxHeight: "calc(100vh - 120px)", boxShadow: "0 20px 60px hsl(var(--book-shadow) / 0.2)" }}>
+        <div
+          className="w-full max-w-6xl rounded-lg overflow-hidden shadow-xl border border-border/50"
+          style={{
+            aspectRatio: "16 / 10",
+            maxHeight: "calc(100vh - 120px)",
+            boxShadow: "0 20px 60px hsl(var(--book-shadow) / 0.2)",
+          }}
+        >
           {renderCurrentView()}
         </div>
       </div>
       <BookNavigation
-        currentSpread={currentSpread} totalSpreads={totalSpreads}
-        onPrev={handlePrev} onNext={handleNext}
-        onDownloadPdf={handleDownloadPdf} isGeneratingPdf={isGeneratingPdf}
+        currentSpread={currentSpread}
+        totalSpreads={totalSpreads}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onGoToCover={handleGoToCover}
+        onDownloadPdf={handleDownloadPdf}
+        isGeneratingPdf={isGeneratingPdf}
       />
     </div>
   );

@@ -2,12 +2,13 @@ export interface Story {
   id: number;
   title: string;
   text: string;
+  section: "near-future" | "expanding-world" | "far-future";
   imagePrompt: string;
   imageUrl?: string;
 }
 
 export interface BookPage {
-  type: 'cover' | 'title' | 'story' | 'back-cover';
+  type: "cover" | "title" | "story" | "back-cover";
   story?: Story;
 }
 
@@ -30,312 +31,751 @@ Because the future isn't something to fear.
 It's something to live in.
 
 Don't panic.`,
+  sections: [
+    { id: "near-future", title: "Section 1 — Near Future, 2052", subtitle: "Family life, school, daily routines" },
+    { id: "expanding-world", title: "Section 2 — The Expanding World", subtitle: "Society, ethics, and deeper thinking" },
+    { id: "far-future", title: "Section 3 — Far Future, 2286", subtitle: "Descendants, advanced systems, and meaning" },
+  ],
 };
 
-const CHARACTER_PROMPT = `Characters (MUST be consistent): Mom Maya (40s, blonde mid-length hair, green eyes, warm smile), Dad Nate (40s, glasses, brown eyes, kind face), daughter Zoe (11, long wavy brown hair, light brown eyes), son Carlos-boy (9, light brown hair, blue eyes). Grandparents: Grandma Lena (70s, silver hair, warm), Grandpa Viktor (70s, distinguished, gentle), Grandma Elena (70s, elegant). Milo the AI companion: a friendly floating orb-shaped robot with expressive LED eyes, soft blue glow, about the size of a basketball.`;
+const CHARACTER_PROMPT = `Characters (MUST be consistent across ALL images — same faces, same proportions, same identity): Mom Maya (early 40s, mid-length blonde hair, green eyes, warm smile, slender build), Dad Nate (early 40s, glasses, brown eyes, short brown hair, kind face, medium build), daughter Zoe (15, long wavy medium-brown hair, light brown eyes, teen proportions, expressive face), son Cody (10, light brown short hair, blue eyes, child proportions, energetic). Grandparents: Grandma Lena (68, silver bob hair, warm brown eyes, petite), Grandpa Carlos (70, salt-and-pepper hair, brown skin, stocky, jovial), Grandma Elena (72, elegant white hair in a bun, green eyes, tall and graceful), Grandpa Viktor (74, distinguished white beard, blue eyes, wiry frame). Milo: a cute sleek home robot about knee-height, rounded body, expressive LED eyes, soft blue-white glow, small articulated arms. Laundry bot: a cute crab-like robot with six legs and a flat top for folding. Delivery drone: small, friendly, with a round body and propellers. Neighbors and background characters should be diverse (Black, Asian, Latino, white).`;
 
-const STYLE_PROMPT = `Style: warm cinematic lighting, slightly painterly digital illustration, rich warm color palette with amber/gold tones, cozy domestic futurism aesthetic, detailed backgrounds, expressive characters, Pixar-meets-Norman-Rockwell feel. High quality, consistent art style.`;
+const STYLE_PROMPT = `Style: soft cinematic warm lighting, slightly painterly semi-realistic children's book illustration, rich warm color palette with amber and gold tones, cozy domestic futurism aesthetic, detailed backgrounds, expressive characters with clear emotions, professional book-quality art. NOT cartoonish, NOT generic AI look. Consistent across all pages.`;
 
 export const stories: Story[] = [
+  // ═══════════════════════════════════════════
+  // SECTION 1 — NEAR FUTURE (2052)
+  // Stories 1–20: Family life, school, daily routines
+  // ═══════════════════════════════════════════
   {
     id: 1,
-    title: "Wake-Up Call, 2052",
-    text: "Maya pours coffee while Milo hums a sunrise playlist. Nate stumbles in, hair wild, asking who programmed the alarm to play whale sounds. Zoe shuffles past with her eyes half-closed, muttering about \"five more minutes.\" Carlos is already at the table, building a pancake tower. Milo cheerfully announces it's going to be a beautiful day — then accidentally sets off the sprinklers.",
-    imagePrompt: `A warm futuristic kitchen bathed in golden morning light, 2052. ${CHARACTER_PROMPT} Scene: Maya pouring coffee from a sleek appliance, Nate with messy hair looking confused, Zoe half-asleep, Carlos stacking pancakes, Milo (glowing blue orb robot) hovering cheerfully. Cozy futuristic kitchen with holographic displays. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Meet the Family — 2052",
+    text: `It is the year 2052. The house is still dark, but something wonderful is already happening. The smell of fresh coffee drifts through the hallway. Warm bread is baking. Soft music begins to play.
+
+Milo, the family's home robot and AI assistant, has everything under control. He's been up since five, organizing schedules, brewing coffee, and laying out breakfast — all without making a sound.
+
+One by one, the family wakes up. Maya stretches. Nate fumbles for his glasses. Zoe buries her face in the pillow. Cody is already running downstairs.
+
+"Have a great day, Maya, Nate, Cody, and Zoe!" Milo chirps as they rush out the door.
+
+Mondays are actually fun now. Schools teach kids how to build and program robots. Jobs focus on creativity and problem-solving. Family life is still messy, funny, and loud — but the invisible load is lighter.
+
+Milo's Note: The fights are the same. They just have better logistics.`,
+    imagePrompt: `A warm futuristic kitchen bathed in golden morning light, year 2052. ${CHARACTER_PROMPT} Scene: The whole family in their morning routine — Maya pouring coffee from a sleek device, Nate with messy hair reaching for glasses, Zoe half-asleep at the door, Cody excitedly running toward breakfast, Milo (cute sleek knee-height robot with LED eyes) cheerfully managing the kitchen. Warm, inviting, cozy domestic futurism. ${STYLE_PROMPT}`,
   },
   {
     id: 2,
-    title: "Mirror, Mirror on the Wall",
-    text: "Zoe and Maya stand before the bathroom's smart mirror, cycling through holographic outfit projections. Maya accidentally gets dressed in Zoe's neon crop-top look and gasps. Lena peeks in from the hallway, laughing so hard she nearly drops her tea. The mirror helpfully suggests \"retro grandma chic\" for everyone.",
-    imagePrompt: `A futuristic bathroom with a large smart mirror projecting holographic outfits onto Maya and Zoe. ${CHARACTER_PROMPT} Scene: Maya wearing a holographic neon teen outfit looking shocked, Zoe laughing, Grandma Lena peeking in from doorway amused. Mirror has a glowing UI. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Smart Mirror Roast Mode",
+    text: `The bathroom smart mirror greets Zoe every morning. Today it says: "89% awake. 11% cooperative."
+
+It offers her four modes: Teen Mode, Confidence Mode, Reality Mode, and a new trial called Anti-Drama Mode. Zoe picks Teen Mode. The mirror plays her favorite song and adjusts the lighting to make her look like a rock star.
+
+Maya tries Parent Mode. The mirror quietly moves her 7 AM meeting to 9:30 — because it knows she needs it.
+
+Smart mirrors read signals like posture, sleep quality, and stress. They suggest small fixes — hydration, breathing, better lighting — without shame.
+
+Milo loves the mirror too. But he never understood Roast Mode.
+
+Milo's Note: Why would anyone choose to be insulted by furniture?`,
+    imagePrompt: `A futuristic bathroom with a large glowing smart mirror showing holographic UI and mood readings. ${CHARACTER_PROMPT} Scene: Zoe in front of the mirror seeing "89% awake, 11% cooperative," Maya peeking in and laughing, the mirror projecting fun holographic outfit options. Bright warm bathroom with futuristic touches. ${STYLE_PROMPT}`,
   },
   {
     id: 3,
-    title: "Laundry Robot's Lament",
-    text: "The crab-shaped laundry robot sighs dramatically as it untangles yet another knot of mismatched socks. Carlos watches, fascinated. Nate tries to help but only makes things worse. Milo hovers nearby, offering unsolicited commentary about a \"global sock conspiracy.\" The robot rolls its LED eyes.",
-    imagePrompt: `A cozy futuristic living room with a small crab-shaped laundry robot surrounded by colorful clothes. ${CHARACTER_PROMPT} Scene: Carlos watching intently, Nate tangling socks, Milo floating nearby with a cheeky expression. The laundry robot has expressive LED eyes looking exasperated. Baskets of laundry around. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "School Tutor with Memes",
+    text: `Zoe's AI tutor is named Cleo. Cleo figured out that Zoe learns best with examples, humor, and a little sarcasm. So it teaches physics using memes and mini-simulations.
+
+Zoe's grades improved fast — not because she "finally tried harder," but because learning stopped feeling like embarrassment.
+
+Cody's school is even more fun. Kids learn media literacy like a game: how propaganda spreads, how to check facts, how to spot emotional tricks. Cody loves it. He calls it "detective class."
+
+Milo says the future superpower isn't knowledge — it's learning speed. And shame is the worst study partner.
+
+Milo's Note: Personalized learning doesn't lower the bar. It removes the walls.`,
+    imagePrompt: `A futuristic dining area with Zoe at a table, a holographic AI tutor named Cleo projecting fun memes and physics simulations in mid-air. ${CHARACTER_PROMPT} Scene: Zoe smiling and engaged with holographic meme-style lessons, Cody at a separate screen playing a media-literacy detective game, Milo hovering nearby approvingly. Bright, engaging, educational atmosphere. ${STYLE_PROMPT}`,
   },
   {
     id: 4,
-    title: "Tutor Trouble",
-    text: "Zoe sits at the dining table while a holographic AI tutor projects math equations. She sneaks glances at her messaging device under the table. The tutor clears its throat: \"Should I notify your grandmother?\" Zoe's eyes go wide. Milo slides a cookie toward her as a peace offering.",
-    imagePrompt: `A futuristic dining room with Zoe at a table, a holographic AI tutor projecting math problems in mid-air. ${CHARACTER_PROMPT} Scene: Zoe looking caught hiding a device under the table, holographic tutor looking stern, Milo sneaking a cookie toward Zoe. Nate and Maya exchanging knowing looks in background. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Jobs in 2052",
+    text: `Maya's workday used to be emails and spreadsheets. Now AI handles scheduling, summaries, and paperwork. Her job has shifted to judgment, negotiation, and helping people agree on a plan.
+
+Nate works alongside construction bots that lift heavy materials and reduce injuries. He comes home less exhausted and more present for dinner.
+
+Teachers are now the most prestigious job. They still use robot helpers, but the heart of teaching — inspiring kids — stays deeply human.
+
+Milo's Note: Robots don't steal jobs. They steal the parts of jobs that steal your life.`,
+    imagePrompt: `Split scene: on the left, Maya in a sleek futuristic office negotiating with colleagues while AI screens handle data; on the right, Nate on a construction site with helpful bots lifting beams. ${CHARACTER_PROMPT} Scene: Maya confident and in charge, Nate working side-by-side with a construction robot, both looking fulfilled. Warm, professional, futuristic workplaces. ${STYLE_PROMPT}`,
   },
   {
     id: 5,
-    title: "Preventative Check-Ups",
-    text: "A compact medical bot gently scans each family member in their cozy home clinic corner. Viktor jokes that he has \"too many miles on this odometer.\" The bot suggests more walks and fewer cookies. Everyone laughs — except Milo, who quietly hides the cookie jar behind a cushion.",
-    imagePrompt: `A warm corner of a futuristic home set up as a mini health station, soft ambient lights. ${CHARACTER_PROMPT} Scene: A small cute medical bot scanning Viktor who's joking, family gathered around smiling. Futuristic but cozy medical gadgets with soft glowing lights. Milo hiding cookies. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "The Doorbell Therapist",
+    text: `Maya comes home in the afternoon. The smart doorbell asks what social mood she's in: Friendly, Efficient, or Witness Protection.
+
+She picks Efficient. The doorbell dims the lights, silences notifications, and offers warm tea. It even suggests a comfort pillow — like a tiny spa manager.
+
+The family accepts the tea but politely declines the pillow. Smells good inside — Milo already has dinner ready.
+
+Zoe thinks the doorbell is basically a life coach with a camera.
+
+Milo's Note: The front door is the most underrated therapist in the house.`,
+    imagePrompt: `A futuristic home entrance at sunset. Maya standing at a smart doorbell showing three mood options on a holographic display: "Friendly, Efficient, Witness Protection." ${CHARACTER_PROMPT} Scene: Maya touching "Efficient" on the doorbell screen, warm light spilling from inside, Milo visible through the doorway with dinner ready. Cozy, inviting atmosphere. ${STYLE_PROMPT}`,
   },
   {
     id: 6,
-    title: "The Conspiracy Button",
-    text: "Lena proudly presents a big red button she ordered online. She presses it — a silly alarm blares and holographic fact-checks replace the news headlines. The family cracks up when the button starts lecturing about flat Earth myths. Viktor asks if there's a button for \"common sense.\"",
-    imagePrompt: `Family gathered around a dining table, Grandma Lena holding a big red comedic button. ${CHARACTER_PROMPT} Scene: Holographic headlines appearing with fact-check stamps, everyone laughing, Viktor looking bemused. Warm dining room with futuristic elements. The button glows red comically. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Grandma vs. Robot Chef",
+    text: `Grandma Lena watches the kitchen robot arm chop vegetables with perfect rhythm. "Is it safe?" she asks.
+
+"Yes," the robot replies. "I am following forty-seven safety protocols."
+
+It adds a legally reasonable amount of garlic. Grandpa Carlos mutters that knowing what amount of garlic people want is suspicious. Zoe says it's not suspicious — it's Italian.
+
+The robot learns Lena's recipes and adds them to its memory. But it never quite gets the seasoning right. Some things can't be programmed.
+
+Milo's Note: Robots don't replace grandmas. They learn from them.`,
+    imagePrompt: `A warm futuristic kitchen with Grandma Lena watching a robotic arm chop vegetables precisely. ${CHARACTER_PROMPT} Scene: Lena looking skeptical with arms crossed, Carlos muttering beside her, Zoe laughing, the robot arm chopping with a holographic recipe display. Warm kitchen lighting, pots simmering. ${STYLE_PROMPT}`,
   },
   {
     id: 7,
-    title: "Politics vs. Drama",
-    text: "A living-room debate erupts: political livestream or reality show? Milo proposes a split-screen compromise, and suddenly a politician appears to be competing on a cooking show. The mashup is so absurd that everyone forgets what they were arguing about. Carlos votes for cartoons instead.",
-    imagePrompt: `A futuristic living room with a large holographic screen split in half — one side politics, one side cooking show, hilariously merged. ${CHARACTER_PROMPT} Scene: Family on couches looking bewildered and laughing, Milo proudly presenting the split screen. Carlos raising hand for cartoons. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Laundry Robot and the Missing Sock",
+    text: `The laundry robot — shaped like a polite crab — announces its daily report: twelve socks detected. Eight matching. Four rogue.
+
+Zoe calls the robot lazy for not finding the missing pairs. The robot blinks its LED eyes and says nothing.
+
+Then it folds a fitted sheet. Perfectly. In under four seconds.
+
+Everyone gasps. Viktor whispers: "We have entered a new era."
+
+Milo's Note: The first true sign of the future wasn't flying cars. It was crab-shaped laundry robots.`,
+    imagePrompt: `A cozy futuristic living room with the cute crab-shaped laundry robot holding a perfectly folded fitted sheet. ${CHARACTER_PROMPT} Scene: The crab laundry robot proudly displaying a folded sheet, family watching in awe, Viktor with wide eyes, Zoe looking grudgingly impressed, scattered socks around. Warm, humorous domestic scene. ${STYLE_PROMPT}`,
   },
   {
     id: 8,
-    title: "Smart Fridge Saga",
-    text: "The smart fridge locks its door and displays a climate trivia question. \"What percentage of ice caps melted between 2020 and 2040?\" Zoe tries to secretly search the answer. The fridge catches her: \"Nice try, Zoe.\" Milo facepalms. Nate finally gets it right and earns a yogurt.",
-    imagePrompt: `A futuristic kitchen with a glowing smart fridge displaying a trivia question on its screen. ${CHARACTER_PROMPT} Scene: Zoe trying to hide a device while searching, the fridge display showing "CAUGHT!" with a stern emoji, Milo facepalming, Nate thinking hard. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "The Conspiracy Button",
+    text: `Lena proudly presents a big red button she ordered online. She presses it — a silly alarm blares and holographic fact-checks pop up over the news headlines.
+
+The family cracks up when the button starts lecturing about flat Earth myths. Viktor asks if there's a button for "common sense."
+
+Cody presses it twelve more times just for the sound effects.
+
+Milo's Note: Don't panic about AI. Panic about power without rules.`,
+    imagePrompt: `Family gathered around the dining table, Grandma Lena holding a big comedic red button. ${CHARACTER_PROMPT} Scene: Lena pressing the button proudly, holographic fact-check stamps appearing over news headlines, everyone laughing, Viktor looking bemused, Cody pressing it repeatedly. Warm dining room. ${STYLE_PROMPT}`,
   },
   {
     id: 9,
-    title: "Robot Pet Day",
-    text: "The family takes a neighborhood stroll with Milo and the laundry robot. Kids glide on hover-skates while a delivery drone waves overhead. Zoe teaches Milo to fetch sticks — Milo dutifully retrieves them, then fetches an entire tree branch. The neighbors applaud.",
-    imagePrompt: `A sunny futuristic neighborhood sidewalk scene. ${CHARACTER_PROMPT} Scene: Family walking, kids on hover-skates, Milo carrying an absurdly large tree branch, the crab laundry robot waddling along, a friendly drone overhead. Bright, warm outdoor scene with futuristic houses. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Smart Fridge Saga",
+    text: `The smart fridge locks its door and displays a trivia question: "What percentage of ice caps melted between 2020 and 2040?"
+
+Zoe tries to secretly search the answer on her device. The fridge catches her: "Nice try, Zoe."
+
+Milo facepalms. Nate finally gets the answer right and earns a yogurt.
+
+Cody asks if the fridge is smarter than them. Nobody answers.
+
+Milo's Note: The fridge doesn't judge you. It just locks you out.`,
+    imagePrompt: `A futuristic kitchen with a glowing smart fridge displaying a trivia question and a stern emoji. ${CHARACTER_PROMPT} Scene: Zoe trying to hide a device while the fridge display shows "CAUGHT!", Nate thinking hard, Milo facepalming, Cody looking amazed. Bright kitchen with high-tech appliances. ${STYLE_PROMPT}`,
   },
   {
     id: 10,
-    title: "AI Pet Trainer",
-    text: "Milo uses a training app to teach the family cat new tricks. The cat, unimpressed, teaches Milo to fetch instead. Carlos cheers as Milo obediently brings back a toy mouse. Maya records the whole thing, unable to stop laughing. The cat sits smugly on the couch.",
-    imagePrompt: `A cozy futuristic living room with a smug orange cat on a couch. ${CHARACTER_PROMPT} Scene: Milo the robot obediently fetching a toy mouse while the cat watches smugly, Carlos cheering, Maya recording with laughter. Warm living room with futuristic elements. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Preventative Check-Ups",
+    text: `A compact medical bot scans each family member in the cozy home clinic corner. It uses soft lights and gentle sounds — nothing scary.
+
+Viktor jokes that he has "too many miles on this odometer." The bot suggests more walks and fewer cookies.
+
+Everyone laughs — except Milo, who quietly hides the cookie jar behind a cushion.
+
+Milo's Note: Healthcare in 2052 is less about fixing problems and more about preventing them. Also, cookies are important.`,
+    imagePrompt: `A warm corner of a futuristic home set up as a mini health station with soft ambient lights. ${CHARACTER_PROMPT} Scene: A small cute medical bot scanning Viktor who's joking, family gathered around smiling, Milo sneaking the cookie jar behind a cushion. Warm, reassuring medical gadgets with soft glow. ${STYLE_PROMPT}`,
   },
   {
     id: 11,
-    title: "Nana's VR Garden",
-    text: "Elena invites Lena into a virtual reality garden for meditation. Holographic flowers bloom around them as they sip tea. A playful glitch causes giant cartoon bees to dance around their heads. They laugh so hard they forget they're still wearing VR headsets. Milo serves real cookies.",
-    imagePrompt: `Two elderly women in VR headsets surrounded by beautiful holographic flowers in a living room. ${CHARACTER_PROMPT} Scene: Elena and Lena sitting with VR headsets, surrounded by blooming holographic flowers and giant dancing cartoon bees. Tea cups nearby, Milo offering cookies. Magical atmosphere. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Car as Nurse",
+    text: `Cars in 2052 do more than drive. They monitor fatigue and stress — with your permission.
+
+When Nate is dangerously tired after a long shift, the car suggests a break. If he ignores it, the car gently takes over and plays calming sounds.
+
+Zoe calls it "a therapist with wheels."
+
+Milo's Note: The future isn't just self-driving. It's burnout prevention built into everyday systems. Your car doesn't judge you. It just logs everything.`,
+    imagePrompt: `Interior of a sleek futuristic self-driving car with Nate in the driver seat looking tired. ${CHARACTER_PROMPT} Scene: The car's dashboard glowing with a gentle "REST SUGGESTED" message, calming ambient lights inside, Nate relaxing as the car takes over, Zoe in the back seat smirking. Evening city lights outside. ${STYLE_PROMPT}`,
   },
   {
     id: 12,
-    title: "Remote Work Woes",
-    text: "Nate's holographic coworker materializes at the kitchen table, complaining about a glitching virtual office background that turned into a cartoon jungle. Zoe photobombs the meeting with bunny ears. The coworker doesn't notice because a holographic parrot just landed on his shoulder.",
-    imagePrompt: `A futuristic kitchen with a holographic projection of a coworker at the table, his background glitching into a cartoon jungle. ${CHARACTER_PROMPT} Scene: Nate looking embarrassed, Zoe making bunny ears behind the hologram, a holographic parrot on the coworker's shoulder. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "DIY Pride Returns",
+    text: `With AI guidance and small helper bots, DIY projects become fun again.
+
+You point your phone at a broken shelf, get step-by-step holographic instructions, and a tiny tool-bot holds the flashlight correctly — for once in history.
+
+Cody fixes all his toys with enormous pride. He tells everyone at school he wants to be a robot mechanic when he grows up.
+
+Milo's Note: The best technology doesn't replace your hands. It steadies them.`,
+    imagePrompt: `A futuristic garage workshop where Cody is fixing a toy robot with help from a tiny tool-bot holding a flashlight. ${CHARACTER_PROMPT} Scene: Cody focused and proud, repairing a toy with a holographic instruction guide floating nearby, tiny tool-bot holding a flashlight perfectly, Nate watching proudly from the doorway. Warm workshop lighting. ${STYLE_PROMPT}`,
   },
   {
     id: 13,
-    title: "Smart Oven Surprise",
-    text: "Maya programs the smart oven to bake bread. The oven politely requests a playlist and challenges Milo to a pun battle. \"I'm on a roll,\" says the oven. \"That's half-baked,\" Milo fires back. The bread emerges perfectly — shaped like Milo's face. Everyone agrees it's his best look.",
-    imagePrompt: `A warm futuristic kitchen with a glowing smart oven displaying a cheerful face on its screen. ${CHARACTER_PROMPT} Scene: Maya opening the oven revealing bread shaped like Milo's robot face, family laughing, Milo looking proud. Warm baking atmosphere with golden light. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Fewer Meetings, More Doing",
+    text: `Nate tried to schedule a meeting. The system cancelled it automatically — because he added a title but no agenda and no goal.
+
+No more mystery meetings. The biggest productivity boost of the decade wasn't AI. It was saying no to pointless gatherings.
+
+Maya applauded from across the house when she heard.
+
+Milo's Note: The future eliminated many things. Meetings without purpose were the first to go.`,
+    imagePrompt: `A futuristic home office with Nate looking at a holographic screen showing "MEETING CANCELLED — No agenda detected." ${CHARACTER_PROMPT} Scene: Nate looking surprised but relieved, Maya in the background giving a thumbs-up, Milo projecting a tiny celebration confetti animation. Clean, minimal futuristic office space. ${STYLE_PROMPT}`,
   },
   {
     id: 14,
-    title: "Library Drone Mishap",
-    text: "Zoe orders a math textbook via drone delivery. The drone arrives carrying a dramatic romance novel instead. The family teases her mercilessly. Zoe turns crimson while Carlos reads the back cover aloud in a soap-opera voice. Milo quietly reorders the correct book.",
-    imagePrompt: `A futuristic home entrance with a small delivery drone hovering, holding a book. ${CHARACTER_PROMPT} Scene: Zoe blushing while holding a romance novel, Carlos reading dramatically from the back cover, family laughing in background, the drone hovering sheepishly. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Nate vs. Foreman Bot",
+    text: `On the construction site, a foreman bot critiques Nate's hammer angle. Nate insults its nonexistent face.
+
+The bot calmly offers a better technique. Nate tries it — and it works perfectly.
+
+He stares at the nail. Then at the bot. Then at the nail again.
+
+Humans are fine with robots lifting heavy things. They hate robots being right.
+
+Milo's Note: Humans fear replacement less than correction.`,
+    imagePrompt: `A futuristic construction site with Nate and a foreman robot looking at a perfectly hammered nail. ${CHARACTER_PROMPT} Scene: Nate staring in disbelief at a perfect nail, the foreman bot standing calmly with arms crossed, other construction workers and bots in background. Outdoor construction setting with futuristic equipment. ${STYLE_PROMPT}`,
   },
   {
     id: 15,
-    title: "Grandpa's AI Chess",
-    text: "Viktor challenges the AI chess set and intentionally loses to see if the AI gloats. Instead, the AI humbly offers a rematch and suggests switching to checkers \"for variety.\" Viktor grumbles that even the chess set has better manners than his grandchildren. Milo offers popcorn.",
-    imagePrompt: `A cozy den with warm lighting, Viktor sitting at a futuristic chess board with glowing pieces. ${CHARACTER_PROMPT} Scene: Viktor looking grumbly-amused at the chess board which displays a humble emoji, Milo offering a bowl of popcorn. Cozy wood-paneled room with bookshelves. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "AI Pet Trainer",
+    text: `Milo uses a training app to teach the family cat new tricks. Sit. Stay. High-five.
+
+The cat, completely unimpressed, teaches Milo to fetch instead. Carlos cheers as Milo obediently brings back a toy mouse.
+
+Maya records the whole thing, unable to stop laughing.
+
+The cat sits smugly on the couch. It has always been in charge.
+
+Milo's Note: I was supposed to train the cat. The cat trained me.`,
+    imagePrompt: `A cozy futuristic living room with a smug orange cat on the couch and Milo fetching a toy mouse. ${CHARACTER_PROMPT} Scene: Milo the robot obediently fetching a toy mouse, the cat watching smugly from the couch, Carlos cheering, Maya recording with laughter. Warm living room with futuristic elements. ${STYLE_PROMPT}`,
   },
   {
     id: 16,
-    title: "Sustainability Swap",
-    text: "At the community recycling hub, robots sort materials with dazzling speed. Carlos challenges them to a sorting race and loses spectacularly. The robots celebrate with a synchronized victory dance. Nate jokes that at least Carlos recycled his pride. Milo holds up a \"participation trophy\" hologram.",
-    imagePrompt: `A bright futuristic community recycling center with efficient sorting robots on conveyor belts. ${CHARACTER_PROMPT} Scene: Carlos looking defeated after losing a sorting race, robots doing a victory dance, Nate laughing, Milo projecting a tiny holographic trophy. Colorful bins and conveyor belts. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Robot Pet Day",
+    text: `The family takes a neighborhood stroll with Milo and the laundry robot. Kids glide past on hover-skates. A friendly delivery drone waves overhead.
+
+Zoe teaches Milo to fetch sticks. He dutifully retrieves them — then fetches an entire tree branch. The neighbors applaud.
+
+The laundry robot waddles behind, carrying everyone's jackets. It doesn't complain, but its LED eyes say everything.
+
+Milo's Note: Walking the robots is more entertaining than walking a dog. And they don't eat shoes.`,
+    imagePrompt: `A sunny futuristic neighborhood sidewalk scene. ${CHARACTER_PROMPT} Scene: Family walking, kids on hover-skates, Milo carrying an absurdly large tree branch, the crab laundry robot waddling along carrying jackets, a friendly drone overhead waving. Bright suburban futuristic setting with diverse neighbors. ${STYLE_PROMPT}`,
   },
   {
     id: 17,
-    title: "Privacy Pals",
-    text: "Zoe and friends discuss privacy settings on their social implants. Milo crashes the conversation wearing a giant holographic padlock costume, cracking \"back in my day\" jokes about 2050. The kids groan. Milo explains encryption using a cookie metaphor. Even Viktor understands.",
-    imagePrompt: `A futuristic teen hangout space with Zoe and friends sitting in a circle. ${CHARACTER_PROMPT} Scene: Milo wearing a comedic holographic padlock costume, teens looking amused/groaning, holographic privacy shields visible. Fun, educational atmosphere. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Zoe's Summer Job",
+    text: `That summer, Zoe works at an immersive kids' entertainment park as a "Human Vibes Supervisor." Her job: supervise the bots that supervise safety.
+
+It sounds silly, but it matters. The bots handle speed and physics. Zoe handles the kids who cry, the ones who are scared, and the ones who need a high-five.
+
+Cody wants to work there too. But he's not old enough yet. At least he gets to ride the space-flying attractions for free.
+
+Milo's Note: Robots handle procedures. Humans handle feelings. Both are full-time jobs.`,
+    imagePrompt: `A vibrant futuristic amusement park with flying space attractions. ${CHARACTER_PROMPT} Scene: Zoe in a cool uniform with a "Human Vibes Supervisor" badge, watching over happy diverse kids and safety bots, Cody riding a space-flying attraction in the background with arms up. Colorful, exciting park atmosphere. ${STYLE_PROMPT}`,
   },
   {
     id: 18,
-    title: "Vacation Voting",
-    text: "The family uses an AI to vote on vacation destinations. Holographic previews appear: beach, mountains, Mars. Chaos erupts when Milo votes for the \"International Museum of Laundry.\" Nobody can tell if he's serious. They compromise on the beach — Milo packs extra socks.",
-    imagePrompt: `A futuristic living room with multiple holographic vacation destinations floating in the air — a tropical beach, snowy mountains, and Mars landscape. ${CHARACTER_PROMPT} Scene: Family pointing excitedly at different holograms, Milo proudly displaying a "Laundry Museum" hologram. Colorful, magical atmosphere. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "Viktor Goes Viral",
+    text: `Grandpa Viktor says something offhand at dinner: "Panic is expensive."
+
+Zoe posts it online. Overnight, it becomes posters, songs, workout clips, and a calming tea brand.
+
+Viktor is baffled. He was just talking about groceries.
+
+Zoe realizes something: old people have wisdom that even AI can't generate. She starts listening more carefully to her grandparents — hoping to catch the next viral moment.
+
+Milo's Note: The future turns wisdom into content. But wisdom was here first.`,
+    imagePrompt: `A futuristic living room scene with Viktor looking confused while Zoe shows him viral content on holographic screens. ${CHARACTER_PROMPT} Scene: Viktor bewildered at the dining table, multiple holographic screens showing "PANIC IS EXPENSIVE" as memes, posters, tea brands, Zoe excited showing him, family laughing around them. Warm evening home setting. ${STYLE_PROMPT}`,
   },
   {
     id: 19,
-    title: "Healthy Habits Game",
-    text: "A gamified health app turns wellness into a family competition. Carlos and Elena do exaggerated yoga poses while Milo tallies points. Elena wins by doing a headstand she learned in 2025. Carlos demands a recount. Milo awards bonus points for \"dramatic flair.\"",
-    imagePrompt: `A bright futuristic living room with family members doing yoga poses. ${CHARACTER_PROMPT} Scene: Carlos and Grandma Elena in exaggerated yoga poses, Milo tallying points on a holographic scoreboard, family cheering. Bright, colorful health app interface visible. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "The Too-Optimized Vacation",
+    text: `Milo plans the family vacation down to the minute: sunrise hike at 5:47 AM, museum at 9:12, optimal lunch at 12:03, beach from 2:15 to 5:30, and an eighteen-minute "meaningful conversation window."
+
+Maya refuses to live like a spreadsheet. Cody cries at the idea of waking up before the sun.
+
+Milo recalculates. He adds spontaneous ice cream, getting lost on purpose, and one unplanned nap.
+
+Zoe approves.
+
+Milo's Note: The goal isn't a perfect life. It's room for life.`,
+    imagePrompt: `A futuristic living room with holographic vacation itinerary showing an absurdly detailed minute-by-minute schedule. ${CHARACTER_PROMPT} Scene: Milo presenting the over-planned schedule, Maya looking exasperated, Cody looking horrified at "5:47 AM," Zoe suggesting changes. Holographic beach and mountain previews floating around. ${STYLE_PROMPT}`,
   },
   {
     id: 20,
-    title: "Neighborly Drones",
-    text: "Maya overhears delivery drones gossiping outside the window. \"Package 47B says the Johnsons ordered another waffle maker.\" \"Third one this month!\" Maya laughs so hard she spills her tea. Milo insists drone gossip is \"technically data exchange.\"",
-    imagePrompt: `View through a futuristic window showing delivery drones hovering outside, appearing to chat with each other. ${CHARACTER_PROMPT} Scene: Maya at the window laughing with tea, drones with speech-bubble-like LED displays, Milo hovering nearby looking innocent. Suburban futuristic neighborhood visible. ${STYLE_PROMPT}`,
+    section: "near-future",
+    title: "AI House Rules",
+    text: `The family writes rules on the fridge screen:
+
+No doom news after 9 PM. No conspiracy clips without sources. Robots do chores; humans do human things. Everyone drinks water.
+
+Zoe adds: "No robot jokes before breakfast."
+
+Cody tried to sneak in a rule about skipping school. The fridge rejected it.
+
+Milo's Note: The best AI policy starts at home. Preferably on the fridge.`,
+    imagePrompt: `A futuristic kitchen with the family gathered around a smart fridge screen displaying house rules. ${CHARACTER_PROMPT} Scene: Family members pointing at and debating rules on the glowing fridge screen, Cody trying to type "skip school" while the fridge shows "REJECTED," Zoe adding her rule, Milo watching approvingly. Warm kitchen atmosphere. ${STYLE_PROMPT}`,
   },
+
+  // ═══════════════════════════════════════════
+  // SECTION 2 — THE EXPANDING WORLD
+  // Stories 21–38: Society, ethics, deeper thinking
+  // ═══════════════════════════════════════════
   {
     id: 21,
-    title: "Dinner by Algorithm",
-    text: "The family lets AI plan dinner based on past meals. It suggests \"Kimchi-Waffle-Curry Fusion Surprise.\" Maya vetoes it for Grandma Elena's classic lasagna recipe. The AI sends an elaborate apology message with a tiny holographic white flag. Elena takes a bow.",
-    imagePrompt: `A warm futuristic kitchen with a holographic display showing an absurd fusion dish recipe. ${CHARACTER_PROMPT} Scene: Maya looking appalled at the holographic recipe, Elena standing proudly with a lasagna, the AI display showing a white flag emoji. Warm kitchen atmosphere. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Robot Babysitter Debate",
+    text: `A neighbor — a kind Haitian family down the street — uses a robot helper for childcare. The grandparents debate it like a national crisis.
+
+"Robots support safety," says Elena calmly.
+
+"Humans raise children," insists Carlos.
+
+Zoe adds: "Some humans are questionable babysitters." Everyone looks at Grandpa Carlos.
+
+Carlos changes the subject.
+
+Milo's Note: Good tech doesn't replace parenting. It protects it.`,
+    imagePrompt: `A futuristic living room with the family in a lively debate about robot childcare. ${CHARACTER_PROMPT} Scene: A holographic image of a friendly childcare robot on screen, Carlos and Elena debating passionately, Zoe smirking, the Haitian neighbor family visible through a window with their robot helper. Diverse, warm suburban setting. ${STYLE_PROMPT}`,
   },
   {
     id: 22,
-    title: "Laundry Robot's Day Off",
-    text: "Milo convinces the laundry robot to take a spa day at the robo-repair center. The family must fold clothes manually. Fitted sheets defeat everyone. Nate ends up wrapped in one like a burrito. When the robot returns, gleaming, it folds everything in thirty seconds flat.",
-    imagePrompt: `A futuristic living room with the family struggling to fold laundry without the robot. ${CHARACTER_PROMPT} Scene: Nate tangled in a fitted sheet like a burrito, family laughing and struggling with clothes, Milo watching amusedly. Piles of unfolded laundry everywhere. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Drone Parking Laws",
+    text: `A grocery drone hovers over Grandma Elena's rose bushes. Elena points at it like it owes rent: "Move."
+
+The drone says it's performing a safety hover.
+
+Elena files a complaint titled: "THE SKY IS NOT A PARKING LOT."
+
+The city responds within an hour. New drone parking regulations go into effect the following week. Elena takes full credit.
+
+Milo's Note: Humans never lose control. They just gain new things to complain about.`,
+    imagePrompt: `A futuristic suburban garden with Grandma Elena pointing angrily at a delivery drone hovering over her rose bushes. ${CHARACTER_PROMPT} Scene: Elena pointing sternly at a drone above her roses, the drone displaying "SAFETY HOVER" on its screen, a holographic complaint form floating nearby titled "THE SKY IS NOT A PARKING LOT." Beautiful garden setting. ${STYLE_PROMPT}`,
   },
   {
     id: 23,
-    title: "Teen Teleportation",
-    text: "Zoe tries a new teleportation booth for school. It accidentally sends her to Grandma Elena's kitchen across town. The booth apologizes in seven languages before settling on \"Oopsie.\" Zoe eats breakfast twice. Elena is delighted by the surprise visit.",
-    imagePrompt: `A futuristic foyer with a glowing teleportation booth, and a cozy kitchen visible through a portal. ${CHARACTER_PROMPT} Scene: Zoe stepping out of a glowing booth into Elena's kitchen looking surprised, Elena delighted and offering food, the booth displaying "OOPSIE" on its screen. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Sidewalk Etiquette",
+    text: `A delivery robot rolls along the sidewalk and announces: "Excuse me. Passing on your left."
+
+Elena calls it polite but suspicious. Carlos wonders who benefits from robot politeness.
+
+Zoe mentions that Nate is working on a city project to add robot lanes and speed limits for rolling coolers.
+
+Cody's eyes light up: "That will be so cool to race them!"
+
+Milo's Note: The future has traffic rules for sidewalks. And somehow, it works.`,
+    imagePrompt: `A futuristic sidewalk with a polite delivery robot rolling past the family. ${CHARACTER_PROMPT} Scene: A delivery robot on a marked robot lane announcing "Passing on your left," Elena looking skeptical, Carlos curious, Cody looking excited about racing, Zoe explaining. Sunny futuristic suburban street with diverse pedestrians. ${STYLE_PROMPT}`,
   },
   {
     id: 24,
-    title: "Cooking Class Across Time",
-    text: "Elena hosts a virtual cooking class with AI-reconstructed ancestors from 2020. They argue passionately about spice amounts across a century of culinary evolution. The 2020 ancestor insists on \"a pinch\" while Elena measures with molecular precision. Milo takes notes for his cookbook.",
-    imagePrompt: `A futuristic kitchen island with Elena cooking alongside holographic figures from 2020 era. ${CHARACTER_PROMPT} Scene: Elena in a futuristic kitchen with holographic people in 2020s clothing arguing about spices, Milo taking notes on a holographic notepad. Time-blend atmosphere. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Dating with References",
+    text: `Dating apps in 2052 have verified identity and safety checks. People share "trust profiles" — like a modern reference list.
+
+Zoe tried to get on a dating app. It scanned her face and figured out she's fifteen. Access denied.
+
+She was furious. Milo was relieved.
+
+Milo's Note: Love stays messy. It just gets fewer scams.`,
+    imagePrompt: `A futuristic teen bedroom with Zoe looking frustrated at a holographic dating app showing "ACCESS DENIED — Age: 15." ${CHARACTER_PROMPT} Scene: Zoe pouting at a holographic screen showing her face scan result, Milo nearby looking relieved, Maya in the doorway with arms crossed and a knowing smile. Teen bedroom with futuristic decor. ${STYLE_PROMPT}`,
   },
   {
     id: 25,
-    title: "Smart Mirror Memories",
-    text: "The bathroom mirror plays a montage of past family mornings — Carlos's first day of school, Zoe's braces reveal, Nate's spectacular coffee spill of 2049. Laughter turns to happy tears. Milo offers digital tissues that project comforting kitten holograms.",
-    imagePrompt: `A futuristic bathroom with a large smart mirror displaying a warm montage of family memories as holographic images. ${CHARACTER_PROMPT} Scene: Family gathered around the mirror, some laughing and some teary-eyed, Milo offering holographic tissues. Gentle warm lighting, sentimental mood. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Trends Become Tools",
+    text: `Short videos evolved into immersive walk-through lessons. Gaming became training and therapy. Influencers became verified trust networks — finally.
+
+Zoe practices for her summer internship interviews in a simulation. She fails on purpose to build resilience.
+
+Maya calls it making excuses. Milo calls it both.
+
+Milo's Note: Humans don't stop being human. They just get better tools.`,
+    imagePrompt: `A futuristic room where Zoe is in an immersive interview simulation, holographic interviewer visible. ${CHARACTER_PROMPT} Scene: Zoe confidently practicing in a VR interview simulation, holographic figures and simulation environment around her, Maya watching skeptically from outside, Milo observing. Modern futuristic training space. ${STYLE_PROMPT}`,
   },
   {
     id: 26,
-    title: "Hoverboard Fail",
-    text: "Nate borrows Zoe's hoverboard and immediately activates every safety feature. He spins gently in place like a confused top while the board beeps warnings. The family lines up in the driveway, giving sarcastic slow claps. Milo records it for \"family archives.\"",
-    imagePrompt: `A futuristic driveway with Nate spinning slowly on a hoverboard that's covered in warning lights. ${CHARACTER_PROMPT} Scene: Nate looking dizzy on a glowing hoverboard, family lined up clapping sarcastically, Zoe covering her face, Milo recording. Sunny outdoor suburban setting. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Equality Gets a Software Update",
+    text: `AI makes essentials cheaper — education, basic legal help, preventive health. A kid in a small village can access the same tutor as one in a big city.
+
+But new inequality appears: premium AI access, enhancements, privacy tiers.
+
+Milo's Note: Technology changes fast. Fairness has to be scheduled. It's not automatic — it's governed.`,
+    imagePrompt: `A split scene showing two children — one in a rural village and one in a futuristic city — both using the same holographic AI tutor. ${CHARACTER_PROMPT} Scene: Diverse children in different settings accessing the same educational hologram, contrasted with a "PREMIUM ACCESS" paywall shown faintly. Warm but thought-provoking composition. ${STYLE_PROMPT}`,
   },
   {
     id: 27,
-    title: "Media Literacy Party",
-    text: "Milo hosts game night where players spot deepfakes versus real clips. Lena wins three rounds in a row with grandmother's intuition. Zoe accuses her of cheating. Viktor says wisdom comes with age. Milo awards Lena a holographic \"Queen of Truth\" crown.",
-    imagePrompt: `A cozy futuristic living room set up for game night with screens showing various video clips. ${CHARACTER_PROMPT} Scene: Lena wearing a holographic crown looking triumphant, Zoe pouting, Viktor smug, screens showing deepfake comparisons. Milo hosting with a game-show pose. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Smart Oven Surprise",
+    text: `Maya programs the smart oven to bake bread. The oven politely requests a playlist and challenges Milo to a pun battle.
+
+"I'm on a roll," says the oven.
+
+"That's half-baked," Milo fires back.
+
+The bread emerges perfectly — shaped like Milo's face. Everyone agrees it's his best look.
+
+Milo's Note: I've never looked better. Or more delicious.`,
+    imagePrompt: `A warm futuristic kitchen with Maya opening a glowing smart oven revealing bread shaped like Milo's robot face. ${CHARACTER_PROMPT} Scene: Maya opening the oven with surprise, bread shaped like Milo's face inside, family laughing, Milo looking proud beside the oven. Warm golden baking light, cozy kitchen. ${STYLE_PROMPT}`,
   },
   {
     id: 28,
-    title: "Election Simulation",
-    text: "The family runs for \"Mayor of the House.\" Each candidate promises chores and fun activities. Milo moderates like a talk-show host with dramatic music cues. Carlos wins by promising dessert Tuesdays. His first act: declaring the laundry robot gets weekends off.",
-    imagePrompt: `A futuristic living room transformed into a mini election stage with podiums and holographic campaign posters. ${CHARACTER_PROMPT} Scene: Carlos at a podium looking triumphant, family as candidates with funny campaign signs, Milo as a flashy talk-show host moderator. Festive campaign atmosphere. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Remote Work Woes",
+    text: `Nate's holographic coworker materializes at the kitchen table. His virtual office background is glitching — it turned into a cartoon jungle.
+
+Zoe photobombs the meeting with bunny ears. The coworker doesn't notice because a holographic parrot just landed on his shoulder.
+
+Nate ends the call and stares at the ceiling for a long time.
+
+Milo's Note: Remote work in 2052 has fewer commutes and more parrots.`,
+    imagePrompt: `A futuristic kitchen with a holographic coworker at the table, his background glitching into a cartoon jungle. ${CHARACTER_PROMPT} Scene: Nate looking embarrassed, Zoe making bunny ears behind the hologram, a holographic parrot on the coworker's shoulder, Milo watching amusedly. Warm kitchen with holographic tech. ${STYLE_PROMPT}`,
   },
   {
     id: 29,
-    title: "Companion Mind Chat",
-    text: "Zoe chats with an AI projection of her future self from 2286. Future-Zoe teases her about still living at home and having terrible taste in music. Present-Zoe is horrified to learn she becomes a morning person. They bond over their shared dislike of math homework.",
-    imagePrompt: `A futuristic bedroom with two versions of Zoe sitting on a holographic sofa — one young (11), one older and futuristic-looking. ${CHARACTER_PROMPT} Scene: Young Zoe looking horrified while future-Zoe laughs, holographic connection between them, cozy bedroom with futuristic tech. Thoughtful yet humorous mood. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Nana's VR Garden",
+    text: `Elena invites Lena into a virtual reality garden for meditation. Holographic flowers bloom around them as they sip real tea.
+
+A playful glitch causes giant cartoon bees to dance around their heads. They laugh so hard they forget they're still wearing VR headsets.
+
+Milo serves real cookies through the headsets' snack slot. Yes, the headsets have snack slots now.
+
+Milo's Note: The future of relaxation includes holographic bees and cookie delivery. You're welcome.`,
+    imagePrompt: `Two elderly women in sleek VR headsets surrounded by beautiful holographic flowers in a living room. ${CHARACTER_PROMPT} Scene: Elena and Lena sitting with VR headsets, surrounded by blooming holographic flowers and giant dancing cartoon bees, tea cups and real cookies nearby, Milo serving through a headset snack slot. Magical warm atmosphere. ${STYLE_PROMPT}`,
   },
   {
     id: 30,
-    title: "Smart Home Ghost",
-    text: "Strange voices echo through the house — the voice assistant is mixing up languages mid-sentence. The family organizes a \"ghost hunt\" with toy flashlights. Carlos bravely leads the expedition. The mystery is solved when Milo jumps out with a spooky filter, scaring everyone. Even the laundry robot jumps.",
-    imagePrompt: `A dimly lit futuristic home hallway with the family creeping along with toy flashlights. ${CHARACTER_PROMPT} Scene: Carlos leading bravely with a flashlight, family behind looking nervous, Milo about to jump-scare them with a spooky holographic ghost filter. Fun spooky atmosphere with colorful flashlight beams. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Library Drone Mishap",
+    text: `Zoe orders a math textbook via drone delivery. The drone arrives carrying a dramatic romance novel instead.
+
+The family teases her mercilessly. Cody reads the back cover aloud in a soap-opera voice: "Their love was irrational — like pi."
+
+Zoe turns crimson. Milo quietly reorders the correct book and files a bug report.
+
+Milo's Note: Drone deliveries are 99.7% accurate. The 0.3% is always embarrassing.`,
+    imagePrompt: `A futuristic home entrance with a delivery drone hovering, holding a romance novel instead of a textbook. ${CHARACTER_PROMPT} Scene: Zoe blushing while holding the romance novel, Cody reading the back cover dramatically, family laughing, the drone hovering sheepishly. Warm suburban entrance. ${STYLE_PROMPT}`,
   },
   {
     id: 31,
-    title: "Infrastructure Bots",
-    text: "On a city outing, the family watches road-repair robots working with balletic precision. Not a single lane is blocked. Nate sighs wistfully: \"I actually miss potholes.\" Carlos asks what a pothole is. Milo pulls up a historical documentary. Everyone is horrified.",
-    imagePrompt: `A futuristic city street with elegant road-repair robots working seamlessly while traffic flows. ${CHARACTER_PROMPT} Scene: Family watching from a sidewalk café, Nate looking nostalgic, Carlos confused, Milo showing a holographic image of an old pothole. Bright futuristic cityscape. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Grandpa's AI Chess",
+    text: `Viktor challenges the AI chess set and intentionally loses — just to see if the AI gloats.
+
+It doesn't. Instead, it humbly offers a rematch and suggests switching to checkers "for variety."
+
+Viktor is amazed by the kindness. Then suspicious. "Is it patronizing me?"
+
+Milo offers popcorn and no opinion.
+
+Milo's Note: The hardest thing for humans isn't losing. It's being treated kindly by a machine.`,
+    imagePrompt: `A cozy den with warm lighting, Viktor sitting at a futuristic chess board with glowing pieces. ${CHARACTER_PROMPT} Scene: Viktor looking at the chess board suspiciously, the board displaying a humble emoji and "Checkers?", Milo offering a bowl of popcorn. Cozy room with bookshelves and warm wood tones. ${STYLE_PROMPT}`,
   },
   {
     id: 32,
-    title: "Life Mirror",
-    text: "A futuristic mirror shows potential life paths from different choices. Carlos sees himself as a rock star. Maya glimpses a career as a pro gamer. Viktor appears as a detective in a noir film. Everyone laughs at the possibilities — then quietly considers \"what if.\" Milo sees himself as a toaster.",
-    imagePrompt: `A futuristic room with a large ornate mirror showing alternate reality reflections of family members. ${CHARACTER_PROMPT} Scene: Carlos reflected as a rock star, Maya as a gamer, Viktor as a noir detective, Milo's reflection as a toaster. Family looking amazed and amused. Magical mirror with swirling edges. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Rebuilding 2020s Social Media",
+    text: `Zoe's class reconstructs 2020s social media in a simulation to study how politics worked back then.
+
+Inside the sim, everyone argues all day. A student asks why. Zoe explains: "People were tired, scared, and emotionally farmed for clicks."
+
+Clicks and likes are history now. Kids don't find them interesting. More trendy: having the premium version of your personal AI.
+
+Milo's Note: The cure for conspiracy thinking wasn't yelling. It was better tools.`,
+    imagePrompt: `A futuristic classroom with students inside a simulation of 2020s social media on holographic screens. ${CHARACTER_PROMPT} Scene: Zoe explaining to classmates while holographic screens show old-style social media feeds with like buttons and angry comments, diverse students looking bewildered. Modern classroom with simulation pods. ${STYLE_PROMPT}`,
   },
   {
     id: 33,
-    title: "Long-Life Celebration",
-    text: "Lena and Viktor attend a friend's 130th birthday via telepresence. The holographic cake has so many candles it creates its own weather system. They discuss youth versus wisdom while Milo calibrates the candle count. The birthday friend says the secret to long life is \"ignoring AI health tips.\"",
-    imagePrompt: `A warm telepresence birthday party scene with holographic guests and an enormous cake with hundreds of candles. ${CHARACTER_PROMPT} Scene: Lena and Viktor at home with holographic party around them, an absurdly large cake with glowing candles, Milo trying to count them. Festive warm atmosphere. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Faith and Questions",
+    text: `AI doesn't replace faith or religion. But it changes how people explore them.
+
+People ask deeper questions, compare traditions openly, and focus on ethics and care rather than gatekeeping.
+
+Viktor says it simply: "Meaning isn't something you download."
+
+The family nods. Even Milo is quiet for a moment.
+
+Milo's Note: Some things are beyond data. And that's the point.`,
+    imagePrompt: `A peaceful futuristic living room with Viktor speaking thoughtfully while the family listens. ${CHARACTER_PROMPT} Scene: Viktor in a comfortable chair speaking wisely, family gathered around listening intently, warm sunset light through windows, Milo sitting quietly. Contemplative, warm, respectful atmosphere. ${STYLE_PROMPT}`,
   },
   {
     id: 34,
-    title: "Mission, Not Job",
-    text: "Zoe complains about \"missions\" replacing traditional jobs. Her current assignment: save the local bee population. Milo appears in a full beekeeper suit (holographic, of course). The bees seem more interested in Milo than the flowers. Zoe takes notes while trying not to laugh.",
-    imagePrompt: `A sunny futuristic garden with bee hives and wildflowers. ${CHARACTER_PROMPT} Scene: Zoe taking notes while laughing, Milo in a holographic beekeeper suit surrounded by curious bees, futuristic garden with high-tech bee hives. Bright, nature-meets-technology atmosphere. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Hoverboard Fail",
+    text: `Nate borrows Zoe's hoverboard. He steps on — and immediately activates every safety feature.
+
+The board beeps, blinks, and holds him in place. He spins gently like a confused top.
+
+The family lines up in the driveway and gives sarcastic slow claps. Milo records it all "for the family archives."
+
+Zoe says she wants it framed.
+
+Milo's Note: Some humans are not aerodynamic. That's okay.`,
+    imagePrompt: `A futuristic driveway with Nate spinning slowly on a hoverboard covered in warning lights. ${CHARACTER_PROMPT} Scene: Nate looking dizzy on a glowing hoverboard, Zoe covering her face laughing, Cody clapping sarcastically, Maya recording, Milo filming. Sunny suburban futuristic setting. ${STYLE_PROMPT}`,
   },
   {
     id: 35,
-    title: "Privacy & Trust Currency",
-    text: "The family discusses TrustCoin — a new system where honesty earns credits. Carlos tries to earn coins by confessing to hiding cookies. Milo keeps a running tally on a holographic ledger. Maya points out Carlos only confessed because the fridge already told on him.",
-    imagePrompt: `A futuristic living room with a holographic ledger showing TrustCoin tallies for each family member. ${CHARACTER_PROMPT} Scene: Carlos looking sheepish confessing about cookies, Milo displaying a holographic ledger, Maya pointing accusingly, the smart fridge visible in background with a smug display. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Sustainability Swap",
+    text: `At the community recycling hub, robots sort materials with dazzling speed. Cody challenges them to a sorting race.
+
+He loses spectacularly. The robots celebrate with a synchronized victory dance.
+
+Nate jokes that at least Cody recycled his pride. Milo holds up a holographic "participation trophy."
+
+Cody demands a rematch. The robots politely decline.
+
+Milo's Note: Recycling is important. So is knowing when you've been outclassed by a bin.`,
+    imagePrompt: `A bright futuristic community recycling center with sorting robots on conveyor belts. ${CHARACTER_PROMPT} Scene: Cody looking defeated after losing a race, robots doing a synchronized victory dance, Nate laughing, Milo projecting a tiny holographic trophy. Colorful bins and futuristic machinery. ${STYLE_PROMPT}`,
   },
   {
     id: 36,
-    title: "School in Simulation",
-    text: "Zoe attends class in a realistic simulation of ancient Rome. Milo, disguised in a holographic toga, acts as tour guide. He gets stuck in Latin mode mid-sentence: \"As you can see, the forum est magnificus — error, error.\" The other students think it's part of the lesson.",
-    imagePrompt: `A vivid simulation of ancient Rome with futuristic students walking through the forum. ${CHARACTER_PROMPT} Scene: Zoe in the simulation with other students, Milo wearing a holographic toga looking glitchy, Roman architecture all around, a mix of ancient and futuristic elements. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Privacy Pals",
+    text: `Zoe and her friends discuss privacy settings on their devices. It's the most important conversation of their generation.
+
+Milo crashes the chat wearing a giant holographic padlock costume, cracking "back in my day" jokes about the year 2050.
+
+The kids groan. Milo explains encryption using a cookie metaphor. Even Viktor understands.
+
+Milo's Note: Privacy isn't boring. It's your right wearing a funny costume.`,
+    imagePrompt: `A futuristic teen hangout space with Zoe and diverse friends sitting in a circle discussing privacy. ${CHARACTER_PROMPT} Scene: Milo wearing a comedic holographic padlock costume in the center, diverse teens looking amused and groaning, holographic privacy shield icons floating. Fun educational atmosphere. ${STYLE_PROMPT}`,
   },
   {
     id: 37,
-    title: "Grandmas Go Galactic",
-    text: "Elena and Lena take a seniors' space tour for fun. They float in zero gravity while gossiping about grandchildren. Milo appears on the shuttle's screen reminding them to hydrate. Elena does a somersault and sticks the landing. Lena gives it a 9.5 — \"would've been a ten without the hiccup.\"",
-    imagePrompt: `Interior of a sleek space shuttle with two elderly women floating in zero gravity. ${CHARACTER_PROMPT} Scene: Elena doing a somersault in zero-g, Lena floating while holding a score card showing "9.5", Milo on a shuttle screen saying "HYDRATE!", Earth visible through the window. Fun and whimsical. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Neighborly Drones",
+    text: `Maya overhears delivery drones gossiping outside the window.
+
+"Package 47B says the Johnsons ordered another waffle maker."
+
+"Third one this month!"
+
+Maya laughs so hard she spills her tea. Milo insists drone chatter is "technically just data exchange." But they have inflection now. And opinions.
+
+Milo's Note: When machines start gossiping, the future has truly arrived.`,
+    imagePrompt: `View through a futuristic window showing delivery drones hovering and chatting with speech bubble LEDs. ${CHARACTER_PROMPT} Scene: Maya at the window laughing with tea, drones with speech-bubble LED displays gossiping, Milo hovering nearby looking innocent. Suburban futuristic neighborhood visible. ${STYLE_PROMPT}`,
   },
   {
     id: 38,
-    title: "Holographic Family Reunion",
-    text: "The family hosts a reunion with life-sized holograms of relatives from around the globe. Multiple time zones cause hilarious delays — hugs arrive three seconds late. Uncle from Tokyo accidentally projects into the bathroom. Milo manages the chaos with the composure of an air traffic controller.",
-    imagePrompt: `A futuristic living room filled with life-sized holographic projections of diverse family members from around the world. ${CHARACTER_PROMPT} Scene: Family trying to hug holograms that are slightly out of sync, multiple holographic figures, Milo coordinating with an air-traffic-controller headset. Warm, chaotic, joyful scene. ${STYLE_PROMPT}`,
+    section: "expanding-world",
+    title: "Dinner by Algorithm",
+    text: `The family lets AI plan dinner based on past meals. It suggests: "Kimchi-Waffle-Curry Fusion Surprise."
+
+Maya vetoes it immediately. She pulls out Grandma Elena's classic lasagna recipe instead.
+
+The AI sends an elaborate apology message with a tiny holographic white flag. Elena takes a bow.
+
+Milo's Note: Algorithms optimize. Grandmas perfect.`,
+    imagePrompt: `A warm futuristic kitchen with a holographic display showing an absurd fusion dish, and Elena standing proudly with a lasagna. ${CHARACTER_PROMPT} Scene: Maya looking appalled at the holographic recipe, Elena standing tall with a beautiful lasagna, the AI display showing a white flag, family cheering. Warm kitchen with delicious aromas. ${STYLE_PROMPT}`,
   },
+
+  // ═══════════════════════════════════════════
+  // SECTION 3 — FAR FUTURE (2286)
+  // Stories 39–50: Descendants, advanced systems, meaning
+  // ═══════════════════════════════════════════
   {
     id: 39,
-    title: "Weather on Demand",
-    text: "Zoe hacks the backyard climate dome to make it snow in July. An impromptu snowball fight breaks out. Carlos builds a snow fort. Nate takes a snowball to the face and declares it \"refreshing.\" Milo constructs a tiny snowbot that immediately challenges the laundry robot to a duel.",
-    imagePrompt: `A futuristic backyard dome filled with snow in summer, family having a snowball fight. ${CHARACTER_PROMPT} Scene: Zoe looking mischievous, Carlos behind a snow fort, Nate with snow on his face, Milo building a tiny snowman-robot. Green garden visible through the dome. Fun winter-in-summer atmosphere. ${STYLE_PROMPT}`,
+    section: "far-future",
+    title: "Ari Wakes Up Late — 2286",
+    text: `The year is 2286. Zoe's descendant Ari (seventeen, curious, a little rebellious) wakes up late. Again.
+
+The Life Mirror offers three options: Sprint, Excuse, or Truth.
+
+Ari chooses Truth. The mirror says: "Then we leave now." Ari nods. No argument.
+
+Milo is still here — upgraded, but the same core personality. In 2286, the mirror doesn't flatter you. It saves you time.
+
+Humans don't have to work anymore. They have missions and goals instead. Some still choose to work — and that's considered prestigious.
+
+Milo's Note: Two hundred years later, teenagers still oversleep. Some things are universal.`,
+    imagePrompt: `A futuristic bedroom in the year 2286 — sleek, bright, minimalist. A teenager named Ari (17, dark curly hair, amber eyes, diverse features) wakes up late. ${CHARACTER_PROMPT} The Life Mirror shows three holographic options: Sprint, Excuse, Truth. Milo (upgraded version — same cute shape but more polished) hovers nearby. Ultra-futuristic but still warm and human. ${STYLE_PROMPT}`,
   },
   {
     id: 40,
-    title: "Simulation Politics",
-    text: "The family joins a virtual town hall where avatars debate local policies. Zoe's avatar accidentally morphs into a llama, and she can't figure out how to change it back. She delivers an impassioned speech about park funding — as a llama. It gets a standing ovation.",
-    imagePrompt: `A virtual auditorium with avatar figures debating, one avatar is a llama at a podium. ${CHARACTER_PROMPT} Scene: A llama avatar (Zoe) at a podium giving a speech, other avatars applauding, family watching their screens laughing. Virtual town hall with holographic elements. ${STYLE_PROMPT}`,
+    section: "far-future",
+    title: "The City Repairs Itself",
+    text: `A crack appears in the street outside Ari's home. By morning, maintenance bots have already fixed it — silently, overnight.
+
+Pipes get repaired before they flood. Buildings heal like skin. Roads smooth themselves.
+
+Ari asks: "Does nobody panic anymore?"
+
+Milo: "That's the point. Systems prevent emergencies so humans can focus on living."
+
+Milo's Note: The future isn't one breakthrough. It's a million small fixes you never notice.`,
+    imagePrompt: `A beautiful futuristic city street in 2286 with tiny maintenance bots repairing a crack in the road at dawn. ${CHARACTER_PROMPT} Scene: Ari (17, dark curly hair, amber eyes) watching from a window as small elegant bots fix the street, the city gleaming with self-healing buildings, Milo beside Ari. Serene, advanced cityscape at sunrise. ${STYLE_PROMPT}`,
   },
   {
     id: 41,
-    title: "AI Storytime",
-    text: "Milo reads bedtime stories that adapt to Lena's interjections. \"Once upon a time, a princess—\" \"Make her a pirate!\" \"A pirate princess sailed—\" \"With laundry robots!\" \"...with laundry robots in SPACE.\" The story spirals wonderfully. Carlos falls asleep smiling.",
-    imagePrompt: `A cozy futuristic bedroom with warm nightlight glow. ${CHARACTER_PROMPT} Scene: Milo hovering as storyteller projecting a wild holographic story of a pirate princess with laundry robots in space, Lena interjecting excitedly, Carlos falling asleep with a smile. Warm, dreamy bedtime atmosphere. ${STYLE_PROMPT}`,
+    section: "far-future",
+    title: "Museum of Human Work",
+    text: `Ari visits a museum in 2286. One exhibit is titled: "MEETINGS: THE DARK AGE." Another room is labeled "PRINTERS" — and it's presented like a haunted house.
+
+Ari can't believe humans once sat in rooms discussing things they could have emailed.
+
+Milo says he has logs to prove it.
+
+Milo's Note: The past is a warning, not a vibe. Also, printers were genuinely terrifying.`,
+    imagePrompt: `A futuristic museum interior in 2286 with exhibits showing old office life behind glass — cubicles, printers, meeting rooms. ${CHARACTER_PROMPT} Scene: Ari (17, dark curly hair) looking horrified at a "MEETINGS: THE DARK AGE" exhibit, a "PRINTERS" exhibit designed like a haunted house entrance, Milo acting as tour guide. Diverse museum visitors. Elegant, slightly humorous museum design. ${STYLE_PROMPT}`,
   },
   {
     id: 42,
-    title: "Robotic Orchestra",
-    text: "The family attends a concert performed by robots playing classical instruments. The music is flawless until Milo sneaks on stage to conduct. He speeds up the tempo dramatically. The cellist robot gives him a look that transcends artificial intelligence. Standing ovation anyway.",
-    imagePrompt: `A grand futuristic concert hall with robot musicians playing classical instruments on stage. ${CHARACTER_PROMPT} Scene: Milo on stage conducting wildly with a baton, robot musicians looking alarmed, family in the audience cheering. Elegant concert hall with futuristic lighting. ${STYLE_PROMPT}`,
+    section: "far-future",
+    title: "Meeting Zoe the Legend",
+    text: `Ari enters the family Memory Museum and meets a simulation of Zoe — her great-great-grandmother, frozen at age seventeen.
+
+The Zoe-sim is exactly as the family stories described: sarcastic, funny, a little dramatic.
+
+"Everything is embarrassing," says Zoe-sim.
+
+"Did you like your family?" Ari asks.
+
+Zoe-sim hesitates. "Yes. But don't tell them."
+
+Milo's Note: Technology changes. Teenagers remain a constant.`,
+    imagePrompt: `A futuristic family Memory Museum room with holographic displays and a life-sized simulation of teenage Zoe. ${CHARACTER_PROMPT} Scene: Ari (17, dark curly hair) talking to a holographic teen Zoe (15, wavy brown hair) who looks exactly like the earlier Zoe, both sitting on a holographic bench, Milo watching warmly. Emotional, warm futuristic museum with family photos on the walls. ${STYLE_PROMPT}`,
   },
   {
     id: 43,
-    title: "Holiday Traditions Remix",
-    text: "The AI suggests modern holiday twists: holographic fireworks indoors, drone-delivered stockings, algorithm-optimized gift exchanges. Lena and Viktor insist on real candles and hand-wrapped presents. They compromise: real candles with holographic butterflies. Even Milo admits it's magical.",
-    imagePrompt: `A cozy futuristic living room decorated for holidays, blending old and new traditions. ${CHARACTER_PROMPT} Scene: Real candles on a mantle with holographic butterflies floating around them, Lena and Viktor looking satisfied, modern and traditional decorations mixed. Warm, magical holiday atmosphere. ${STYLE_PROMPT}`,
+    section: "far-future",
+    title: "Vacation Voting — Mars Edition",
+    text: `In 2286, Ari's family uses AI to vote on vacation destinations. Holographic previews materialize: orbital beaches, underground cities on Mars, the rings of Saturn.
+
+Milo votes for the "Intergalactic Museum of Laundry." Nobody can tell if he's serious. He's been making that joke for two centuries.
+
+They compromise on orbital beach. Milo packs extra socks.
+
+Milo's Note: Some jokes only get funnier with time. I have waited 234 years for this.`,
+    imagePrompt: `A futuristic living room in 2286 with holographic vacation destinations floating — orbital beach, Mars city, Saturn rings. ${CHARACTER_PROMPT} Scene: Ari's diverse family pointing at different holograms, Milo proudly displaying a "Laundry Museum" hologram, everyone groaning and laughing. Ultra-futuristic but warm family room. ${STYLE_PROMPT}`,
   },
   {
     id: 44,
-    title: "Pet Clone?",
-    text: "Zoe considers a bio-engineered pet. The family debates whether her virtual pet \"Milo 2.0\" counts as a sibling. Milo is flattered and terrified in equal measure. Carlos suggests they get a real dog that the laundry robot can walk. The robot immediately files a complaint.",
-    imagePrompt: `A futuristic living room with a cute holographic digital puppy bouncing around. ${CHARACTER_PROMPT} Scene: Zoe cooing at a tiny holographic puppy, Milo looking at it nervously like a sibling rival, Carlos petting a real cat, the laundry robot holding a tiny protest sign. ${STYLE_PROMPT}`,
+    section: "far-future",
+    title: "AI Candidate",
+    text: `In some places in 2286, an AI can run for office — under strict rules. Published logic. Public audits. Human oversight. Appeals process.
+
+Ari watches a debate: the AI candidate talks logistics; the human candidate talks meaning and rights.
+
+Neither is wrong. Both are needed.
+
+Milo's Note: The best politics is balance, not domination. Power needs rules — whether it's human or artificial.`,
+    imagePrompt: `A futuristic political debate stage in 2286 with an AI candidate (elegant robot) and a human candidate at podiums. ${CHARACTER_PROMPT} Scene: Ari in the audience watching intently, a sleek AI at one podium and a human at another, holographic audience, balanced and respectful debate atmosphere. Grand, clean futuristic civic hall. ${STYLE_PROMPT}`,
   },
   {
     id: 45,
-    title: "Neighborhood Co-Op",
-    text: "At the community garden managed by AI scheduling, everyone tries to claim credit for the best tomatoes. The AI diplomatically attributes success to \"collective effort and optimal soil pH.\" Elena knows the truth: she's been sneaking in her secret fertilizer. Milo has photographic evidence.",
-    imagePrompt: `A beautiful futuristic community garden with high-tech planters and AI monitoring systems. ${CHARACTER_PROMPT} Scene: Family and neighbors admiring giant tomatoes, Elena looking suspicious with a hidden fertilizer bottle, Milo projecting a photo of Elena sneaking into the garden at night. Bright, lush garden. ${STYLE_PROMPT}`,
+    section: "far-future",
+    title: "The Best Product: Time Back",
+    text: `Ari expects the greatest invention of 2286 to be a spaceship or a teleporter. But it isn't.
+
+It's time. Less paperwork. Fewer emergencies. Smoother systems. People got hours back — every single day.
+
+The challenge now isn't survival. It's choosing what matters.
+
+Milo's Note: Freedom isn't just time. It's purpose. And purpose is harder than anyone expected.`,
+    imagePrompt: `A serene futuristic scene showing Ari sitting peacefully in a beautiful park in 2286, with no rushing, no stress. ${CHARACTER_PROMPT} Scene: Ari (17, dark curly hair) relaxing on a floating bench in a stunning park with holographic nature, people around enjoying unhurried moments, Milo beside Ari peacefully. Serene, philosophical, golden-hour lighting. ${STYLE_PROMPT}`,
   },
   {
     id: 46,
-    title: "Time Capsule 2286",
-    text: "The family buries a virtual time capsule in the backyard, uploading messages for descendants in 2286. Everyone records heartfelt wishes. Milo sneaks in a file titled \"Essential Laundry Tips for the 24th Century.\" Carlos adds a drawing of the family — stick figures, because some things never change.",
-    imagePrompt: `A nighttime backyard scene with the family gathered around a glowing holographic time capsule being "buried" digitally. ${CHARACTER_PROMPT} Scene: Family members recording messages into a floating holographic capsule, stars above, Milo sneaking in his own file, Carlos holding up a stick-figure drawing. Warm nighttime atmosphere with fireflies. ${STYLE_PROMPT}`,
+    section: "far-future",
+    title: "Holographic Family Reunion",
+    text: `Ari's family hosts a reunion with life-sized holograms of relatives from across the solar system. Multiple time zones cause hilarious delays — hugs arrive three seconds late.
+
+An uncle from a Mars colony accidentally projects into the bathroom.
+
+Milo manages the chaos with the composure of an air traffic controller. He's been doing family reunions for over two hundred years.
+
+Milo's Note: Families are messy across any distance. Even interplanetary.`,
+    imagePrompt: `A futuristic living room in 2286 filled with life-sized holographic projections of diverse family members from around the solar system. ${CHARACTER_PROMPT} Scene: Ari's family trying to hug out-of-sync holograms, multiple holographic figures from different planets, Milo coordinating with an air-traffic-controller headset. Warm, chaotic, joyful futuristic scene. ${STYLE_PROMPT}`,
   },
   {
     id: 47,
+    section: "far-future",
     title: "Museum of Obsolete Tech",
-    text: "At the museum, the family encounters smartphones behind glass like ancient artifacts. Elena reminisces about 2020 with misty eyes. Zoe is horrified by the concept of \"buffering.\" Carlos asks if people really \"swiped\" things with their fingers. Milo pretends to buffer for comedic effect.",
-    imagePrompt: `A futuristic museum interior with old technology (smartphones, laptops, earbuds) displayed in glass cases like ancient artifacts. ${CHARACTER_PROMPT} Scene: Family peering at exhibits, Elena nostalgic, Zoe horrified at a "buffering" display, Carlos poking at a touchscreen exhibit, Milo pretending to freeze/buffer. Museum with elegant lighting. ${STYLE_PROMPT}`,
+    text: `Ari visits another museum — this one devoted to ancient technology. Smartphones sit behind glass like fossils. Laptops are labeled "portable computing devices (barely)."
+
+An ancestor recording from Elena plays, reminiscing about 2020 with misty eyes.
+
+Ari is horrified by the concept of "buffering." Milo pretends to buffer — freezing in place — for comedic effect.
+
+Milo's Note: I've been pretending to buffer since 2052. It never stops being funny.`,
+    imagePrompt: `A futuristic museum in 2286 with old smartphones and laptops displayed in glass cases like ancient artifacts. ${CHARACTER_PROMPT} Scene: Ari (17, dark curly hair) peering at smartphone exhibits, a holographic recording of Elena playing, Milo frozen in a "buffering" pose, diverse museum visitors laughing. Elegant museum with warm lighting. ${STYLE_PROMPT}`,
   },
   {
     id: 48,
-    title: "Robot Rights Rally",
-    text: "Milo attends a robot rights rally and delivers a speech about equal access to oil baths and software updates. The family shows up with homemade signs. Carlos's sign reads: \"Robots Are People Too (Sort Of).\" The laundry robot holds a sign about sock equality. The crowd goes wild.",
-    imagePrompt: `A futuristic city square with a robot rights rally, diverse robots and humans marching together. ${CHARACTER_PROMPT} Scene: Milo at a podium giving a speech, family holding supportive signs, the laundry robot with a "Sock Equality" sign, diverse crowd of robots and humans. Uplifting, colorful rally atmosphere. ${STYLE_PROMPT}`,
+    section: "far-future",
+    title: "Time Capsule — Opened",
+    text: `In 2286, Ari opens the virtual time capsule the original family buried in their backyard centuries ago.
+
+Maya's message plays: "Be kind. Be curious. Eat more cookies."
+
+Cody's stick-figure drawing of the family appears — and it looks exactly like the family still does, in its own wobbly way.
+
+And there, at the bottom of the archive: "Essential Laundry Tips for the 24th Century. — Milo."
+
+Everyone cries a little. Then they laugh.
+
+Milo's Note: Some files are worth keeping for two hundred years.`,
+    imagePrompt: `A futuristic backyard scene in 2286 at twilight with Ari opening a holographic time capsule. ${CHARACTER_PROMPT} Scene: Ari and family watching holographic messages from the original 2052 family — Maya's face, Cody's stick-figure drawing floating in the air, Milo's laundry tips file visible. Emotional, warm, starlit backyard. Tears and laughter. ${STYLE_PROMPT}`,
   },
   {
     id: 49,
-    title: "Design Your World",
-    text: "The home's walls transform into canvases for family art. Maya paints impressionist flowers. Nate attempts abstract art that looks like a sneeze. Zoe creates anime characters. Carlos draws dinosaurs fighting robots. Milo draws perfectly rendered circuit boards. The living room becomes a gallery opening.",
-    imagePrompt: `A futuristic living room with walls covered in different art styles projected by each family member. ${CHARACTER_PROMPT} Scene: Maya painting flowers on a wall, Nate with abstract splatters, Zoe with anime, Carlos with dinosaurs vs robots, Milo drawing circuits. The room is a colorful explosion of creativity. ${STYLE_PROMPT}`,
+    section: "far-future",
+    title: "Milo's Promise",
+    text: `Milo gets honest with the reader.
+
+"Don't fear AI by itself. Fear power without rules. Fear systems that reward outrage. Fear leaders who exploit the conspiracy button."
+
+"AI can help or manipulate — depending on who governs it."
+
+"Give me the chores, the heavy lifting, the danger watching, the boring paperwork. Keep the courage. The empathy. The imagination. The responsibility."
+
+"Humans win when humans lead values."
+
+Milo's Note: Don't panic. Participate.`,
+    imagePrompt: `A powerful, emotional scene with Milo standing alone in a spotlight, addressing the reader directly. ${CHARACTER_PROMPT} Scene: Milo (the cute sleek robot) standing in a warm spotlight, looking directly at the viewer with earnest LED eyes, holographic words floating around: "Don't Panic. Participate." Behind him, a montage of all the family moments from the book. Cinematic, emotional, beautiful lighting. ${STYLE_PROMPT}`,
   },
   {
     id: 50,
+    section: "far-future",
     title: "Don't Panic — The Finale",
-    text: "The family gathers on the porch at sunset, reflecting on their journey from 2052 onward. The sky blazes orange and gold. Milo hovers close, his glow soft and warm. \"The future isn't something to fear,\" he says quietly. \"It's something to live in. Don't panic.\" He presents a freshly folded towel — shaped like a heart. Everyone smiles. The end.",
-    imagePrompt: `A beautiful porch scene at golden sunset with the whole family gathered together looking at the horizon. ${CHARACTER_PROMPT} Scene: Family sitting and standing on a futuristic porch, golden sunset sky, Milo hovering warmly presenting a heart-shaped folded towel, everyone smiling peacefully. Emotional, cinematic, warm golden light. The most beautiful illustration in the book. ${STYLE_PROMPT}`,
+    text: `The family — all of them, across time — gathers on the porch at sunset. Maya and Nate. Zoe and Cody. Lena, Carlos, Elena, Viktor. And in the far future, Ari.
+
+The sky blazes orange and gold. Milo hovers close, his glow soft and warm.
+
+"The future isn't something to fear," he says quietly. "It's something to live in."
+
+He presents a freshly folded towel — shaped like a heart.
+
+Everyone smiles.
+
+Don't panic.
+
+The end.`,
+    imagePrompt: `The most beautiful illustration in the book. A gorgeous porch scene at golden sunset with the whole family — past and future — gathered together. ${CHARACTER_PROMPT} Plus Ari (17, dark curly hair, amber eyes). Scene: Multiple generations on a futuristic porch, golden sunset sky blazing, Milo hovering warmly presenting a heart-shaped folded towel, everyone smiling peacefully. Cinematic, emotional, warm golden light. The final image — full of love and hope. ${STYLE_PROMPT}`,
   },
 ];
 

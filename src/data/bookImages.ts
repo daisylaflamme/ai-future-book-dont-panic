@@ -33,6 +33,22 @@ import story31 from "@/assets/story-31.jpg";
 import story32 from "@/assets/story-32.jpg";
 import story33 from "@/assets/story-33.jpg";
 import story34 from "@/assets/story-34.jpg";
+import story35 from "@/assets/story-35.jpg";
+import story36 from "@/assets/story-36.jpg";
+import story37 from "@/assets/story-37.jpg";
+import story38 from "@/assets/story-38.jpg";
+import story39 from "@/assets/story-39.jpg";
+import story40 from "@/assets/story-40.jpg";
+import story41 from "@/assets/story-41.jpg";
+import story42 from "@/assets/story-42.jpg";
+import story43 from "@/assets/story-43.jpg";
+import story44 from "@/assets/story-44.jpg";
+import story45 from "@/assets/story-45.jpg";
+import story46 from "@/assets/story-46.jpg";
+import story47 from "@/assets/story-47.jpg";
+import story48 from "@/assets/story-48.jpg";
+import story49 from "@/assets/story-49.jpg";
+import story50 from "@/assets/story-50.jpg";
 
 export const coverImage = cover;
 
@@ -43,5 +59,8 @@ export const storyImages: Record<number, string> = {
   16: story16, 17: story17, 18: story18, 19: story19, 20: story20,
   21: story21, 22: story22, 23: story23, 24: story24, 25: story25,
   26: story26, 27: story27, 28: story28, 29: story29, 30: story30,
-  31: story31, 32: story32, 33: story33, 34: story34,
+  31: story31, 32: story32, 33: story33, 34: story34, 35: story35,
+  36: story36, 37: story37, 38: story38, 39: story39, 40: story40,
+  41: story41, 42: story42, 43: story43, 44: story44, 45: story45,
+  46: story46, 47: story47, 48: story48, 49: story49, 50: story50,
 };
