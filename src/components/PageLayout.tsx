@@ -25,8 +25,9 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
         side === "left" ? "border-r border-border/20" : ""
       }`}
       style={{
-        backgroundImage: bg,
-        backgroundColor: "#F7F4EF",
+        backgroundImage: `url(${pageBackground})`,
+        backgroundSize: "cover",
+        backgroundPosition: side === "left" ? "left center" : "right center",
       }}
     >
       {/* Image container with border frame like mockup */}
