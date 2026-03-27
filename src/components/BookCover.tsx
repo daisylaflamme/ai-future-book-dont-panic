@@ -20,24 +20,18 @@ const BookCover = ({ coverImage }: BookCoverProps) => {
         />
       )}
 
-      {/* Dark gradient overlays for text readability and top-title suppression */}
+      {/* Lighter gradient overlay for text readability */}
       <div
         className="absolute inset-0"
         style={{
           background: `linear-gradient(
             to top,
-            hsl(228 45% 6% / 0.96) 0%,
-            hsl(228 45% 6% / 0.86) 24%,
-            hsl(228 45% 6% / 0.5) 52%,
-            hsl(228 45% 6% / 0.6) 74%,
-            hsl(228 45% 6% / 0.94) 100%
+            hsl(228 45% 6% / 0.92) 0%,
+            hsl(228 45% 6% / 0.65) 22%,
+            hsl(228 45% 6% / 0.25) 50%,
+            hsl(228 45% 6% / 0.4) 75%,
+            hsl(228 45% 6% / 0.7) 100%
           )`,
-        }}
-      />
-      <div
-        className="absolute inset-x-0 top-0 h-[34%]"
-        style={{
-          background: "linear-gradient(to bottom, hsl(228 45% 6% / 0.98) 0%, hsl(228 45% 6% / 0.9) 48%, hsl(228 45% 6% / 0) 100%)",
         }}
       />
 
