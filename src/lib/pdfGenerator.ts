@@ -15,7 +15,7 @@ const PAGE_W = SPREAD_W / 2; // 6 inches = 152.4mm
 const MARGIN = 18; // ~0.5 inch
 const GUTTER = 20; // inside margin
 
-async function loadImageAsDataUrl(src: string): Promise<string | null> {
+async function loadImageAsDataUrl(src: string): Promise<{ dataUrl: string; width: number; height: number } | null> {
   try {
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -24,12 +24,14 @@ async function loadImageAsDataUrl(src: string): Promise<string | null> {
       img.onerror = () => reject();
       img.src = src;
     });
+    const w = img.naturalWidth;
+    const h = img.naturalHeight;
     const canvas = document.createElement("canvas");
-    canvas.width = img.naturalWidth;
-    canvas.height = img.naturalHeight;
+    canvas.width = w;
+    canvas.height = h;
     const ctx = canvas.getContext("2d")!;
     ctx.drawImage(img, 0, 0);
-    return canvas.toDataURL("image/jpeg", 0.92);
+    return { dataUrl: canvas.toDataURL("image/jpeg", 0.92), width: w, height: h };
   } catch {
     return null;
   }
@@ -42,12 +44,12 @@ function drawImageContained(
   x: number,
   y: number,
   maxW: number,
-  maxH: number
+  maxH: number,
+  naturalW?: number,
+  naturalH?: number
 ) {
-  const img = new Image();
-  img.src = dataUrl;
-  const imgW = img.naturalWidth || maxW;
-  const imgH = img.naturalHeight || maxH;
+  const imgW = naturalW && naturalW > 0 ? naturalW : maxW;
+  const imgH = naturalH && naturalH > 0 ? naturalH : maxH;
   const scale = Math.min(maxW / imgW, maxH / imgH);
   const drawW = imgW * scale;
   const drawH = imgH * scale;
@@ -84,8 +86,8 @@ export async function generateBookPdf() {
   });
 
   // Pre-load all images
-  const imageCache: Record<number, string | null> = {};
-  const coverDataUrl = await loadImageAsDataUrl(coverImage);
+  const imageCache: Record<number, { dataUrl: string; width: number; height: number } | null> = {};
+  const coverLoaded = await loadImageAsDataUrl(coverImage);
 
   for (const story of stories) {
     if (story.imageUrl) {
@@ -97,8 +99,8 @@ export async function generateBookPdf() {
   pdf.setFillColor(18, 22, 40);
   pdf.rect(0, 0, SPREAD_W, SPREAD_H, "F");
 
-  if (coverDataUrl) {
-    drawImageContained(pdf, coverDataUrl, 0, 0, SPREAD_W, SPREAD_H);
+  if (coverLoaded) {
+    drawImageContained(pdf, coverLoaded.dataUrl, 0, 0, SPREAD_W, SPREAD_H, coverLoaded.width, coverLoaded.height);
     // Dark overlay
     pdf.setFillColor(10, 12, 25);
     pdf.setGState(new (pdf as any).GState({ opacity: 0.6 }));
@@ -204,7 +206,7 @@ export async function generateBookPdf() {
 function renderStoryOnPage(
   pdf: jsPDF,
   story: (typeof stories)[0],
-  imgDataUrl: string | null | undefined,
+  imgData: { dataUrl: string; width: number; height: number } | null | undefined,
   x: number,
   y: number,
   width: number,
@@ -215,8 +217,8 @@ function renderStoryOnPage(
   const imgPadding = 3;
 
   // Image — aspect-ratio preserved (contain)
-  if (imgDataUrl) {
-    drawImageContained(pdf, imgDataUrl, x + imgPadding, y + imgPadding, width - imgPadding * 2, imgAreaH - imgPadding * 2);
+  if (imgData) {
+    drawImageContained(pdf, imgData.dataUrl, x + imgPadding, y + imgPadding, width - imgPadding * 2, imgAreaH - imgPadding * 2, imgData.width, imgData.height);
   } else {
     // Placeholder
     pdf.setFillColor(238, 233, 223);
