@@ -9,7 +9,7 @@ const BookCover = ({ coverImage }: BookCoverProps) => {
     <div
       className="relative w-full h-full flex items-center justify-center overflow-hidden"
       style={{
-        background: "linear-gradient(135deg, hsl(220 30% 12%) 0%, hsl(220 25% 20%) 40%, hsl(38 60% 35%) 100%)",
+        background: "linear-gradient(135deg, hsl(220 30% 10%) 0%, hsl(220 25% 18%) 50%, hsl(38 50% 25%) 100%)",
       }}
     >
       {coverImage && (
@@ -20,55 +20,59 @@ const BookCover = ({ coverImage }: BookCoverProps) => {
         />
       )}
 
-      {/* Gradient overlay for text readability */}
+      {/* Strong gradient overlay for text readability */}
       <div
         className="absolute inset-0"
         style={{
           background: `linear-gradient(
             to top,
-            rgba(10,12,25,0.92) 0%,
-            rgba(10,12,25,0.7) 25%,
-            rgba(10,12,25,0.3) 50%,
-            rgba(10,12,25,0.5) 75%,
-            rgba(10,12,25,0.8) 100%
+            rgba(5,8,20,0.95) 0%,
+            rgba(5,8,20,0.85) 20%,
+            rgba(5,8,20,0.45) 50%,
+            rgba(5,8,20,0.55) 70%,
+            rgba(5,8,20,0.9) 100%
           )`,
         }}
       />
 
-      <div className="relative z-10 text-center px-8 py-12 max-w-2xl">
+      <div className="relative z-10 flex flex-col items-center justify-center text-center px-10 py-16 max-w-2xl w-full h-full">
+        {/* Top spacer */}
+        <div className="flex-1" />
+
+        {/* Title */}
         <h1
-          className="font-display text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-4"
+          className="font-display text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight tracking-tight"
           style={{
             color: "hsl(40 30% 95%)",
-            textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 4px 40px rgba(0,0,0,0.5)",
+            textShadow: "0 3px 24px rgba(0,0,0,0.9), 0 6px 48px rgba(0,0,0,0.6)",
           }}
         >
           {BOOK_META.title}
         </h1>
+
+        {/* Divider */}
+        <div className="w-20 h-0.5 my-6" style={{ background: "hsl(38 70% 55%)" }} />
+
+        {/* Subtitle */}
         <p
-          className="font-display text-lg md:text-xl lg:text-2xl italic mb-6"
+          className="font-display text-base md:text-lg lg:text-xl italic"
           style={{
             color: "hsl(38 70% 65%)",
-            textShadow: "0 2px 12px rgba(0,0,0,0.7)",
-          }}
-        >
-          — {BOOK_META.subtitle}
-        </p>
-        <div className="w-24 h-0.5 mx-auto mb-6" style={{ background: "hsl(38 70% 55%)" }} />
-        <p
-          className="font-body text-sm md:text-base mb-3"
-          style={{
-            color: "hsl(40 20% 85%)",
-            textShadow: "0 1px 8px rgba(0,0,0,0.6)",
+            textShadow: "0 2px 12px rgba(0,0,0,0.8)",
           }}
         >
           {BOOK_META.fullSubtitle}
         </p>
+
+        {/* Bottom spacer */}
+        <div className="flex-1" />
+
+        {/* Author at bottom */}
         <p
-          className="font-ui text-xs md:text-sm tracking-wider uppercase mt-8"
+          className="font-ui text-xs md:text-sm tracking-widest uppercase"
           style={{
             color: "hsl(38 60% 70%)",
-            textShadow: "0 1px 6px rgba(0,0,0,0.6)",
+            textShadow: "0 1px 8px rgba(0,0,0,0.7)",
           }}
         >
           {BOOK_META.author}
