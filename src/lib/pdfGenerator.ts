@@ -116,15 +116,16 @@ export async function generateBookPdf() {
   const titleBlockH = titleLines.length * 10;
   pdf.text(titleLines, SPREAD_W / 2, SPREAD_H / 2 - titleBlockH, { align: "center" });
 
+  const subtitleY = SPREAD_H / 2 + 5;
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(11);
   pdf.setTextColor(195, 185, 165);
   const fsLines = pdf.splitTextToSize(BOOK_META.fullSubtitle, 200);
-  pdf.text(fsLines, SPREAD_W / 2, 115, { align: "center" });
+  pdf.text(fsLines, SPREAD_W / 2, subtitleY, { align: "center" });
 
   pdf.setFontSize(10);
   pdf.setTextColor(210, 175, 100);
-  pdf.text(BOOK_META.author, SPREAD_W / 2, 145, { align: "center" });
+  pdf.text(BOOK_META.author, SPREAD_W / 2, SPREAD_H - 30, { align: "center" });
 
   // === TITLE PAGE ===
   pdf.addPage();
