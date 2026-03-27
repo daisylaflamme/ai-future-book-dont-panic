@@ -7,6 +7,28 @@ interface StoryPageProps {
   side: "left" | "right";
 }
 
+/**
+ * Parse story text to separate regular paragraphs from "Milo's Note:" blocks.
+ * Milo's Note gets special bold+italic styling like the mockup.
+ */
+const renderStoryText = (text: string) => {
+  const paragraphs = text.split("\n").filter((p) => p.trim());
+
+  return paragraphs.map((para, i) => {
+    // Check if this paragraph starts with "Milo's Note:"
+    if (para.trim().startsWith("Milo's Note:")) {
+      const noteContent = para.trim().replace("Milo's Note:", "").trim();
+      return (
+        <p key={i} className="mt-1">
+          <span className="font-bold text-foreground/90">Milo's Note:</span>{" "}
+          <span>{noteContent}</span>
+        </p>
+      );
+    }
+    return <p key={i}>{para}</p>;
+  });
+};
+
 const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
   return (
     <PageLayout
@@ -18,7 +40,7 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
           <img
             src={story.imageUrl}
             alt={story.title}
-            className="w-full h-full object-cover rounded"
+            className="w-full h-full object-cover"
             loading="lazy"
           />
         ) : (
@@ -28,15 +50,13 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
         )
       }
       title={
-        <h3 className="font-display text-sm md:text-base lg:text-lg font-semibold text-foreground leading-snug">
+        <h3 className="font-display text-base md:text-lg lg:text-xl font-bold text-foreground text-center leading-snug">
           {story.title}
         </h3>
       }
       body={
-        <div className="font-body text-[11px] md:text-xs lg:text-[13px] text-foreground/80">
-          {story.text.split("\n").map((para, i) => (
-            <p key={i}>{para}</p>
-          ))}
+        <div className="font-body text-[11px] md:text-xs lg:text-[13px] text-foreground/75">
+          {renderStoryText(story.text)}
         </div>
       }
     />
