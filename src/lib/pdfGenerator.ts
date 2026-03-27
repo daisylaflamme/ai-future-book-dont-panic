@@ -206,7 +206,7 @@ export async function generateBookPdf() {
 function renderStoryOnPage(
   pdf: jsPDF,
   story: (typeof stories)[0],
-  imgDataUrl: string | null | undefined,
+  imgData: { dataUrl: string; width: number; height: number } | null | undefined,
   x: number,
   y: number,
   width: number,
