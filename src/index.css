@@ -78,7 +78,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Lora', serif;
+    font-family: 'Libre Baskerville', serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -92,10 +92,10 @@
   }
 
   .book-body-font {
-    font-family: 'Lora', serif;
+    font-family: 'Libre Baskerville', serif;
   }
 
   .book-ui-font {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Libre Baskerville', serif;
   }
 }

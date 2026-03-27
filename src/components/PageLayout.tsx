@@ -69,16 +69,16 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
         {title}
       </div>
 
-      {/* Body text — well-spaced paragraphs */}
+      {/* Body text — Libre Baskerville, generous line-height */}
       <div className="flex-1 min-h-0 overflow-y-auto pr-1">
-        <div className="leading-[2.8] md:leading-[3.0] space-y-4 md:space-y-5">
+        <div className="leading-[1.7] md:leading-[1.75] space-y-3 md:space-y-4">
           {body}
         </div>
       </div>
 
-      {/* Page number — pinned bottom, muted */}
+      {/* Page number — Libre Baskerville, small, subtle */}
       <div className="flex-shrink-0 pt-4 md:pt-5">
-        <p className="font-ui text-[10px] md:text-[11px] text-muted-foreground/50 text-center tracking-widest">
+        <p className="font-body text-[10px] md:text-[11px] text-foreground/35 text-center tracking-wider">
           {pageNumber}
         </p>
       </div>

@@ -15,8 +15,8 @@ export default {
     extend: {
       fontFamily: {
         display: ['"Playfair Display"', 'serif'],
-        body: ['"Lora"', 'serif'],
-        ui: ['"Inter"', 'sans-serif'],
+        body: ['"Libre Baskerville"', 'serif'],
+        ui: ['"Libre Baskerville"', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
