@@ -86,8 +86,8 @@ export async function generateBookPdf() {
   });
 
   // Pre-load all images
-  const imageCache: Record<number, string | null> = {};
-  const coverDataUrl = await loadImageAsDataUrl(coverImage);
+  const imageCache: Record<number, { dataUrl: string; width: number; height: number } | null> = {};
+  const coverLoaded = await loadImageAsDataUrl(coverImage);
 
   for (const story of stories) {
     if (story.imageUrl) {
