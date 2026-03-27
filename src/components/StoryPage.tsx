@@ -9,17 +9,24 @@ interface StoryPageProps {
 const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
   return (
     <div
-      className={`flex flex-col h-full p-4 md:p-5 lg:p-6 ${side === "left" ? "border-r border-border/30" : ""}`}
+      className={`flex flex-col h-full p-5 md:p-6 lg:p-7 ${side === "left" ? "border-r border-border/30" : ""}`}
       style={{
-        background: "linear-gradient(160deg, hsl(40 35% 97%) 0%, hsl(38 28% 95%) 30%, hsl(35 30% 93%) 100%)",
+        background: `
+          linear-gradient(160deg, hsl(40 35% 97%) 0%, hsl(38 28% 95%) 30%, hsl(35 30% 92%) 100%)
+        `,
+        backgroundImage: `
+          linear-gradient(160deg, hsl(40 35% 97%) 0%, hsl(38 28% 95%) 30%, hsl(35 30% 92%) 100%),
+          radial-gradient(ellipse at 20% 80%, hsl(210 30% 95% / 0.3) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 20%, hsl(38 40% 92% / 0.4) 0%, transparent 50%)
+        `,
       }}
     >
       {/* Illustration */}
       <div
-        className="relative w-full flex-shrink-0 mb-2 rounded-md overflow-hidden"
+        className="relative w-full flex-shrink-0 mb-3 rounded-lg overflow-hidden"
         style={{
-          height: "45%",
-          boxShadow: "0 2px 12px hsl(var(--book-shadow) / 0.08)",
+          height: "42%",
+          boxShadow: "0 3px 16px hsl(var(--book-shadow) / 0.1)",
         }}
       >
         {story.imageUrl ? (
@@ -42,17 +49,17 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
       {/* Story content */}
       <div className="flex-1 flex flex-col justify-between min-h-0 overflow-hidden">
         <div className="overflow-y-auto pr-1">
-          <h3 className="font-display text-sm md:text-base lg:text-lg font-semibold text-foreground mb-1 leading-snug">
+          <h3 className="font-display text-sm md:text-base lg:text-lg font-semibold text-foreground mb-2 leading-snug">
             {story.title}
           </h3>
-          <p className="font-body text-[10px] md:text-xs lg:text-[13px] leading-relaxed text-foreground/80 whitespace-pre-line">
+          <p className="font-body text-[11px] md:text-xs lg:text-[13px] leading-[1.7] text-foreground/80 whitespace-pre-line">
             {story.text}
           </p>
         </div>
 
         {/* Page number */}
-        <div className="mt-1 pt-0.5 flex-shrink-0">
-          <p className="font-ui text-[9px] md:text-[10px] text-muted-foreground/60 text-center italic">
+        <div className="mt-2 pt-1 flex-shrink-0">
+          <p className="font-ui text-[9px] md:text-[10px] text-muted-foreground/50 text-center italic tracking-wider">
             — {pageNumber} —
           </p>
         </div>
