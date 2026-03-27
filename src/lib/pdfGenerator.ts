@@ -1,181 +1,257 @@
 import jsPDF from "jspdf";
 import { stories, BOOK_META } from "@/data/bookData";
+import { coverImage } from "@/data/bookImages";
+
+// KDP 6×9 portrait trim in points (1 pt = 1/72 in)
+// We generate landscape spreads: each spread = 2 pages side by side
+// But for KDP single-page PDF we do 6×9 portrait pages.
+// However the user's app is landscape spreads — let's keep landscape spread PDF
+// with proper proportions and add a KDP single-page version.
+
+// Landscape spread dimensions (mm) — two 6×9 pages side by side
+const SPREAD_W = 304.8; // 12 inches
+const SPREAD_H = 228.6; // 9 inches
+const PAGE_W = SPREAD_W / 2; // 6 inches = 152.4mm
+const MARGIN = 18; // ~0.5 inch
+const GUTTER = 20; // inside margin
+
+async function loadImageAsDataUrl(src: string): Promise<string | null> {
+  try {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject();
+      img.src = src;
+    });
+    const canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(img, 0, 0);
+    return canvas.toDataURL("image/jpeg", 0.92);
+  } catch {
+    return null;
+  }
+}
+
+// Draw image maintaining aspect ratio (object-contain)
+function drawImageContained(
+  pdf: jsPDF,
+  dataUrl: string,
+  x: number,
+  y: number,
+  maxW: number,
+  maxH: number
+) {
+  const img = new Image();
+  img.src = dataUrl;
+  const imgW = img.naturalWidth || maxW;
+  const imgH = img.naturalHeight || maxH;
+  const scale = Math.min(maxW / imgW, maxH / imgH);
+  const drawW = imgW * scale;
+  const drawH = imgH * scale;
+  const offsetX = x + (maxW - drawW) / 2;
+  const offsetY = y + (maxH - drawH) / 2;
+  pdf.addImage(dataUrl, "JPEG", offsetX, offsetY, drawW, drawH);
+}
+
+// Subtle page background with gradient effect
+function drawPageBackground(pdf: jsPDF, x: number, y: number, w: number, h: number, section: string) {
+  // Base warm cream
+  pdf.setFillColor(248, 245, 238);
+  pdf.rect(x, y, w, h, "F");
+
+  // Section-specific subtle tint
+  if (section === "expanding-world") {
+    pdf.setFillColor(240, 245, 250);
+    pdf.setGState(new (pdf as any).GState({ opacity: 0.3 }));
+    pdf.rect(x, y, w, h, "F");
+    pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
+  } else if (section === "far-future") {
+    pdf.setFillColor(245, 242, 250);
+    pdf.setGState(new (pdf as any).GState({ opacity: 0.3 }));
+    pdf.rect(x, y, w, h, "F");
+    pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
+  }
+}
 
 export async function generateBookPdf() {
   const pdf = new jsPDF({
     orientation: "landscape",
     unit: "mm",
-    format: [297, 210],
+    format: [SPREAD_W, SPREAD_H],
   });
 
-  const pageWidth = 297;
-  const pageHeight = 210;
-  const halfWidth = pageWidth / 2;
-  const margin = 14;
+  // Pre-load all images
+  const imageCache: Record<number, string | null> = {};
+  const coverDataUrl = await loadImageAsDataUrl(coverImage);
 
-  // --- COVER PAGE ---
-  pdf.setFillColor(18, 22, 40);
-  pdf.rect(0, 0, pageWidth, pageHeight, "F");
-
-  // Try to add cover image
-  const coverStory = stories[0];
-  if (coverStory?.imageUrl) {
-    try {
-      pdf.addImage(coverStory.imageUrl, "JPEG", 0, 0, pageWidth, pageHeight);
-      // Dark overlay for text
-      pdf.setFillColor(10, 12, 25);
-      pdf.setGState(new (pdf as any).GState({ opacity: 0.65 }));
-      pdf.rect(0, 0, pageWidth, pageHeight, "F");
-      pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
-    } catch {
-      // fallback solid color
+  for (const story of stories) {
+    if (story.imageUrl) {
+      imageCache[story.id] = await loadImageAsDataUrl(story.imageUrl);
     }
   }
 
+  // === COVER PAGE ===
+  pdf.setFillColor(18, 22, 40);
+  pdf.rect(0, 0, SPREAD_W, SPREAD_H, "F");
+
+  if (coverDataUrl) {
+    drawImageContained(pdf, coverDataUrl, 0, 0, SPREAD_W, SPREAD_H);
+    // Dark overlay
+    pdf.setFillColor(10, 12, 25);
+    pdf.setGState(new (pdf as any).GState({ opacity: 0.6 }));
+    pdf.rect(0, 0, SPREAD_W, SPREAD_H, "F");
+    pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
+  }
+
   pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(26);
+  pdf.setFontSize(28);
   pdf.setTextColor(235, 225, 205);
-  const titleLines = pdf.splitTextToSize(BOOK_META.title, pageWidth - 80);
-  pdf.text(titleLines, pageWidth / 2, 70, { align: "center" });
+  const titleLines = pdf.splitTextToSize(BOOK_META.title, SPREAD_W - 80);
+  pdf.text(titleLines, SPREAD_W / 2, 70, { align: "center" });
 
   pdf.setFont("helvetica", "italic");
-  pdf.setFontSize(17);
+  pdf.setFontSize(18);
   pdf.setTextColor(210, 175, 100);
-  pdf.text(`— ${BOOK_META.subtitle}`, pageWidth / 2, 95, { align: "center" });
+  pdf.text(`— ${BOOK_META.subtitle}`, SPREAD_W / 2, 95, { align: "center" });
 
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(11);
   pdf.setTextColor(195, 185, 165);
-  const subtitleLines = pdf.splitTextToSize(BOOK_META.fullSubtitle, 200);
-  pdf.text(subtitleLines, pageWidth / 2, 115, { align: "center" });
+  const fsLines = pdf.splitTextToSize(BOOK_META.fullSubtitle, 200);
+  pdf.text(fsLines, SPREAD_W / 2, 115, { align: "center" });
 
   pdf.setFontSize(10);
   pdf.setTextColor(210, 175, 100);
-  pdf.text(BOOK_META.author, pageWidth / 2, 145, { align: "center" });
+  pdf.text(BOOK_META.author, SPREAD_W / 2, 145, { align: "center" });
 
-  // --- TITLE PAGE ---
+  // === TITLE PAGE ===
   pdf.addPage();
   pdf.setFillColor(248, 245, 238);
-  pdf.rect(0, 0, pageWidth, pageHeight, "F");
+  pdf.rect(0, 0, SPREAD_W, SPREAD_H, "F");
 
   pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(22);
+  pdf.setFontSize(24);
   pdf.setTextColor(30, 35, 50);
-  const titleLines2 = pdf.splitTextToSize(BOOK_META.title, 200);
-  pdf.text(titleLines2, pageWidth / 2, 65, { align: "center" });
+  const t2 = pdf.splitTextToSize(BOOK_META.title, 220);
+  pdf.text(t2, SPREAD_W / 2, 65, { align: "center" });
 
   pdf.setFont("helvetica", "italic");
-  pdf.setFontSize(15);
+  pdf.setFontSize(16);
   pdf.setTextColor(180, 140, 70);
-  pdf.text(`— ${BOOK_META.subtitle}`, pageWidth / 2, 90, { align: "center" });
+  pdf.text(`— ${BOOK_META.subtitle}`, SPREAD_W / 2, 90, { align: "center" });
 
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(10);
   pdf.setTextColor(100, 100, 100);
-  const fsLines = pdf.splitTextToSize(BOOK_META.fullSubtitle, 200);
-  pdf.text(fsLines, pageWidth / 2, 110, { align: "center" });
+  const fs2 = pdf.splitTextToSize(BOOK_META.fullSubtitle, 200);
+  pdf.text(fs2, SPREAD_W / 2, 110, { align: "center" });
 
   pdf.setFontSize(9);
-  pdf.text("Written by", pageWidth / 2, 135, { align: "center" });
+  pdf.text("Written by", SPREAD_W / 2, 140, { align: "center" });
   pdf.setFont("helvetica", "italic");
   pdf.setFontSize(12);
   pdf.setTextColor(30, 35, 50);
-  pdf.text(BOOK_META.authorLong, pageWidth / 2, 145, { align: "center" });
+  pdf.text(BOOK_META.authorLong, SPREAD_W / 2, 150, { align: "center" });
 
-  // --- STORY SPREADS ---
+  // === STORY SPREADS ===
   for (let i = 0; i < stories.length; i += 2) {
     pdf.addPage();
-    pdf.setFillColor(248, 245, 238);
-    pdf.rect(0, 0, pageWidth, pageHeight, "F");
 
-    // Spine line
+    // Left page background
+    drawPageBackground(pdf, 0, 0, PAGE_W, SPREAD_H, stories[i].section);
+    // Right page background
+    if (i + 1 < stories.length) {
+      drawPageBackground(pdf, PAGE_W, 0, PAGE_W, SPREAD_H, stories[i + 1].section);
+    }
+
+    // Spine
     pdf.setDrawColor(210, 200, 185);
     pdf.setLineWidth(0.3);
-    pdf.line(halfWidth, 5, halfWidth, pageHeight - 5);
+    pdf.line(PAGE_W, 8, PAGE_W, SPREAD_H - 8);
 
-    // Left page
-    renderStoryOnPage(pdf, stories[i], margin, margin, halfWidth - margin * 2, pageHeight - margin * 2, i + 1);
+    // Left story
+    const leftMargin = GUTTER;
+    renderStoryOnPage(pdf, stories[i], imageCache[stories[i].id], leftMargin, MARGIN, PAGE_W - GUTTER - MARGIN, SPREAD_H - MARGIN * 2, i + 1);
 
-    // Right page
+    // Right story
     if (i + 1 < stories.length) {
-      renderStoryOnPage(pdf, stories[i + 1], halfWidth + margin, margin, halfWidth - margin * 2, pageHeight - margin * 2, i + 2);
+      const rightX = PAGE_W + MARGIN;
+      renderStoryOnPage(pdf, stories[i + 1], imageCache[stories[i + 1].id], rightX, MARGIN, PAGE_W - GUTTER - MARGIN, SPREAD_H - MARGIN * 2, i + 2);
     }
   }
 
-  // --- BACK COVER ---
+  // === BACK COVER ===
   pdf.addPage();
   pdf.setFillColor(25, 30, 50);
-  pdf.rect(0, 0, pageWidth, pageHeight, "F");
+  pdf.rect(0, 0, SPREAD_W, SPREAD_H, "F");
 
   pdf.setFont("helvetica", "normal");
-  pdf.setFontSize(9);
+  pdf.setFontSize(10);
   pdf.setTextColor(195, 185, 170);
-  const backLines = pdf.splitTextToSize(BOOK_META.backCoverText, 180);
-  pdf.text(backLines, pageWidth / 2, 40, { align: "center" });
+  const backLines = pdf.splitTextToSize(BOOK_META.backCoverText, 200);
+  pdf.text(backLines, SPREAD_W / 2, 40, { align: "center" });
 
   pdf.setFontSize(8);
   pdf.setTextColor(210, 175, 100);
-  pdf.text(BOOK_META.author, pageWidth / 2, pageHeight - 20, { align: "center" });
+  pdf.text(BOOK_META.author, SPREAD_W / 2, SPREAD_H - 20, { align: "center" });
 
   pdf.save("AI-Let-Me-Tell-You-What-Ill-Do-With-Humans.pdf");
 }
 
 function renderStoryOnPage(
   pdf: jsPDF,
-  story: typeof stories[0],
+  story: (typeof stories)[0],
+  imgDataUrl: string | null | undefined,
   x: number,
   y: number,
   width: number,
   height: number,
   pageNum: number
 ) {
-  const imgHeight = height * 0.42;
+  const imgAreaH = height * 0.38;
+  const imgPadding = 3;
 
-  // Image
-  if (story.imageUrl) {
-    try {
-      pdf.addImage(story.imageUrl, "JPEG", x, y, width, imgHeight);
-    } catch {
-      renderPlaceholder(pdf, x, y, width, imgHeight);
-    }
+  // Image — aspect-ratio preserved (contain)
+  if (imgDataUrl) {
+    drawImageContained(pdf, imgDataUrl, x + imgPadding, y + imgPadding, width - imgPadding * 2, imgAreaH - imgPadding * 2);
   } else {
-    renderPlaceholder(pdf, x, y, width, imgHeight);
+    // Placeholder
+    pdf.setFillColor(238, 233, 223);
+    pdf.roundedRect(x, y, width, imgAreaH, 2, 2, "F");
+    pdf.setFont("helvetica", "italic");
+    pdf.setFontSize(8);
+    pdf.setTextColor(160, 150, 135);
+    pdf.text("Illustration", x + width / 2, y + imgAreaH / 2, { align: "center" });
   }
 
   // Title
-  const textY = y + imgHeight + 5;
+  const titleY = y + imgAreaH + 8;
   pdf.setFont("helvetica", "bold");
   pdf.setFontSize(11);
   pdf.setTextColor(30, 35, 50);
   const titleLines = pdf.splitTextToSize(story.title, width);
-  pdf.text(titleLines, x, textY);
+  pdf.text(titleLines, x, titleY);
 
-  // Story text — fitted to remaining space
+  // Body text
   const titleH = titleLines.length * 5;
-  const storyY = textY + titleH + 2;
-  const remainingH = height - imgHeight - titleH - 15;
+  const textY = titleY + titleH + 4;
+  const remainingH = height - imgAreaH - titleH - 25;
 
   pdf.setFont("helvetica", "normal");
-  pdf.setFontSize(7.5);
+  pdf.setFontSize(8);
   pdf.setTextColor(50, 50, 55);
   const textLines = pdf.splitTextToSize(story.text, width);
-  // Limit lines to fit
-  const maxLines = Math.floor(remainingH / 3.2);
+  const lineH = 3.6; // ~1.6 line-height for 8pt
+  const maxLines = Math.floor(remainingH / lineH);
   const fittedLines = textLines.slice(0, maxLines);
-  pdf.text(fittedLines, x, storyY);
+  pdf.text(fittedLines, x, textY, { lineHeightFactor: 1.6 });
 
-  // Page number
+  // Page number — always at bottom center
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(7);
   pdf.setTextColor(160, 155, 145);
-  pdf.text(`— ${pageNum} —`, x + width / 2, y + height - 1, { align: "center" });
-}
-
-function renderPlaceholder(pdf: jsPDF, x: number, y: number, w: number, h: number) {
-  pdf.setFillColor(238, 233, 223);
-  pdf.roundedRect(x, y, w, h, 2, 2, "F");
-  pdf.setFont("helvetica", "italic");
-  pdf.setFontSize(8);
-  pdf.setTextColor(160, 150, 135);
-  pdf.text("Illustration", x + w / 2, y + h / 2, { align: "center" });
+  pdf.text(`— ${pageNum} —`, x + width / 2, y + height - 2, { align: "center" });
 }
