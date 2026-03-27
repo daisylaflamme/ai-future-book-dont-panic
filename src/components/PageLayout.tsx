@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-/** Section-specific background gradients */
+/** Section-specific background gradients with subtle texture feel */
 const SECTION_BACKGROUNDS: Record<string, string> = {
   "near-future": `
     linear-gradient(165deg, hsl(42 40% 98%) 0%, hsl(38 30% 95%) 25%, hsl(35 35% 91%) 60%, hsl(32 28% 94%) 100%),
@@ -22,15 +22,20 @@ const SECTION_BACKGROUNDS: Record<string, string> = {
   `,
 };
 
-/** Consistent spacing scale (Tailwind-aligned rem values) */
+/** Pixel-precise spacing scale */
 const SPACING = {
   pagePadding: "p-5 md:p-6 lg:p-7",
   imageHeight: "36%",
-  imageToTitle: "mt-5",
-  titleToBody: "mb-3",
-  bodyLineHeight: "leading-[2.1]",
-  paragraphGap: "space-y-3",
-  pageNumberTop: "pt-3",
+  /** 24–32px gap from image to title */
+  imageToTitle: "pt-6 md:pt-7 lg:pt-8",
+  /** 12–16px gap from title to body */
+  titleToBody: "mb-3 md:mb-4",
+  /** Generous line height */
+  bodyLineHeight: "leading-[2.15]",
+  /** Paragraph spacing */
+  paragraphGap: "space-y-3 md:space-y-3.5",
+  /** Body to page number */
+  pageNumberTop: "pt-4 md:pt-5",
 } as const;
 
 interface PageLayoutProps {
@@ -50,19 +55,19 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
       className={`flex flex-col h-full ${SPACING.pagePadding} ${side === "left" ? "border-r border-border/30" : ""}`}
       style={{ backgroundImage: bg }}
     >
-      {/* Image container */}
+      {/* Image container — breathing room via rounded frame + subtle shadow */}
       <div
         className="relative w-full flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center"
         style={{
           height: SPACING.imageHeight,
           background: "hsl(220 15% 95% / 0.3)",
-          boxShadow: "0 3px 16px hsl(var(--book-shadow) / 0.08)",
+          boxShadow: "0 4px 20px hsl(var(--book-shadow) / 0.1)",
         }}
       >
         {image}
       </div>
 
-      {/* Text content */}
+      {/* Text content — vertically balanced with justify-between */}
       <div className={`flex-1 flex flex-col min-h-0 ${SPACING.imageToTitle}`}>
         <div className="flex-1 overflow-y-auto pr-1 flex flex-col justify-start">
           <div className={SPACING.titleToBody}>{title}</div>
@@ -70,7 +75,7 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
         </div>
       </div>
 
-      {/* Page number */}
+      {/* Page number — pinned bottom */}
       <div className={`flex-shrink-0 ${SPACING.pageNumberTop}`}>
         <p className="font-ui text-[10px] md:text-[11px] text-muted-foreground/60 text-center tracking-wider">
           — {pageNumber} —
