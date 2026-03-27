@@ -58,12 +58,14 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
       {/* Story content — fills remaining space, vertically distributed */}
       <div className="flex-1 flex flex-col min-h-0 mt-3">
         <div className="flex-1 overflow-y-auto pr-1 flex flex-col justify-start pt-2">
-          <h3 className="font-display text-sm md:text-base lg:text-lg font-semibold text-foreground mb-2 leading-snug">
+          <h3 className="font-display text-sm md:text-base lg:text-lg font-semibold text-foreground mb-3 leading-snug">
             {story.title}
           </h3>
-          <p className="font-body text-[11px] md:text-xs lg:text-[13px] leading-[1.75] text-foreground/80 whitespace-pre-line">
-            {story.text}
-          </p>
+          <div className="font-body text-[11px] md:text-xs lg:text-[13px] leading-[1.9] text-foreground/80 space-y-2">
+            {story.text.split("\n").map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
         </div>
       </div>
 
