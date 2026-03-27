@@ -86,5 +86,5 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
   );
 };
 
-export { SECTION_BACKGROUNDS };
+export { SECTION_TINTS, getSectionBackground };
 export default PageLayout;
