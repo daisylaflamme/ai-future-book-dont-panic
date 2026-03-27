@@ -79,7 +79,7 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
 
       {/* Body text — well-spaced paragraphs */}
       <div className="flex-1 min-h-0 overflow-y-auto pr-1">
-        <div className="leading-[2.4] md:leading-[2.5] space-y-3.5 md:space-y-4">
+        <div className="leading-[2.8] md:leading-[3.0] space-y-4 md:space-y-5">
           {body}
         </div>
       </div>
