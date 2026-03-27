@@ -32,7 +32,7 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
     >
       {/* Content outline container */}
       <div
-        className="flex flex-col rounded-lg p-4 md:p-5 overflow-hidden"
+        className="flex flex-col rounded-lg p-4 md:p-5"
         style={{
           border: "1.5px solid hsl(220 20% 85% / 0.5)",
           boxShadow: "0 2px 12px hsl(220 30% 50% / 0.06), inset 0 0 0 0.5px hsl(0 0% 100% / 0.4)",
