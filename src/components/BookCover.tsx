@@ -39,15 +39,15 @@ const BookCover = ({ coverImage }: BookCoverProps) => {
         {/* Top spacer */}
         <div className="flex-1" />
 
-        {/* Title */}
+        {/* Title — single combined line */}
         <h1
-          className="font-display text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight tracking-tight"
+          className="font-display text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold leading-tight tracking-tight"
           style={{
             color: "hsl(40 30% 95%)",
             textShadow: "0 3px 24px rgba(0,0,0,0.9), 0 6px 48px rgba(0,0,0,0.6)",
           }}
         >
-          {BOOK_META.title}
+          {BOOK_META.title} — {BOOK_META.subtitle}
         </h1>
 
         {/* Divider */}

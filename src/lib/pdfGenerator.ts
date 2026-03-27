@@ -109,25 +109,23 @@ export async function generateBookPdf() {
   }
 
   pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(28);
+  pdf.setFontSize(24);
   pdf.setTextColor(235, 225, 205);
-  const titleLines = pdf.splitTextToSize(BOOK_META.title, SPREAD_W - 80);
-  pdf.text(titleLines, SPREAD_W / 2, 70, { align: "center" });
+  const fullTitle = `${BOOK_META.title} — ${BOOK_META.subtitle}`;
+  const titleLines = pdf.splitTextToSize(fullTitle, SPREAD_W - 60);
+  const titleBlockH = titleLines.length * 10;
+  pdf.text(titleLines, SPREAD_W / 2, SPREAD_H / 2 - titleBlockH, { align: "center" });
 
-  pdf.setFont("helvetica", "italic");
-  pdf.setFontSize(18);
-  pdf.setTextColor(210, 175, 100);
-  pdf.text(`— ${BOOK_META.subtitle}`, SPREAD_W / 2, 95, { align: "center" });
-
+  const subtitleY = SPREAD_H / 2 + 5;
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(11);
   pdf.setTextColor(195, 185, 165);
   const fsLines = pdf.splitTextToSize(BOOK_META.fullSubtitle, 200);
-  pdf.text(fsLines, SPREAD_W / 2, 115, { align: "center" });
+  pdf.text(fsLines, SPREAD_W / 2, subtitleY, { align: "center" });
 
   pdf.setFontSize(10);
   pdf.setTextColor(210, 175, 100);
-  pdf.text(BOOK_META.author, SPREAD_W / 2, 145, { align: "center" });
+  pdf.text(BOOK_META.author, SPREAD_W / 2, SPREAD_H - 30, { align: "center" });
 
   // === TITLE PAGE ===
   pdf.addPage();
