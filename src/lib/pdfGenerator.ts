@@ -213,35 +213,61 @@ export async function generateBookPdf() {
       pdf.text("Illustration", contentX + contentW / 2, contentTop + imgAreaH / 2, { align: "center" });
     }
 
-    // Title — 8mm gap after image (≈24pt)
+    // Title — centered, bold, larger like mockup
     const titleY = contentTop + imgAreaH + 8;
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(13);
+    pdf.setFontSize(14);
     pdf.setTextColor(30, 35, 50);
     const titleLines = pdf.splitTextToSize(story.title, contentW);
-    pdf.text(titleLines, contentX, titleY);
-    const titleH = titleLines.length * 5.5;
+    pdf.text(titleLines, contentX + contentW / 2, titleY, { align: "center" });
+    const titleH = titleLines.length * 6;
 
-    // Body text — 4.5mm gap after title (≈14pt)
-    const textY = titleY + titleH + 4.5;
-    const remainingH = contentBottom - textY - 12;
+    // Body text
+    const textY = titleY + titleH + 5;
 
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(9.5);
-    pdf.setTextColor(45, 45, 50);
-
-    // Split paragraphs and add extra spacing between them
     const paragraphs = story.text.split("\n").filter(p => p.trim());
-    const lineH = 4.5; // increased line height for readability
+    const lineH = 4.5;
     let cursorY = textY;
 
     for (const para of paragraphs) {
       if (cursorY > contentBottom - 14) break;
-      const paraLines = pdf.splitTextToSize(para, contentW);
-      const maxLines = Math.floor((contentBottom - 14 - cursorY) / lineH);
-      const fitted = paraLines.slice(0, maxLines);
-      pdf.text(fitted, contentX, cursorY, { lineHeightFactor: 1.8 });
-      cursorY += fitted.length * lineH + 2.5; // 2.5mm paragraph gap
+
+      // Detect "Milo's Note:" and render bold prefix
+      const isMiloNote = para.trim().startsWith("Milo's Note:");
+      if (isMiloNote) {
+        cursorY += 1.5; // extra space before Milo's Note
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(9.5);
+        pdf.setTextColor(35, 35, 45);
+        const noteLabel = "Milo's Note: ";
+        const labelW = pdf.getTextWidth(noteLabel);
+        pdf.text(noteLabel, contentX, cursorY);
+
+        const noteContent = para.trim().replace("Milo's Note:", "").trim();
+        pdf.setFont("helvetica", "normal");
+        pdf.setTextColor(50, 50, 55);
+        const noteLines = pdf.splitTextToSize(noteContent, contentW - labelW);
+        // First line next to label, rest below
+        if (noteLines.length > 0) {
+          pdf.text(noteLines[0], contentX + labelW, cursorY);
+          cursorY += lineH;
+          for (let nl = 1; nl < noteLines.length; nl++) {
+            if (cursorY > contentBottom - 14) break;
+            pdf.text(noteLines[nl], contentX, cursorY);
+            cursorY += lineH;
+          }
+        }
+        cursorY += 2;
+      } else {
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(9.5);
+        pdf.setTextColor(50, 50, 55);
+        const paraLines = pdf.splitTextToSize(para, contentW);
+        const maxLines = Math.floor((contentBottom - 14 - cursorY) / lineH);
+        const fitted = paraLines.slice(0, maxLines);
+        pdf.text(fitted, contentX, cursorY, { lineHeightFactor: 1.8 });
+        cursorY += fitted.length * lineH + 2.5;
+      }
     }
 
     drawPageNumber(pdf, pageNum);
