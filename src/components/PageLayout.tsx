@@ -40,14 +40,17 @@ interface PageLayoutProps {
 }
 
 const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayoutProps) => {
-  const bg = SECTION_BACKGROUNDS[section] || SECTION_BACKGROUNDS["near-future"];
+  const bg = getSectionBackground(section);
 
   return (
     <div
       className={`relative flex flex-col h-full p-5 md:p-7 lg:p-8 ${
         side === "left" ? "border-r border-border/20" : ""
       }`}
-      style={{ backgroundImage: bg }}
+      style={{
+        backgroundImage: bg,
+        backgroundColor: "#F7F4EF",
+      }}
     >
       {/* Image container with border frame like mockup */}
       <div
