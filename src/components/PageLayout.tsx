@@ -72,10 +72,11 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
       {/* Body text */}
       <div className="flex-1 min-h-0 overflow-y-auto pr-1">
         {body}
-        {/* Decorative divider after content */}
-        <div className="flex justify-center mt-5 mb-2">
-          <div className="w-12 h-px" style={{ background: "linear-gradient(90deg, transparent, #C4B99A, transparent)" }} />
-        </div>
+      </div>
+
+      {/* Decorative divider */}
+      <div className="flex-shrink-0 flex justify-center pt-3">
+        <div className="w-12 h-px" style={{ background: "linear-gradient(90deg, transparent, #C4B99A, transparent)" }} />
       </div>
 
       {/* Page number */}
