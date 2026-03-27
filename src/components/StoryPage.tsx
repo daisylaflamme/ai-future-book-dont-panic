@@ -8,19 +8,22 @@ interface StoryPageProps {
 
 const sectionGradients: Record<string, string> = {
   "near-future": `
-    linear-gradient(160deg, hsl(40 35% 97%) 0%, hsl(38 28% 95%) 30%, hsl(35 30% 92%) 100%),
-    radial-gradient(ellipse at 20% 80%, hsl(38 40% 92% / 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, hsl(45 50% 94% / 0.4) 0%, transparent 50%)
+    linear-gradient(165deg, hsl(42 40% 98%) 0%, hsl(38 30% 95%) 25%, hsl(35 35% 91%) 60%, hsl(32 28% 94%) 100%),
+    radial-gradient(ellipse at 15% 85%, hsl(38 50% 90% / 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 15%, hsl(48 55% 93% / 0.4) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, hsl(40 30% 96% / 0.15) 0%, transparent 70%)
   `,
   "expanding-world": `
-    linear-gradient(160deg, hsl(210 20% 97%) 0%, hsl(220 15% 95%) 30%, hsl(200 18% 93%) 100%),
-    radial-gradient(ellipse at 30% 70%, hsl(210 30% 94% / 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 20%, hsl(38 30% 94% / 0.3) 0%, transparent 50%)
+    linear-gradient(165deg, hsl(215 25% 98%) 0%, hsl(220 18% 95%) 25%, hsl(205 22% 92%) 60%, hsl(210 15% 95%) 100%),
+    radial-gradient(ellipse at 10% 90%, hsl(215 35% 92% / 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 10%, hsl(195 40% 93% / 0.4) 0%, transparent 45%),
+    radial-gradient(circle at 60% 40%, hsl(210 20% 96% / 0.2) 0%, transparent 60%)
   `,
   "far-future": `
-    linear-gradient(160deg, hsl(260 15% 97%) 0%, hsl(250 12% 95%) 30%, hsl(270 10% 93%) 100%),
-    radial-gradient(ellipse at 20% 80%, hsl(260 20% 94% / 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, hsl(38 25% 94% / 0.3) 0%, transparent 50%)
+    linear-gradient(165deg, hsl(265 18% 98%) 0%, hsl(255 14% 95%) 25%, hsl(275 12% 92%) 60%, hsl(260 10% 95%) 100%),
+    radial-gradient(ellipse at 10% 85%, hsl(265 25% 92% / 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 15%, hsl(280 20% 94% / 0.3) 0%, transparent 45%),
+    radial-gradient(circle at 40% 60%, hsl(255 15% 96% / 0.2) 0%, transparent 60%)
   `,
 };
 
