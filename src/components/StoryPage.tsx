@@ -54,7 +54,10 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
         </h3>
       }
       body={
-        <div className="font-body text-[11px] md:text-xs lg:text-[13px] text-foreground/75">
+        <div
+          className="font-body text-[11px] md:text-xs lg:text-[13px] text-foreground/75"
+          style={{ lineHeight: 2.5 }}
+        >
           {renderStoryText(story.text)}
         </div>
       }
