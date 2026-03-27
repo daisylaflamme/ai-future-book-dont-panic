@@ -37,9 +37,10 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
           border: "1.5px solid hsl(220 20% 85% / 0.5)",
           boxShadow: "0 2px 12px hsl(220 30% 50% / 0.06), inset 0 0 0 0.5px hsl(0 0% 100% / 0.4)",
           background: "hsl(0 0% 100% / 0.15)",
-          maxHeight: "calc(100% - 28px)",
+          maxHeight: "100%",
           flex: "1 1 0",
           minHeight: 0,
+          overflow: "hidden",
         }}
       >
         {/* Image container */}
