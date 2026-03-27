@@ -19,7 +19,7 @@ interface PageLayoutProps {
 const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
   return (
     <div
-      className={`relative flex flex-col h-full p-5 md:p-7 lg:p-8 ${
+      className={`relative flex flex-col h-full p-5 pb-6 md:p-7 md:pb-8 lg:p-8 lg:pb-9 ${
         side === "left" ? "border-r border-border/20" : ""
       }`}
       style={{
