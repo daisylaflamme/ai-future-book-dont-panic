@@ -27,10 +27,11 @@ const BookCover = ({ coverImage }: BookCoverProps) => {
           background: `linear-gradient(
             to top,
             hsl(228 45% 6% / 0.92) 0%,
-            hsl(228 45% 6% / 0.65) 22%,
-            hsl(228 45% 6% / 0.25) 50%,
-            hsl(228 45% 6% / 0.4) 75%,
-            hsl(228 45% 6% / 0.7) 100%
+            hsl(228 45% 6% / 0.7) 20%,
+            hsl(228 45% 6% / 0.5) 40%,
+            hsl(228 45% 6% / 0.55) 55%,
+            hsl(228 45% 6% / 0.45) 70%,
+            hsl(228 45% 6% / 0.65) 100%
           )`,
         }}
       />
@@ -43,8 +44,8 @@ const BookCover = ({ coverImage }: BookCoverProps) => {
         <h1
           className="font-display text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold leading-tight tracking-tight"
           style={{
-            color: "hsl(40 30% 95%)",
-            textShadow: "0 3px 24px rgba(0,0,0,0.9), 0 6px 48px rgba(0,0,0,0.6)",
+            color: "hsl(40 30% 98%)",
+            textShadow: "0 2px 16px rgba(0,0,0,1), 0 4px 32px rgba(0,0,0,0.8), 0 0 60px rgba(0,0,0,0.5)",
           }}
         >
           {BOOK_META.title} — {BOOK_META.subtitle}
