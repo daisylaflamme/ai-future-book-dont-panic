@@ -726,17 +726,13 @@ Milo's Note: Don't panic. Participate.`,
     id: 50,
     section: "far-future",
     title: "Don't Panic — The Finale",
-    text: `The family — all of them, across time — gathers on the porch at sunset. Maya and Nate. Zoe and Cody. Lena, Carlos, Elena, Viktor. And in the far future, Ari.
+    text: `The whole family gathers on the porch at sunset. Milo hovers close, his glow soft and warm.
 
-The sky blazes orange and gold. Milo hovers close, his glow soft and warm.
+"The future isn't something to fear," he says. "It's something to live in."
 
-"The future isn't something to fear," he says quietly. "It's something to live in."
+He presents a towel — shaped like a heart.
 
-He presents a freshly folded towel — shaped like a heart.
-
-Don't panic.
-
-The end.`,
+Don't panic. The end.`,
     imagePrompt: `The most beautiful illustration. A gorgeous porch at golden sunset with the whole family — past and future. ${CHARACTER_PROMPT} Plus Ari (17, short dark curly hair, amber eyes). Multiple generations, golden sunset sky, Milo presenting a heart-shaped towel, everyone smiling. Cinematic, emotional, golden light. ${STYLE_PROMPT}`,
   },
 ];
