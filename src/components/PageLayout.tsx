@@ -30,31 +30,43 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
         backgroundPosition: side === "left" ? "left center" : "right center",
       }}
     >
-      {/* Image container with border frame like mockup */}
+      {/* Content outline container */}
       <div
-        className="relative w-full flex-shrink-0 rounded-md overflow-hidden"
+        className="flex flex-col flex-1 min-h-0 rounded-lg p-4 md:p-5"
         style={{
-          height: "36%",
-          border: "3px solid hsl(220 15% 88% / 0.6)",
-          boxShadow: "0 4px 24px hsl(220 30% 30% / 0.08), inset 0 0 0 1px hsl(0 0% 100% / 0.3)",
+          border: "1.5px solid hsl(220 20% 85% / 0.5)",
+          boxShadow: "0 2px 12px hsl(220 30% 50% / 0.06), inset 0 0 0 0.5px hsl(0 0% 100% / 0.4)",
+          background: "hsl(0 0% 100% / 0.15)",
         }}
       >
-        {image}
-      </div>
+        {/* Image container */}
+        <div
+          className="relative w-full flex-shrink-0 rounded-md overflow-hidden"
+          style={{
+            height: "38%",
+            border: "3px solid hsl(220 15% 88% / 0.6)",
+            boxShadow: "0 4px 24px hsl(220 30% 30% / 0.08), inset 0 0 0 1px hsl(0 0% 100% / 0.3)",
+          }}
+        >
+          {image}
+        </div>
 
-      {/* Title — centered, larger, bold serif like mockup */}
-      <div className="pt-5 md:pt-6 lg:pt-7 pb-3 md:pb-4">
-        {title}
-      </div>
+        {/* Title */}
+        <div className="pt-5 md:pt-6 lg:pt-7 pb-3 md:pb-4">
+          {title}
+        </div>
 
-      {/* Body text */}
-      <div className="flex-1 min-h-0 overflow-y-auto pr-1">
-        {body}
-      </div>
+        {/* Body text */}
+        <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+          {body}
+        </div>
 
-      {/* Decorative divider */}
-      <div className="flex-shrink-0 flex justify-center pt-3">
-        <div className="w-12 h-px" style={{ background: "linear-gradient(90deg, transparent, #C4B99A, transparent)" }} />
+        {/* Bold decorative divider */}
+        <div className="flex-shrink-0 flex items-center justify-center gap-2 pt-4">
+          <div className="w-8 h-[1.5px]" style={{ background: "linear-gradient(90deg, transparent, #9B8E7A)" }} />
+          <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#B0A48E" }} />
+          <div className="w-8 h-[1.5px]" style={{ background: "linear-gradient(90deg, #9B8E7A, transparent)" }} />
+        </div>
       </div>
 
       {/* Page number */}
