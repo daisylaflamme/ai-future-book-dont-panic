@@ -18,13 +18,13 @@ const renderStoryText = (text: string) => {
     if (para.trim().startsWith("Milo's Note:")) {
       const noteContent = para.trim().replace("Milo's Note:", "").trim();
       return (
-        <p key={i} className="mt-2">
+        <p key={i} className="mt-4 mb-2">
           <span className="font-bold" style={{ color: "#1B2A4A" }}>Milo's Note:</span>{" "}
           <span style={{ color: "#1B2A4A" }}>{noteContent}</span>
         </p>
       );
     }
-    return <p key={i}>{para}</p>;
+    return <p key={i} className="mb-3">{para}</p>;
   });
 };
 
