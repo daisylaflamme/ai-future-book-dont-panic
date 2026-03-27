@@ -32,11 +32,11 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
       className={`flex flex-col h-full p-4 md:p-5 lg:p-6 ${side === "left" ? "border-r border-border/30" : ""}`}
       style={{ backgroundImage: bg }}
     >
-      {/* Illustration — object-contain to prevent stretching */}
+      {/* Illustration */}
       <div
-        className="relative w-full flex-shrink-0 mb-5 rounded-lg overflow-hidden flex items-center justify-center"
+        className="relative w-full flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center"
         style={{
-          height: "40%",
+          height: "38%",
           background: "hsl(220 15% 95% / 0.3)",
           boxShadow: "0 3px 16px hsl(var(--book-shadow) / 0.08)",
         }}
@@ -55,9 +55,9 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
         )}
       </div>
 
-      {/* Story content */}
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-        <div className="overflow-y-auto pr-1 flex-1">
+      {/* Story content — fills remaining space, vertically distributed */}
+      <div className="flex-1 flex flex-col min-h-0 mt-3">
+        <div className="flex-1 overflow-y-auto pr-1 flex flex-col justify-start pt-2">
           <h3 className="font-display text-sm md:text-base lg:text-lg font-semibold text-foreground mb-2 leading-snug">
             {story.title}
           </h3>
@@ -67,8 +67,8 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
         </div>
       </div>
 
-      {/* Page number — always visible at bottom */}
-      <div className="flex-shrink-0 pt-1 pb-1">
+      {/* Page number — pinned to bottom */}
+      <div className="flex-shrink-0 pt-2">
         <p className="font-ui text-[10px] md:text-[11px] text-muted-foreground/60 text-center tracking-wider">
           — {pageNumber} —
         </p>
