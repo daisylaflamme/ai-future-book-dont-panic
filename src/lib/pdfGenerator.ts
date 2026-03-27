@@ -217,8 +217,8 @@ function renderStoryOnPage(
   const imgPadding = 3;
 
   // Image — aspect-ratio preserved (contain)
-  if (imgDataUrl) {
-    drawImageContained(pdf, imgDataUrl, x + imgPadding, y + imgPadding, width - imgPadding * 2, imgAreaH - imgPadding * 2);
+  if (imgData) {
+    drawImageContained(pdf, imgData.dataUrl, x + imgPadding, y + imgPadding, width - imgPadding * 2, imgAreaH - imgPadding * 2, imgData.width, imgData.height);
   } else {
     // Placeholder
     pdf.setFillColor(238, 233, 223);
