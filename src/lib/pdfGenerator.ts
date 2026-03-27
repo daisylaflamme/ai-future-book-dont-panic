@@ -213,8 +213,8 @@ export async function generateBookPdf() {
       pdf.text("Illustration", contentX + contentW / 2, contentTop + imgAreaH / 2, { align: "center" });
     }
 
-    // Title
-    const titleY = contentTop + imgAreaH + 10;
+    // Title — 8mm gap after image (≈24pt)
+    const titleY = contentTop + imgAreaH + 8;
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(13);
     pdf.setTextColor(30, 35, 50);
@@ -222,18 +222,27 @@ export async function generateBookPdf() {
     pdf.text(titleLines, contentX, titleY);
     const titleH = titleLines.length * 5.5;
 
-    // Body text
-    const textY = titleY + titleH + 5;
-    const remainingH = contentBottom - textY - 12; // 12mm reserved for page number area
+    // Body text — 4.5mm gap after title (≈14pt)
+    const textY = titleY + titleH + 4.5;
+    const remainingH = contentBottom - textY - 12;
 
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(9.5);
     pdf.setTextColor(45, 45, 50);
-    const bodyLines = pdf.splitTextToSize(story.text, contentW);
-    const lineH = 4.2; // generous line height for 9.5pt
-    const maxLines = Math.floor(remainingH / lineH);
-    const fitted = bodyLines.slice(0, maxLines);
-    pdf.text(fitted, contentX, textY, { lineHeightFactor: 1.7 });
+
+    // Split paragraphs and add extra spacing between them
+    const paragraphs = story.text.split("\n").filter(p => p.trim());
+    const lineH = 4.5; // increased line height for readability
+    let cursorY = textY;
+
+    for (const para of paragraphs) {
+      if (cursorY > contentBottom - 14) break;
+      const paraLines = pdf.splitTextToSize(para, contentW);
+      const maxLines = Math.floor((contentBottom - 14 - cursorY) / lineH);
+      const fitted = paraLines.slice(0, maxLines);
+      pdf.text(fitted, contentX, cursorY, { lineHeightFactor: 1.8 });
+      cursorY += fitted.length * lineH + 2.5; // 2.5mm paragraph gap
+    }
 
     drawPageNumber(pdf, pageNum);
   }
