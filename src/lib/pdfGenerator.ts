@@ -133,8 +133,10 @@ export async function generateBookPdf() {
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(9);
   pdf.setTextColor(200, 190, 170);
-  const fsSub = pdf.splitTextToSize(BOOK_META.fullSubtitle, PAGE_W - 40);
-  pdf.text(fsSub, PAGE_W / 2, PAGE_H * 0.58, { align: "center" });
+  const fsLine1 = "Stories from a Future Where";
+  const fsLine2 = "Families and AI Grow Together";
+  pdf.text(fsLine1, PAGE_W / 2, PAGE_H * 0.58, { align: "center" });
+  pdf.text(fsLine2, PAGE_W / 2, PAGE_H * 0.58 + 5, { align: "center" });
 
   // Author
   pdf.setFontSize(10);

@@ -65,15 +65,15 @@ const BookCover = ({ coverImage }: BookCoverProps) => {
         {/* Divider */}
         <div className="w-20 h-0.5 my-6" style={{ background: "hsl(38 70% 55%)" }} />
 
-        {/* Subtitle */}
+        {/* Subtitle — two lines */}
         <p
-          className="font-display text-base md:text-lg lg:text-xl italic"
+          className="font-display text-base md:text-lg lg:text-xl italic text-center"
           style={{
             color: "hsl(38 70% 65%)",
             textShadow: "0 2px 12px rgba(0,0,0,0.8)",
           }}
         >
-          {BOOK_META.fullSubtitle}
+          Stories from a Future Where<br />Families and AI Grow Together
         </p>
 
         {/* Bottom spacer */}
