@@ -28,8 +28,8 @@ const SPACING = {
   imageHeight: "36%",
   imageToTitle: "mt-5",
   titleToBody: "mb-3",
-  bodyLineHeight: "leading-[1.9]",
-  paragraphGap: "space-y-2.5",
+  bodyLineHeight: "leading-[2.1]",
+  paragraphGap: "space-y-3",
   pageNumberTop: "pt-3",
 } as const;
 
