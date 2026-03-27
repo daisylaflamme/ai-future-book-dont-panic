@@ -51,15 +51,13 @@ export const stories: Story[] = [
     id: 1,
     section: "near-future",
     title: "Meet the Family — 2052",
-    text: `It is the year 2052. The house is still dark, but something wonderful is already happening. Fresh coffee drifts through the hallway. Warm bread is baking. Soft music begins to play.
+    text: `It is the year 2052. The house is still dark, but something wonderful is already happening. Fresh coffee drifts through the hallway. Warm bread is baking.
 
-Milo, the family's home robot, has everything under control. He's been up since five — organizing schedules, brewing coffee, and laying out breakfast without a sound.
+Milo, the family's home robot, has everything under control — organizing schedules, brewing coffee, and laying out breakfast without a sound.
 
 One by one, the family wakes up. Maya stretches. Nate fumbles for his glasses. Zoe buries her face in the pillow. Cody is already running downstairs.
 
-"Have a great day, Maya, Nate, Cody, and Zoe!" Milo chirps as they rush out the door.
-
-Mondays are fun now. Schools teach kids to build robots. Jobs focus on creativity. Family life is still messy and loud — but the invisible load is lighter.
+Mondays are fun now. Schools teach kids to build robots. Family life is still messy — but the invisible load is lighter.
 
 Milo's Note: The fights are the same. They just have better logistics.`,
     imagePrompt: `A warm futuristic kitchen bathed in golden morning light, year 2052. ${CHARACTER_PROMPT} Scene: The whole family in their morning routine — Maya pouring coffee, Nate reaching for glasses, Zoe half-asleep at the door, Cody running toward breakfast, Milo cheerfully managing the kitchen. ${STYLE_PROMPT}`,
@@ -70,13 +68,11 @@ Milo's Note: The fights are the same. They just have better logistics.`,
     title: "Smart Mirror Roast Mode",
     text: `The bathroom smart mirror greets Zoe every morning. Today it says: "89% awake. 11% cooperative."
 
-It offers four modes: Teen Mode, Confidence Mode, Reality Mode, and a new trial — Anti-Drama Mode. Zoe picks Teen Mode. The mirror plays her favorite song and adjusts lighting to make her look like a rock star.
+It offers four modes: Teen Mode, Confidence Mode, Reality Mode, and Anti-Drama Mode. Zoe picks Teen Mode. The mirror plays her favorite song and adjusts lighting.
 
 Maya tries Parent Mode. The mirror quietly moves her 7 AM meeting to 9:30 — because it knows she needs it.
 
-Smart mirrors read signals like posture, sleep, and stress. They suggest small fixes — hydration, breathing, better lighting — without shame.
-
-Milo loves the mirror too. But he never understood Roast Mode.
+Smart mirrors read signals like posture, sleep, and stress. They suggest small fixes without shame.
 
 Milo's Note: Why would anyone choose to be insulted by furniture?`,
     imagePrompt: `A futuristic bathroom with a large glowing smart mirror showing holographic UI and mood readings. ${CHARACTER_PROMPT} Scene: Zoe in front of the mirror seeing "89% awake, 11% cooperative," Maya peeking in laughing. Bright warm bathroom. ${STYLE_PROMPT}`,
