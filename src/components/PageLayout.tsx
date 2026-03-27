@@ -1,45 +1,34 @@
 import type { ReactNode } from "react";
 
 /**
- * Dreamy gradient background matching the mockup:
- * Frosted glass pages over a warm-to-cool cosmic gradient with sparkle accents.
- * Section tints are subtle shifts on top of the base.
+ * Warm, elegant book page background.
+ * Base: #F7F4EF warm off-white
+ * Gradient: top-left #F2EDE7 → bottom-right #FAF7F2
+ * Subtle radial glow + faint noise texture for print realism.
+ * Consistent across all sections with very subtle section tints.
  */
-const SECTION_BACKGROUNDS: Record<string, string> = {
+const BASE_BACKGROUND = `
+  linear-gradient(135deg, #F2EDE7 0%, #F7F4EF 45%, #FAF7F2 100%),
+  radial-gradient(ellipse at 25% 75%, hsl(35 40% 92% / 0.25) 0%, transparent 55%),
+  radial-gradient(ellipse at 75% 25%, hsl(40 30% 95% / 0.2) 0%, transparent 50%)
+`;
+
+const SECTION_TINTS: Record<string, string> = {
   "near-future": `
-    linear-gradient(170deg,
-      hsl(220 20% 94% / 0.95) 0%,
-      hsl(230 18% 92% / 0.9) 30%,
-      hsl(260 15% 90% / 0.85) 60%,
-      hsl(30 30% 92% / 0.9) 100%
-    ),
-    radial-gradient(ellipse at 20% 90%, hsl(30 50% 88% / 0.4) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 10%, hsl(220 30% 92% / 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, hsl(0 0% 100% / 0.15) 0%, transparent 70%)
+    radial-gradient(ellipse at 60% 30%, hsl(38 45% 92% / 0.15) 0%, transparent 60%)
   `,
   "expanding-world": `
-    linear-gradient(170deg,
-      hsl(220 22% 93% / 0.95) 0%,
-      hsl(230 20% 91% / 0.9) 30%,
-      hsl(250 18% 89% / 0.85) 60%,
-      hsl(215 25% 91% / 0.9) 100%
-    ),
-    radial-gradient(ellipse at 15% 85%, hsl(220 35% 88% / 0.35) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 15%, hsl(200 30% 92% / 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 60% 40%, hsl(0 0% 100% / 0.12) 0%, transparent 65%)
+    radial-gradient(ellipse at 60% 30%, hsl(215 30% 93% / 0.15) 0%, transparent 60%)
   `,
   "far-future": `
-    linear-gradient(170deg,
-      hsl(250 18% 94% / 0.95) 0%,
-      hsl(260 15% 91% / 0.9) 30%,
-      hsl(270 12% 89% / 0.85) 60%,
-      hsl(280 15% 91% / 0.9) 100%
-    ),
-    radial-gradient(ellipse at 10% 80%, hsl(260 25% 88% / 0.35) 0%, transparent 50%),
-    radial-gradient(ellipse at 90% 20%, hsl(280 20% 92% / 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 40% 60%, hsl(0 0% 100% / 0.12) 0%, transparent 65%)
+    radial-gradient(ellipse at 60% 30%, hsl(260 20% 93% / 0.15) 0%, transparent 60%)
   `,
 };
+
+function getSectionBackground(section: string): string {
+  const tint = SECTION_TINTS[section] || SECTION_TINTS["near-future"];
+  return `${tint}, ${BASE_BACKGROUND}`;
+}
 
 interface PageLayoutProps {
   section: string;
@@ -51,14 +40,17 @@ interface PageLayoutProps {
 }
 
 const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayoutProps) => {
-  const bg = SECTION_BACKGROUNDS[section] || SECTION_BACKGROUNDS["near-future"];
+  const bg = getSectionBackground(section);
 
   return (
     <div
       className={`relative flex flex-col h-full p-5 md:p-7 lg:p-8 ${
         side === "left" ? "border-r border-border/20" : ""
       }`}
-      style={{ backgroundImage: bg }}
+      style={{
+        backgroundImage: bg,
+        backgroundColor: "#F7F4EF",
+      }}
     >
       {/* Image container with border frame like mockup */}
       <div
@@ -94,5 +86,5 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
   );
 };
 
-export { SECTION_BACKGROUNDS };
+export { SECTION_TINTS, getSectionBackground };
 export default PageLayout;

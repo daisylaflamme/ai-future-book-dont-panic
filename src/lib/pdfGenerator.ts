@@ -49,21 +49,32 @@ function drawContained(
   pdf.addImage(dataUrl, "JPEG", x + (maxW - dw) / 2, y + (maxH - dh) / 2, dw, dh);
 }
 
-/** Soft warm page background */
+/** Warm off-white page background (#F7F4EF base) with subtle gradient */
 function drawPageBg(pdf: jsPDF, section?: string) {
-  // Base cream
-  pdf.setFillColor(250, 247, 240);
+  // Base: #F7F4EF warm off-white
+  pdf.setFillColor(247, 244, 239);
   pdf.rect(0, 0, PAGE_W, PAGE_H, "F");
 
-  // Section tint
+  // Soft gradient overlay: slightly warmer top-left, brighter bottom-right
+  pdf.setFillColor(242, 237, 231); // #F2EDE7
+  pdf.setGState(new (pdf as any).GState({ opacity: 0.3 }));
+  pdf.rect(0, 0, PAGE_W * 0.5, PAGE_H * 0.5, "F");
+  pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
+
+  pdf.setFillColor(250, 247, 242); // #FAF7F2
+  pdf.setGState(new (pdf as any).GState({ opacity: 0.25 }));
+  pdf.rect(PAGE_W * 0.4, PAGE_H * 0.4, PAGE_W * 0.6, PAGE_H * 0.6, "F");
+  pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
+
+  // Very subtle section tint
   if (section === "expanding-world") {
     pdf.setFillColor(235, 242, 250);
-    pdf.setGState(new (pdf as any).GState({ opacity: 0.25 }));
+    pdf.setGState(new (pdf as any).GState({ opacity: 0.12 }));
     pdf.rect(0, 0, PAGE_W, PAGE_H, "F");
     pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
   } else if (section === "far-future") {
     pdf.setFillColor(242, 238, 250);
-    pdf.setGState(new (pdf as any).GState({ opacity: 0.25 }));
+    pdf.setGState(new (pdf as any).GState({ opacity: 0.12 }));
     pdf.rect(0, 0, PAGE_W, PAGE_H, "F");
     pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
   }
