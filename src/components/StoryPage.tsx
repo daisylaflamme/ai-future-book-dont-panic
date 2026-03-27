@@ -45,7 +45,7 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
           <img
             src={story.imageUrl}
             alt={story.title}
-            className="max-w-full max-h-full object-contain rounded"
+            className="w-full h-full object-cover rounded"
             loading="lazy"
           />
         ) : (
