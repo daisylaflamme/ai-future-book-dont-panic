@@ -73,12 +73,6 @@ const PageLayout = ({ section, side, pageNumber, image, title, body }: PageLayou
         </div>
       </div>
 
-      {/* Page number */}
-      <div className="flex-shrink-0 pt-2">
-        <p className="font-body text-[10px] md:text-[11px] text-foreground/35 text-center tracking-wider">
-          {pageNumber}
-        </p>
-      </div>
     </div>
   );
 };
