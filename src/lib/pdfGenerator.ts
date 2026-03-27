@@ -101,12 +101,10 @@ export async function generateBookPdf() {
 
   if (coverLoaded) {
     drawImageContained(pdf, coverLoaded.dataUrl, 0, 0, SPREAD_W, SPREAD_H, coverLoaded.width, coverLoaded.height);
-    // Dark overlays to suppress baked-in top title and keep centered title readable
+    // Lighter overlay now that image has no baked-in text
     pdf.setFillColor(10, 12, 25);
-    pdf.setGState(new (pdf as any).GState({ opacity: 0.72 }));
+    pdf.setGState(new (pdf as any).GState({ opacity: 0.5 }));
     pdf.rect(0, 0, SPREAD_W, SPREAD_H, "F");
-    pdf.setGState(new (pdf as any).GState({ opacity: 0.92 }));
-    pdf.rect(0, 0, SPREAD_W, SPREAD_H * 0.34, "F");
     pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
   }
 
