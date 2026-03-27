@@ -15,7 +15,7 @@ const PAGE_W = SPREAD_W / 2; // 6 inches = 152.4mm
 const MARGIN = 18; // ~0.5 inch
 const GUTTER = 20; // inside margin
 
-async function loadImageAsDataUrl(src: string): Promise<string | null> {
+async function loadImageAsDataUrl(src: string): Promise<{ dataUrl: string; width: number; height: number } | null> {
   try {
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -24,12 +24,14 @@ async function loadImageAsDataUrl(src: string): Promise<string | null> {
       img.onerror = () => reject();
       img.src = src;
     });
+    const w = img.naturalWidth;
+    const h = img.naturalHeight;
     const canvas = document.createElement("canvas");
-    canvas.width = img.naturalWidth;
-    canvas.height = img.naturalHeight;
+    canvas.width = w;
+    canvas.height = h;
     const ctx = canvas.getContext("2d")!;
     ctx.drawImage(img, 0, 0);
-    return canvas.toDataURL("image/jpeg", 0.92);
+    return { dataUrl: canvas.toDataURL("image/jpeg", 0.92), width: w, height: h };
   } catch {
     return null;
   }
