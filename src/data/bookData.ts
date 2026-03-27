@@ -64,13 +64,11 @@ Milo's Note: The fights are the same. They just have better logistics.`,
     id: 2,
     section: "near-future",
     title: "Smart Mirror Roast Mode",
-    text: `The bathroom smart mirror greets Zoe every morning. Today it says: "89% awake. 11% cooperative."
+    text: `The bathroom smart mirror greets Zoe every morning. Today: "89% awake. 11% cooperative."
 
-It offers four modes: Teen Mode, Confidence Mode, Reality Mode, and Anti-Drama Mode. Zoe picks Teen Mode. The mirror plays her favorite song and adjusts lighting.
+Zoe picks Teen Mode. The mirror plays her favorite song and adjusts the lighting.
 
-Maya tries Parent Mode. The mirror quietly moves her 7 AM meeting to 9:30 — because it knows she needs it.
-
-Smart mirrors read signals like posture, sleep, and stress. They suggest small fixes without shame.
+Maya tries Parent Mode. It quietly moves her 7 AM meeting to 9:30.
 
 Milo's Note: Why would anyone choose to be insulted by furniture?`,
     imagePrompt: `A futuristic bathroom with a large glowing smart mirror showing holographic UI and mood readings. ${CHARACTER_PROMPT} Scene: Zoe in front of the mirror seeing "89% awake, 11% cooperative," Maya peeking in laughing. Bright warm bathroom. ${STYLE_PROMPT}`,
