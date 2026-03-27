@@ -9,18 +9,17 @@ interface StoryPageProps {
 
 /**
  * Parse story text to separate regular paragraphs from "Milo's Note:" blocks.
- * Milo's Note gets special bold+italic styling like the mockup.
+ * Milo's Note gets italic Libre Baskerville styling with muted color.
  */
 const renderStoryText = (text: string) => {
   const paragraphs = text.split("\n").filter((p) => p.trim());
 
   return paragraphs.map((para, i) => {
-    // Check if this paragraph starts with "Milo's Note:"
     if (para.trim().startsWith("Milo's Note:")) {
       const noteContent = para.trim().replace("Milo's Note:", "").trim();
       return (
-        <p key={i} className="mt-1">
-          <span className="font-bold text-foreground/90">Milo's Note:</span>{" "}
+        <p key={i} className="mt-3 pt-2 italic text-foreground/60">
+          <span className="font-bold not-italic text-foreground/70">Milo's Note:</span>{" "}
           <span>{noteContent}</span>
         </p>
       );
@@ -50,7 +49,7 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
         )
       }
       title={
-        <h3 className="font-display text-base md:text-lg lg:text-xl font-bold text-foreground text-center leading-snug">
+        <h3 className="font-display text-base md:text-lg lg:text-xl font-semibold text-foreground text-center leading-snug tracking-wide">
           {story.title}
         </h3>
       }
