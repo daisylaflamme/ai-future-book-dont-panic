@@ -3,6 +3,10 @@ import pageBackground from "@/assets/page-background.png";
 
 const SECTION_TINTS: Record<string, string> = {};
 
+function getSectionBackground(_section: string): string {
+  return `url(${pageBackground})`;
+}
+
 interface PageLayoutProps {
   section: string;
   side: "left" | "right";
