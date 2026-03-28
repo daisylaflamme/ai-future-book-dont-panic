@@ -31,8 +31,8 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
       }}
     >
       {/* Content outline container */}
-      <div
-        className="grid h-full min-h-0 w-full flex-1 grid-rows-[minmax(0,38%)_auto_minmax(0,1fr)_auto] overflow-hidden rounded-lg border border-border/65 bg-background/20 p-4 md:p-5"
+        <div
+          className="grid h-full min-h-0 w-full flex-1 grid-rows-[minmax(0,38%)_auto_minmax(0,1fr)_minmax(24px,auto)] overflow-hidden rounded-lg border border-border/65 bg-background/20 p-4 md:p-5"
         style={{
           boxShadow:
             "0 2px 12px hsl(var(--book-shadow) / 0.08), inset 0 -1px 0 hsl(var(--border) / 0.7), inset 0 0 0 0.5px hsl(var(--background) / 0.6)",
@@ -57,20 +57,26 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
         </div>
 
         {/* Body text */}
-        <div className="min-h-0 overflow-y-auto pr-1 pb-2">
+        <div className="min-h-0 overflow-y-auto pr-1 pb-1">
           {body}
         </div>
 
         {/* Bold decorative divider */}
-        <div className="flex flex-shrink-0 items-center justify-center gap-2 pb-1 pt-4">
+        <div className="flex min-h-[24px] flex-shrink-0 items-center justify-center gap-2 pt-2">
           <div
-            className="h-[1.5px] w-8"
-            style={{ background: "linear-gradient(90deg, transparent, hsl(var(--book-accent)))" }}
+            className="h-[2px] w-10"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, hsl(var(--book-accent) / 0.92), hsl(var(--book-accent)))",
+            }}
           />
-          <div className="h-1.5 w-1.5 rounded-full bg-book-accent/75" />
+          <div className="h-2 w-2 rounded-full bg-book-accent" />
           <div
-            className="h-[1.5px] w-8"
-            style={{ background: "linear-gradient(90deg, hsl(var(--book-accent)), transparent)" }}
+            className="h-[2px] w-10"
+            style={{
+              background:
+                "linear-gradient(90deg, hsl(var(--book-accent)), hsl(var(--book-accent) / 0.92), transparent)",
+            }}
           />
         </div>
       </div>
