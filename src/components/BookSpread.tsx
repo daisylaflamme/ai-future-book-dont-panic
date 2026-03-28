@@ -13,9 +13,11 @@ const BookSpread = ({ left, right, spreadIndex, sectionTitle }: BookSpreadProps)
   const rightPageNum = spreadIndex * 2 + 2;
 
   return (
-    <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 relative">
+    <div className="relative grid h-full min-h-0 w-full grid-cols-1 grid-rows-1 items-stretch md:grid-cols-2">
       {/* Left page */}
-      <StoryPage story={left} pageNumber={leftPageNum} side="left" />
+      <div className="h-full min-h-0">
+        <StoryPage story={left} pageNumber={leftPageNum} side="left" />
+      </div>
 
       {/* Book spine - desktop only */}
       <div
@@ -29,7 +31,9 @@ const BookSpread = ({ left, right, spreadIndex, sectionTitle }: BookSpreadProps)
       />
 
       {/* Right page */}
-      <StoryPage story={right} pageNumber={rightPageNum} side="right" />
+      <div className="h-full min-h-0">
+        <StoryPage story={right} pageNumber={rightPageNum} side="right" />
+      </div>
     </div>
   );
 };

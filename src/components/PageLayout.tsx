@@ -17,30 +17,32 @@ interface PageLayoutProps {
 }
 
 const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
+  const sectionBackground = getSectionBackground(section);
+
   return (
     <div
-      className={`relative flex h-full flex-col p-5 md:p-7 lg:p-8 ${
+      className={`relative flex h-full min-h-0 flex-col p-5 md:p-7 lg:p-8 ${
         side === "left" ? "border-r border-border/20" : ""
       }`}
       style={{
-        backgroundImage: `url(${pageBackground})`,
+        backgroundImage: sectionBackground,
         backgroundSize: "cover",
         backgroundPosition: side === "left" ? "left center" : "right center",
       }}
     >
       {/* Content outline container */}
       <div
-        className="flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/55 bg-background/20 p-4 md:p-5"
+        className="grid h-full min-h-0 w-full flex-1 grid-rows-[minmax(0,38%)_auto_minmax(0,1fr)_auto] overflow-hidden rounded-lg border border-border/65 bg-background/20 p-4 md:p-5"
         style={{
           boxShadow:
-            "0 2px 12px hsl(var(--book-shadow) / 0.08), inset 0 0 0 0.5px hsl(var(--background) / 0.6)",
+            "0 2px 12px hsl(var(--book-shadow) / 0.08), inset 0 -1px 0 hsl(var(--border) / 0.7), inset 0 0 0 0.5px hsl(var(--background) / 0.6)",
         }}
       >
         {/* Image container */}
         <div
-          className="relative w-full flex-shrink-0 rounded-md overflow-hidden"
+          className="relative w-full flex-shrink-0 overflow-hidden rounded-md"
           style={{
-            height: "38%",
+            height: "100%",
             border: "2px solid hsl(var(--border) / 0.55)",
             boxShadow:
               "0 4px 24px hsl(var(--book-shadow) / 0.12), inset 0 0 0 1px hsl(var(--background) / 0.35)",
@@ -55,12 +57,12 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
         </div>
 
         {/* Body text */}
-        <div className="flex-1 min-h-0 overflow-y-auto pr-1 pb-2">
+        <div className="min-h-0 overflow-y-auto pr-1 pb-2">
           {body}
         </div>
 
         {/* Bold decorative divider */}
-        <div className="mt-auto flex flex-shrink-0 items-center justify-center gap-2 pb-1 pt-4">
+        <div className="flex flex-shrink-0 items-center justify-center gap-2 pb-1 pt-4">
           <div
             className="h-[1.5px] w-8"
             style={{ background: "linear-gradient(90deg, transparent, hsl(var(--book-accent)))" }}
