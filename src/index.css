@@ -99,23 +99,24 @@
     font-family: 'Libre Baskerville', serif;
   }
 
-  /* Thin beige scrollbar for book pages */
-  .book-scrollbar::-webkit-scrollbar {
-    width: 4px;
-  }
-  .book-scrollbar::-webkit-scrollbar-track {
-    background: hsl(35 30% 90% / 0.4);
-    border-radius: 2px;
-  }
-  .book-scrollbar::-webkit-scrollbar-thumb {
-    background: hsl(35 25% 75%);
-    border-radius: 2px;
-  }
-  .book-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: hsl(35 30% 65%);
-  }
-  .book-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(35 25% 75%) hsl(35 30% 90% / 0.4);
-  }
+}
+
+/* Thin beige scrollbar for book pages — outside @layer for full specificity */
+.book-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(35, 25%, 75%) hsl(35, 30%, 90%, 0.4);
+}
+.book-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.book-scrollbar::-webkit-scrollbar-track {
+  background: hsl(35, 30%, 90%, 0.4);
+  border-radius: 2px;
+}
+.book-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(35, 25%, 75%);
+  border-radius: 2px;
+}
+.book-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(35, 30%, 65%);
 }
