@@ -19,7 +19,7 @@ interface PageLayoutProps {
 const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
   return (
     <div
-      className={`relative flex flex-col h-full p-5 pb-6 md:p-7 md:pb-8 lg:p-8 lg:pb-9 ${
+      className={`relative flex h-full flex-col p-5 md:p-7 lg:p-8 ${
         side === "left" ? "border-r border-border/20" : ""
       }`}
       style={{
@@ -30,11 +30,10 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
     >
       {/* Content outline container */}
       <div
-        className="flex flex-col flex-1 min-h-0 overflow-hidden rounded-lg p-4 md:p-5"
+        className="flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/55 bg-background/20 p-4 md:p-5"
         style={{
-          border: "1.5px solid hsl(220 20% 85% / 0.5)",
-          boxShadow: "0 2px 12px hsl(220 30% 50% / 0.06), inset 0 0 0 0.5px hsl(0 0% 100% / 0.4)",
-          background: "hsl(0 0% 100% / 0.15)",
+          boxShadow:
+            "0 2px 12px hsl(var(--book-shadow) / 0.08), inset 0 0 0 0.5px hsl(var(--background) / 0.6)",
         }}
       >
         {/* Image container */}
@@ -42,25 +41,26 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
           className="relative w-full flex-shrink-0 rounded-md overflow-hidden"
           style={{
             height: "38%",
-            border: "3px solid hsl(220 15% 88% / 0.6)",
-            boxShadow: "0 4px 24px hsl(220 30% 30% / 0.08), inset 0 0 0 1px hsl(0 0% 100% / 0.3)",
+            border: "2px solid hsl(var(--border) / 0.55)",
+            boxShadow:
+              "0 4px 24px hsl(var(--book-shadow) / 0.12), inset 0 0 0 1px hsl(var(--background) / 0.35)",
           }}
         >
           {image}
         </div>
 
         {/* Title */}
-        <div className="pt-5 md:pt-6 lg:pt-7 pb-3 md:pb-4">
+        <div className="pb-3 pt-5 md:pb-4 md:pt-6 lg:pt-7">
           {title}
         </div>
 
         {/* Body text */}
-        <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+        <div className="flex-1 min-h-0 overflow-y-auto pr-1 pb-2">
           {body}
         </div>
 
         {/* Bold decorative divider */}
-        <div className="flex-shrink-0 flex items-center justify-center gap-2 pt-4">
+        <div className="mt-auto flex flex-shrink-0 items-center justify-center gap-2 pb-1 pt-4">
           <div className="w-8 h-[1.5px]" style={{ background: "linear-gradient(90deg, transparent, #9B8E7A)" }} />
           <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#B0A48E" }} />
           <div className="w-8 h-[1.5px]" style={{ background: "linear-gradient(90deg, #9B8E7A, transparent)" }} />
