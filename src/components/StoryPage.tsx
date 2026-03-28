@@ -30,7 +30,7 @@ const renderStoryText = (text: string) => {
 };
 
 const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
-  const [hovered, setHovered] = useState(false);
+  const [showFull, setShowFull] = useState(false);
 
   return (
     <>
@@ -42,13 +42,18 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
           story.imageUrl ? (
             <div
               className="relative w-full h-full"
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
             >
               <img
                 src={story.imageUrl}
                 alt={story.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover hidden md:block md:cursor-zoom-in"
+                loading="lazy"
+                onClick={() => setShowFull(true)}
+              />
+              <img
+                src={story.imageUrl}
+                alt={story.title}
+                className="w-full h-full object-cover md:hidden"
                 loading="lazy"
               />
             </div>
@@ -74,11 +79,10 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
       />
 
       {/* Desktop-only fullsize image overlay on hover */}
-      {hovered && story.imageUrl && (
+      {showFull && story.imageUrl && (
         <div
-          className="hidden md:flex fixed inset-0 z-50 items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in cursor-pointer"
-          onClick={() => setHovered(false)}
-          onMouseLeave={() => setHovered(false)}
+          className="hidden md:flex fixed inset-0 z-50 items-center justify-center bg-black/60 animate-fade-in cursor-zoom-out"
+          onClick={() => setShowFull(false)}
         >
           <img
             src={story.imageUrl}
