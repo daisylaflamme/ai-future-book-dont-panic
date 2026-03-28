@@ -57,7 +57,7 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
         </div>
 
         {/* Body text */}
-        <div className="min-h-0 overflow-y-auto pr-1 pb-1">
+        <div className="book-scrollbar min-h-0 overflow-y-auto pr-1 pb-1">
           {body}
         </div>
 
