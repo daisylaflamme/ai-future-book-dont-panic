@@ -61,21 +61,24 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
           {body}
         </div>
 
-        {/* Bold decorative divider */}
+        {/* Bottom decorative divider */}
         <div className="flex min-h-[24px] flex-shrink-0 items-center justify-center gap-2 pt-2">
           <div
-            className="h-[2px] w-10"
+            className="h-[2px] w-12"
             style={{
               background:
-                "linear-gradient(90deg, transparent, hsl(var(--book-accent) / 0.92), hsl(var(--book-accent)))",
+                "linear-gradient(90deg, transparent, hsl(var(--book-gold) / 0.9), hsl(var(--book-gold)))",
             }}
           />
-          <div className="h-2 w-2 rounded-full bg-book-accent" />
           <div
-            className="h-[2px] w-10"
+            className="h-2 w-2 rounded-full"
+            style={{ backgroundColor: "hsl(var(--book-gold))" }}
+          />
+          <div
+            className="h-[2px] w-12"
             style={{
               background:
-                "linear-gradient(90deg, hsl(var(--book-accent)), hsl(var(--book-accent) / 0.92), transparent)",
+                "linear-gradient(90deg, hsl(var(--book-gold)), hsl(var(--book-gold) / 0.9), transparent)",
             }}
           />
         </div>
