@@ -61,9 +61,15 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
 
         {/* Bold decorative divider */}
         <div className="mt-auto flex flex-shrink-0 items-center justify-center gap-2 pb-1 pt-4">
-          <div className="w-8 h-[1.5px]" style={{ background: "linear-gradient(90deg, transparent, #9B8E7A)" }} />
-          <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#B0A48E" }} />
-          <div className="w-8 h-[1.5px]" style={{ background: "linear-gradient(90deg, #9B8E7A, transparent)" }} />
+          <div
+            className="h-[1.5px] w-8"
+            style={{ background: "linear-gradient(90deg, transparent, hsl(var(--book-accent)))" }}
+          />
+          <div className="h-1.5 w-1.5 rounded-full bg-book-accent/75" />
+          <div
+            className="h-[1.5px] w-8"
+            style={{ background: "linear-gradient(90deg, hsl(var(--book-accent)), transparent)" }}
+          />
         </div>
       </div>
     </div>
