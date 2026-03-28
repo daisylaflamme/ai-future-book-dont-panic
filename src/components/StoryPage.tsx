@@ -1,5 +1,6 @@
 import type { Story } from "@/data/bookData";
 import PageLayout from "./PageLayout";
+import { useState } from "react";
 
 interface StoryPageProps {
   story: Story;
@@ -29,39 +30,67 @@ const renderStoryText = (text: string) => {
 };
 
 const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <PageLayout
-      section={story.section}
-      side={side}
-      pageNumber={pageNumber}
-      image={
-        story.imageUrl ? (
+    <>
+      <PageLayout
+        section={story.section}
+        side={side}
+        pageNumber={pageNumber}
+        image={
+          story.imageUrl ? (
+            <div
+              className="relative w-full h-full"
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+            >
+              <img
+                src={story.imageUrl}
+                alt={story.title}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-book-warm">
+              <span className="text-lg text-muted-foreground/40">📖</span>
+            </div>
+          )
+        }
+        title={
+          <h3 className="font-display text-base md:text-lg lg:text-xl font-semibold text-foreground text-center leading-snug tracking-wide">
+            {story.title}
+          </h3>
+        }
+        body={
+          <div
+            className="font-body text-[11px] md:text-xs lg:text-[13px] text-foreground/75"
+            style={{ lineHeight: 1.7 }}
+          >
+            {renderStoryText(story.text)}
+          </div>
+        }
+      />
+
+      {/* Desktop-only fullsize image overlay on hover */}
+      {hovered && story.imageUrl && (
+        <div
+          className="hidden md:flex fixed inset-0 z-50 items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in cursor-pointer"
+          onClick={() => setHovered(false)}
+          onMouseLeave={() => setHovered(false)}
+        >
           <img
             src={story.imageUrl}
             alt={story.title}
-            className="w-full h-full object-cover"
-            loading="lazy"
+            className="max-w-[85vw] max-h-[85vh] rounded-xl object-contain shadow-2xl animate-scale-in"
+            style={{
+              boxShadow: "0 20px 60px hsl(var(--book-shadow) / 0.4)",
+            }}
           />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-book-warm">
-            <span className="text-lg text-muted-foreground/40">📖</span>
-          </div>
-        )
-      }
-      title={
-        <h3 className="font-display text-base md:text-lg lg:text-xl font-semibold text-foreground text-center leading-snug tracking-wide">
-          {story.title}
-        </h3>
-      }
-      body={
-        <div
-          className="font-body text-[11px] md:text-xs lg:text-[13px] text-foreground/75"
-          style={{ lineHeight: 1.7 }}
-        >
-          {renderStoryText(story.text)}
         </div>
-      }
-    />
+      )}
+    </>
   );
 };
 
