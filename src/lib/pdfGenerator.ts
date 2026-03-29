@@ -250,39 +250,71 @@ export async function generateBookPdf() {
     const cornerR = 5;
 
     if (imgData) {
-      // First draw a filled rounded rect as the image "window"
+      // Draw a filled rounded rect as frame background
       pdf.setFillColor(240, 237, 228);
       pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
 
-      // Draw image using cover (crops top/bottom to fill width)
-      drawCover(pdf, imgData.dataUrl, contentX, contentTop, contentW, imgAreaH, imgData.w, imgData.h);
+      // Draw image contained within the frame (no bleed outside)
+      // Use cover but constrained: calculate draw coords manually to stay in bounds
+      const frameAR = contentW / imgAreaH;
+      const imgAR = imgData.w / imgData.h;
+      let dw: number, dh: number, dx: number, dy: number;
 
-      // Now mask everything outside the frame by redrawing the page background
-      // We redraw the full background BUT only in strips around the image
-      // Top strip
-      pdf.setFillColor(...COLORS.pageBg);
-      pdf.rect(0, 0, PAGE_W, contentTop, "F");
-      if (bgImg) drawCover(pdf, bgImg.dataUrl, 0, 0, PAGE_W, contentTop, bgImg.w, bgImg.h);
+      if (imgAR > frameAR) {
+        // Image wider than frame — fit height, crop sides
+        dh = imgAreaH;
+        dw = imgAreaH * imgAR;
+        dx = contentX + (contentW - dw) / 2;
+        dy = contentTop;
+      } else {
+        // Image taller than frame — fit width, crop top/bottom
+        dw = contentW;
+        dh = contentW / imgAR;
+        dx = contentX;
+        dy = contentTop + (imgAreaH - dh) / 2;
+      }
 
-      // Bottom strip
-      const bottomY = contentTop + imgAreaH;
-      pdf.setFillColor(...COLORS.pageBg);
-      pdf.rect(0, bottomY, PAGE_W, PAGE_H - bottomY, "F");
-      if (bgImg) drawCover(pdf, bgImg.dataUrl, 0, bottomY, PAGE_W, PAGE_H - bottomY, bgImg.w, bgImg.h);
+      // Clip manually: draw image, then mask outside areas
+      pdf.addImage(imgData.dataUrl, "JPEG", dx, dy, dw, dh);
 
-      // Left strip
-      pdf.setFillColor(...COLORS.pageBg);
-      pdf.rect(0, contentTop, contentX, imgAreaH, "F");
-      if (bgImg) drawCover(pdf, bgImg.dataUrl, 0, contentTop, contentX, imgAreaH, bgImg.w, bgImg.h);
+      // Mask the 4 edges outside the image frame by redrawing page bg
+      // Only needed where image bleeds (top/bottom for tall images, left/right for wide)
+      if (imgAR > frameAR) {
+        // Image is wider — bleeds left and right
+        // Left bleed
+        pdf.setFillColor(...COLORS.pageBg);
+        pdf.rect(0, contentTop, contentX, imgAreaH, "F");
+        if (bgImg) drawCover(pdf, bgImg.dataUrl, 0, 0, PAGE_W, PAGE_H, bgImg.w, bgImg.h);
+      } else {
+        // Image is taller — bleeds top and bottom  
+        // Top bleed
+        if (dy < contentTop) {
+          pdf.setFillColor(...COLORS.pageBg);
+          pdf.rect(contentX, dy, contentW, contentTop - dy, "F");
+          if (bgImg) {
+            // Redraw only the bg strip above frame
+            pdf.setFillColor(...COLORS.pageBg);
+            pdf.rect(contentX - 1, 0, contentW + 2, contentTop, "F");
+          }
+        }
+        // Bottom bleed
+        if (dy + dh > contentTop + imgAreaH) {
+          pdf.setFillColor(...COLORS.pageBg);
+          pdf.rect(contentX, contentTop + imgAreaH, contentW, (dy + dh) - (contentTop + imgAreaH), "F");
+        }
+      }
 
-      // Right strip
-      const rightX = contentX + contentW;
-      pdf.setFillColor(...COLORS.pageBg);
-      pdf.rect(rightX, contentTop, PAGE_W - rightX, imgAreaH, "F");
-      if (bgImg) drawCover(pdf, bgImg.dataUrl, rightX, contentTop, PAGE_W - rightX, imgAreaH, bgImg.w, bgImg.h);
+      // Simpler approach: just redraw the full page background EXCEPT the image frame area
+      // Top area
+      drawPageBackground(pdf, bgImg);
+      // Then redraw the image on top, this time using addImage with exact frame bounds
+      pdf.setFillColor(240, 237, 228);
+      pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
+      // Re-add the image clipped to frame
+      pdf.addImage(imgData.dataUrl, "JPEG", dx, dy, dw, dh);
 
-      // Mask corners for rounded effect
-      const cr = cornerR;
+      // Now mask ONLY the corners (small squares) to create rounded corner effect
+      const cr = cornerR + 1;
       const corners = [
         [contentX, contentTop],
         [contentX + contentW - cr, contentTop],
@@ -292,7 +324,6 @@ export async function generateBookPdf() {
       for (const [cx, cy] of corners) {
         pdf.setFillColor(...COLORS.pageBg);
         pdf.rect(cx, cy, cr, cr, "F");
-        if (bgImg) drawCover(pdf, bgImg.dataUrl, cx, cy, cr, cr, bgImg.w, bgImg.h);
       }
 
       // Draw rounded border on top
