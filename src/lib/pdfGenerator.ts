@@ -140,7 +140,7 @@ export async function generateBookPdf() {
   // Using built-in serif font (times) as closest match to app fonts
 
   // Pre-load images
-  const coverImg = await loadImage(coverImage);
+  const coverImg = await loadImage(pdfCoverImage);
   const bgImg = await loadImage(pageBackground);
   const imageCache: Record<number, { dataUrl: string; w: number; h: number } | null> = {};
   for (const s of stories) {
