@@ -254,8 +254,8 @@ export async function generateBookPdf() {
       pdf.setFillColor(240, 237, 228);
       pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
 
-      // Draw image contained within frame (no bleed)
-      drawContain(pdf, imgData.dataUrl, contentX, contentTop, contentW, imgAreaH, imgData.w, imgData.h);
+      // Draw image covering full frame (crop top/bottom if needed)
+      drawCover(pdf, imgData.dataUrl, contentX, contentTop, contentW, imgAreaH, imgData.w, imgData.h);
 
       // Mask corners for rounded effect
       const cr = cornerR + 1;
