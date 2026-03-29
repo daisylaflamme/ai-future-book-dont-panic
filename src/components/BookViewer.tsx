@@ -62,7 +62,7 @@ const BookViewer = () => {
   );
 
   const renderCurrentView = () => {
-    if (currentSpread === 0) return <BookCover coverImage={coverImage} />;
+    if (currentSpread === 0) return <BookCover />;
     if (currentSpread === 1) return <TitlePage />;
     if (currentSpread === totalSpreads - 1) return <BackCover />;
     const spreadIndex = currentSpread - 2;
