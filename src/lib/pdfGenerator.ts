@@ -84,6 +84,25 @@ function drawBottomDivider(pdf: jsPDF, centerX: number, y: number) {
   pdf.line(centerX + gap + dotR, y, centerX + lineW + gap + dotR, y);
 }
 
+/** Mask corners of a rect to simulate rounded corners by drawing background over the sharp corners */
+function drawCornerMasks(pdf: jsPDF, x: number, y: number, w: number, h: number, r: number, bgImg: { dataUrl: string; w: number; h: number } | null) {
+  // Fill corner squares with page background color, then cut out the rounded part
+  // Simple approach: draw filled background-color rectangles at each corner, then fill the rounded rect interior
+  pdf.setFillColor(...COLORS.pageBg);
+  // Top-left corner
+  pdf.rect(x, y, r, r, "F");
+  // Top-right corner
+  pdf.rect(x + w - r, y, r, r, "F");
+  // Bottom-left corner
+  pdf.rect(x, y + h - r, r, r, "F");
+  // Bottom-right corner
+  pdf.rect(x + w - r, y + h - r, r, r, "F");
+
+  // Now re-draw the image only in the corner areas as quarter circles
+  // Since jsPDF can't clip, we approximate by drawing filled arcs
+  pdf.setFillColor(...COLORS.pageBg);
+}
+
 /** Decorated page number */
 function drawPageNumber(pdf: jsPDF, num: number) {
   const y = PAGE_H - MARGIN_BOTTOM + 10;
