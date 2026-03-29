@@ -243,23 +243,23 @@ export async function generateBookPdf() {
     const contentTop = m.top;
     const contentBottom = PAGE_H - m.bottom;
 
-    // ── Image: full width of content area, object-cover ──
-    const imgAreaH = contentW * 0.6; // rectangular frame, reduced height
+    // ── Image: full width of content area, contained in rectangular frame ──
+    const imgAreaH = contentW * 0.72; // taller rectangular frame
     const imgData = imageCache[story.id];
 
     const cornerR = 4;
+    // Draw frame background first
+    pdf.setFillColor(240, 237, 228);
+    pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
+
     if (imgData) {
-      // Draw image covering the full area
-      drawCover(pdf, imgData.dataUrl, contentX, contentTop, contentW, imgAreaH, imgData.w, imgData.h);
-      // Mask corners with background color to simulate rounded corners
-      drawCornerMasks(pdf, contentX, contentTop, contentW, imgAreaH, cornerR, bgImg);
+      // Use contain to fit image within the frame without overflow
+      drawContain(pdf, imgData.dataUrl, contentX + 1, contentTop + 1, contentW - 2, imgAreaH - 2, imgData.w, imgData.h);
       // Draw rounded border on top
       pdf.setDrawColor(220, 215, 205);
       pdf.setLineWidth(0.5);
       pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "S");
     } else {
-      pdf.setFillColor(240, 237, 228);
-      pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
       pdf.setFont("times", "italic");
       pdf.setFontSize(8);
       pdf.setTextColor(170, 160, 145);
