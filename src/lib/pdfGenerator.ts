@@ -250,33 +250,49 @@ export async function generateBookPdf() {
     const cornerR = 5;
 
     if (imgData) {
+      // First draw a filled rounded rect as the image "window"
+      pdf.setFillColor(240, 237, 228);
+      pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
+
       // Draw image using cover (crops top/bottom to fill width)
       drawCover(pdf, imgData.dataUrl, contentX, contentTop, contentW, imgAreaH, imgData.w, imgData.h);
 
-      // Mask any bleed outside the frame by overdrawing background strips
-      // Top strip (above frame)
-      drawPageBackground(pdf, bgImg, contentX - 1, 0, contentW + 2, contentTop);
-      // Bottom strip (below frame)
-      drawPageBackground(pdf, bgImg, contentX - 1, contentTop + imgAreaH, contentW + 2, PAGE_H - (contentTop + imgAreaH));
-      // Left strip
-      drawPageBackground(pdf, bgImg, 0, contentTop, contentX, imgAreaH);
-      // Right strip
-      drawPageBackground(pdf, bgImg, contentX + contentW, contentTop, PAGE_W - (contentX + contentW), imgAreaH);
-
-      // Mask corners with page background to simulate rounded corners
-      const cr = cornerR;
+      // Now mask everything outside the frame by redrawing the page background
+      // We redraw the full background BUT only in strips around the image
+      // Top strip
       pdf.setFillColor(...COLORS.pageBg);
-      if (bgImg) {
-        // Redraw bg over corner squares
-        drawPageBackground(pdf, bgImg, contentX, contentTop, cr, cr);
-        drawPageBackground(pdf, bgImg, contentX + contentW - cr, contentTop, cr, cr);
-        drawPageBackground(pdf, bgImg, contentX, contentTop + imgAreaH - cr, cr, cr);
-        drawPageBackground(pdf, bgImg, contentX + contentW - cr, contentTop + imgAreaH - cr, cr, cr);
-      } else {
-        pdf.rect(contentX, contentTop, cr, cr, "F");
-        pdf.rect(contentX + contentW - cr, contentTop, cr, cr, "F");
-        pdf.rect(contentX, contentTop + imgAreaH - cr, cr, cr, "F");
-        pdf.rect(contentX + contentW - cr, contentTop + imgAreaH - cr, cr, cr, "F");
+      pdf.rect(0, 0, PAGE_W, contentTop, "F");
+      if (bgImg) drawCover(pdf, bgImg.dataUrl, 0, 0, PAGE_W, contentTop, bgImg.w, bgImg.h);
+
+      // Bottom strip
+      const bottomY = contentTop + imgAreaH;
+      pdf.setFillColor(...COLORS.pageBg);
+      pdf.rect(0, bottomY, PAGE_W, PAGE_H - bottomY, "F");
+      if (bgImg) drawCover(pdf, bgImg.dataUrl, 0, bottomY, PAGE_W, PAGE_H - bottomY, bgImg.w, bgImg.h);
+
+      // Left strip
+      pdf.setFillColor(...COLORS.pageBg);
+      pdf.rect(0, contentTop, contentX, imgAreaH, "F");
+      if (bgImg) drawCover(pdf, bgImg.dataUrl, 0, contentTop, contentX, imgAreaH, bgImg.w, bgImg.h);
+
+      // Right strip
+      const rightX = contentX + contentW;
+      pdf.setFillColor(...COLORS.pageBg);
+      pdf.rect(rightX, contentTop, PAGE_W - rightX, imgAreaH, "F");
+      if (bgImg) drawCover(pdf, bgImg.dataUrl, rightX, contentTop, PAGE_W - rightX, imgAreaH, bgImg.w, bgImg.h);
+
+      // Mask corners for rounded effect
+      const cr = cornerR;
+      const corners = [
+        [contentX, contentTop],
+        [contentX + contentW - cr, contentTop],
+        [contentX, contentTop + imgAreaH - cr],
+        [contentX + contentW - cr, contentTop + imgAreaH - cr],
+      ];
+      for (const [cx, cy] of corners) {
+        pdf.setFillColor(...COLORS.pageBg);
+        pdf.rect(cx, cy, cr, cr, "F");
+        if (bgImg) drawCover(pdf, bgImg.dataUrl, cx, cy, cr, cr, bgImg.w, bgImg.h);
       }
 
       // Draw rounded border on top
