@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import { stories, BOOK_META } from "@/data/bookData";
-import { coverImage } from "@/data/bookImages";
 import pageBackground from "@/assets/page-background.png";
+import pdfCoverImage from "@/assets/pdf-cover.png";
 
 // ── KDP 6×9" trim size ──
 const PAGE_W_IN = 6;
@@ -140,7 +140,7 @@ export async function generateBookPdf() {
   // Using built-in serif font (times) as closest match to app fonts
 
   // Pre-load images
-  const coverImg = await loadImage(coverImage);
+  const coverImg = await loadImage(pdfCoverImage);
   const bgImg = await loadImage(pageBackground);
   const imageCache: Record<number, { dataUrl: string; w: number; h: number } | null> = {};
   for (const s of stories) {
@@ -156,43 +156,9 @@ export async function generateBookPdf() {
   pdf.rect(0, 0, PAGE_W, PAGE_H, "F");
 
   if (coverImg) {
-    // Full-screen cover using object-cover (no black bars)
+    // Full-screen cover — image already contains all text
     drawCover(pdf, coverImg.dataUrl, 0, 0, PAGE_W, PAGE_H, coverImg.w, coverImg.h);
-    // Subtle gradient overlay for text — only at top and bottom
-    pdf.setFillColor(10, 12, 25);
-    pdf.setGState(new (pdf as any).GState({ opacity: 0.35 }));
-    pdf.rect(0, 0, PAGE_W, PAGE_H * 0.25, "F");
-    pdf.rect(0, PAGE_H * 0.7, PAGE_W, PAGE_H * 0.3, "F");
-    pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
   }
-
-  // Title
-  pdf.setFont("times", "bold");
-  pdf.setFontSize(22);
-  pdf.setTextColor(...COLORS.coverText);
-  const coverTitle = pdf.splitTextToSize(BOOK_META.title, PAGE_W - 30);
-  pdf.text(coverTitle, PAGE_W / 2, PAGE_H * 0.35, { align: "center" });
-
-  // Subtitle
-  pdf.setFont("times", "italic");
-  pdf.setFontSize(13);
-  pdf.setTextColor(...COLORS.goldLight);
-  pdf.text(`— ${BOOK_META.subtitle}`, PAGE_W / 2, PAGE_H * 0.35 + coverTitle.length * 9 + 6, { align: "center" });
-
-  // Full subtitle
-  pdf.setFont("times", "normal");
-  pdf.setFontSize(9);
-  pdf.setTextColor(200, 190, 170);
-  const fsLine1 = "Stories from a Future Where";
-  const fsLine2 = "Families and AI Grow Together";
-  pdf.text(fsLine1, PAGE_W / 2, PAGE_H * 0.58, { align: "center" });
-  pdf.text(fsLine2, PAGE_W / 2, PAGE_H * 0.58 + 5, { align: "center" });
-
-  // Author
-  pdf.setFont("times", "normal");
-  pdf.setFontSize(10);
-  pdf.setTextColor(...COLORS.goldLight);
-  pdf.text(BOOK_META.author, PAGE_W / 2, PAGE_H - 25, { align: "center" });
 
   // ═══════════════════════════════════════
   // TITLE PAGE
@@ -246,7 +212,7 @@ export async function generateBookPdf() {
     const contentBottom = PAGE_H - m.bottom;
 
     // ── Image: full width of content area, object-cover ──
-    const imgAreaH = (contentBottom - contentTop) * 0.36;
+    const imgAreaH = contentW; // square frame, full width
     const imgData = imageCache[story.id];
 
     if (imgData) {
@@ -326,9 +292,6 @@ export async function generateBookPdf() {
         cursorY += fitted.length * lineH + 3; // more space between paragraphs
       }
     }
-
-    // ── Bottom divider ──
-    drawBottomDivider(pdf, PAGE_W / 2, dividerY);
 
     // ── Page number ──
     drawPageNumber(pdf, pageNum);
