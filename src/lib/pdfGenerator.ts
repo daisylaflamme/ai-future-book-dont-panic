@@ -3,6 +3,8 @@ import { stories, BOOK_META } from "@/data/bookData";
 import pageBackground from "@/assets/page-background.png";
 import pdfCoverImage from "@/assets/pdf-cover.png";
 
+type LoadedImage = { dataUrl: string; w: number; h: number };
+
 // ── KDP 6×9" trim size ──
 const PAGE_W_IN = 6;
 const PAGE_H_IN = 9;
@@ -30,9 +32,12 @@ const COLORS = {
   dividerDot: [186, 143, 50],
 } as const;
 
+const STORY_IMAGE_HEIGHT_RATIO = 0.65;
+const STORY_TITLE_TOP_GAP = 15;
+
 // ── Helpers ──
 
-async function loadImage(src: string): Promise<{ dataUrl: string; w: number; h: number } | null> {
+async function loadImage(src: string): Promise<LoadedImage | null> {
   try {
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -46,6 +51,42 @@ async function loadImage(src: string): Promise<{ dataUrl: string; w: number; h: 
     c.height = img.naturalHeight;
     c.getContext("2d")!.drawImage(img, 0, 0);
     return { dataUrl: c.toDataURL("image/jpeg", 0.95), w: img.naturalWidth, h: img.naturalHeight };
+  } catch {
+    return null;
+  }
+}
+
+/** Crop image to a target aspect ratio so it can fill the frame without bleeding outside it */
+async function cropImageToAspect(img: LoadedImage, targetAspect: number): Promise<LoadedImage | null> {
+  try {
+    const srcImg = new Image();
+    srcImg.crossOrigin = "anonymous";
+    await new Promise<void>((res, rej) => {
+      srcImg.onload = () => res();
+      srcImg.onerror = () => rej();
+      srcImg.src = img.dataUrl;
+    });
+
+    const srcAspect = img.w / img.h;
+    let sx = 0;
+    let sy = 0;
+    let sw = img.w;
+    let sh = img.h;
+
+    if (srcAspect > targetAspect) {
+      sw = img.h * targetAspect;
+      sx = (img.w - sw) / 2;
+    } else if (srcAspect < targetAspect) {
+      sh = img.w / targetAspect;
+      sy = (img.h - sh) / 2;
+    }
+
+    const c = document.createElement("canvas");
+    c.width = Math.max(1, Math.round(sw));
+    c.height = Math.max(1, Math.round(sh));
+    c.getContext("2d")!.drawImage(srcImg, sx, sy, sw, sh, 0, 0, c.width, c.height);
+
+    return { dataUrl: c.toDataURL("image/jpeg", 0.95), w: c.width, h: c.height };
   } catch {
     return null;
   }
@@ -175,9 +216,13 @@ export async function generateBookPdf() {
   // Pre-load images
   const coverImg = await loadImage(pdfCoverImage);
   const bgImg = await loadImage(pageBackground);
-  const imageCache: Record<number, { dataUrl: string; w: number; h: number } | null> = {};
+  const imageCache: Record<number, LoadedImage | null> = {};
+  const storyImageAspect = 1 / STORY_IMAGE_HEIGHT_RATIO;
   for (const s of stories) {
-    if (s.imageUrl) imageCache[s.id] = await loadImage(s.imageUrl);
+    if (s.imageUrl) {
+      const loaded = await loadImage(s.imageUrl);
+      imageCache[s.id] = loaded ? await cropImageToAspect(loaded, storyImageAspect) : null;
+    }
   }
 
   let pageNum = 0;
@@ -244,7 +289,7 @@ export async function generateBookPdf() {
     const contentBottom = PAGE_H - m.bottom;
 
     // ── Image: full width of content area, cropped top/bottom with rounded corners ──
-    const imgAreaH = contentW * 0.65; // reduced height for more text space
+    const imgAreaH = contentW * STORY_IMAGE_HEIGHT_RATIO;
     const imgData = imageCache[story.id];
 
     const cornerR = 5;
@@ -254,8 +299,8 @@ export async function generateBookPdf() {
       pdf.setFillColor(240, 237, 228);
       pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
 
-      // Draw image covering full frame (crop top/bottom if needed)
-      drawCover(pdf, imgData.dataUrl, contentX, contentTop, contentW, imgAreaH, imgData.w, imgData.h);
+      // Draw pre-cropped image exactly inside frame bounds (full width, no bleed)
+      pdf.addImage(imgData.dataUrl, "JPEG", contentX, contentTop, contentW, imgAreaH);
 
       // Mask corners for rounded effect
       const cr = cornerR + 1;
@@ -284,7 +329,7 @@ export async function generateBookPdf() {
     }
 
     // ── Title — more space after image ──
-    const titleY = contentTop + imgAreaH + 12; // increased from 8
+    const titleY = contentTop + imgAreaH + STORY_TITLE_TOP_GAP;
     pdf.setFont("times", "bold");
     pdf.setFontSize(14);
     pdf.setTextColor(...COLORS.foreground);
