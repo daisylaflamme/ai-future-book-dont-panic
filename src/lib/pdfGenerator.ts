@@ -243,8 +243,8 @@ export async function generateBookPdf() {
     const contentTop = m.top;
     const contentBottom = PAGE_H - m.bottom;
 
-    // ── Image: full width of content area, contained in rectangular frame ──
-    const imgAreaH = contentW * 0.72; // taller rectangular frame
+    // ── Image: full width of content area, cover-fitted in rectangular frame ──
+    const imgAreaH = contentW * 0.78; // slightly taller rectangular frame
     const imgData = imageCache[story.id];
 
     const cornerR = 4;
@@ -253,8 +253,8 @@ export async function generateBookPdf() {
     pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
 
     if (imgData) {
-      // Use contain to fit image within the frame without overflow
-      drawContain(pdf, imgData.dataUrl, contentX + 1, contentTop + 1, contentW - 2, imgAreaH - 2, imgData.w, imgData.h);
+      // Use cover to fill frame fully, cropping as needed
+      drawCover(pdf, imgData.dataUrl, contentX + 1, contentTop + 1, contentW - 2, imgAreaH - 2, imgData.w, imgData.h);
       // Draw rounded border on top
       pdf.setDrawColor(220, 215, 205);
       pdf.setLineWidth(0.5);
