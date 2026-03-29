@@ -243,19 +243,22 @@ export async function generateBookPdf() {
     const titleH = titleLines.length * 6;
 
     // ── Body text with increased line spacing ──
-    const textY = titleY + titleH + 6;
+    // Allow text to overflow to additional pages
     const paragraphs = story.text.split("\n").filter(p => p.trim());
-    const lineH = 5.2; // increased from 4.5 for more sentence spacing
-    let cursorY = textY;
-    const dividerY = contentBottom - 8; // reserve space for divider
+    const lineH = 5.2;
+    let cursorY = titleY + titleH + 6;
+    const pageBottom = contentBottom - 8;
 
     for (const para of paragraphs) {
-      if (cursorY > dividerY - 10) break;
-
       const isMiloNote = para.trim().startsWith("Milo's Note:");
       if (isMiloNote) {
-        cursorY += 4; // more space above Milo's Note
-        // "Milo's Note:" in navy blue, bold
+        if (cursorY + 10 > pageBottom) {
+          drawPageNumber(pdf, pageNum);
+          pdf.addPage(); pageNum++;
+          drawPageBackground(pdf, bgImg);
+          cursorY = getMargins(pageNum % 2 === 0 ? "left" : "right").top + 10;
+        }
+        cursorY += 4;
         pdf.setFont("times", "bold");
         pdf.setFontSize(9.5);
         pdf.setTextColor(...COLORS.navy);
@@ -263,7 +266,6 @@ export async function generateBookPdf() {
         const labelW = pdf.getTextWidth(noteLabel);
         pdf.text(noteLabel, contentX, cursorY);
 
-        // Rest of note in italic
         const noteContent = para.trim().replace("Milo's Note:", "").trim();
         pdf.setFont("times", "italic");
         pdf.setTextColor(...COLORS.navy);
@@ -272,7 +274,12 @@ export async function generateBookPdf() {
           pdf.text(noteLines[0], contentX + labelW, cursorY);
           cursorY += lineH;
           for (let nl = 1; nl < noteLines.length; nl++) {
-            if (cursorY > dividerY - 10) break;
+            if (cursorY > pageBottom) {
+              drawPageNumber(pdf, pageNum);
+              pdf.addPage(); pageNum++;
+              drawPageBackground(pdf, bgImg);
+              cursorY = getMargins(pageNum % 2 === 0 ? "left" : "right").top + 10;
+            }
             pdf.text(noteLines[nl], contentX, cursorY);
             cursorY += lineH;
           }
@@ -283,10 +290,17 @@ export async function generateBookPdf() {
         pdf.setFontSize(9.5);
         pdf.setTextColor(...COLORS.bodyText);
         const paraLines = pdf.splitTextToSize(para, contentW);
-        const maxLines = Math.floor((dividerY - 10 - cursorY) / lineH);
-        const fitted = paraLines.slice(0, maxLines);
-        pdf.text(fitted, contentX, cursorY, { lineHeightFactor: 1.9 });
-        cursorY += fitted.length * lineH + 3; // more space between paragraphs
+        for (const line of paraLines) {
+          if (cursorY > pageBottom) {
+            drawPageNumber(pdf, pageNum);
+            pdf.addPage(); pageNum++;
+            drawPageBackground(pdf, bgImg);
+            cursorY = getMargins(pageNum % 2 === 0 ? "left" : "right").top + 10;
+          }
+          pdf.text(line, contentX, cursorY);
+          cursorY += lineH;
+        }
+        cursorY += 3;
       }
     }
 
