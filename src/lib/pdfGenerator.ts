@@ -103,7 +103,7 @@ function drawPageNumber(pdf: jsPDF, num: number) {
   // Right diamond
   pdf.triangle(cx + 22, y, cx + 22 + dSize, y - dSize, cx + 22 + dSize, y + dSize, "F");
 
-  pdf.setFont("PlayfairDisplay", "normal");
+  pdf.setFont("times", "normal");
   pdf.setFontSize(8);
   pdf.setTextColor(...COLORS.gold);
   pdf.text(`${num}`, cx, y + 0.5, { align: "center" });
