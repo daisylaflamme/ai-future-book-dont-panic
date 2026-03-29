@@ -130,67 +130,13 @@ function drawPageBackground(pdf: jsPDF, bgImg: { dataUrl: string; w: number; h: 
   }
 }
 
-/** Load and register custom fonts from Google Fonts */
-async function loadFontAsBase64(url: string): Promise<string | null> {
-  try {
-    const resp = await fetch(url);
-    const blob = await resp.blob();
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        resolve(result.split(",")[1]);
-      };
-      reader.readAsDataURL(blob);
-    });
-  } catch {
-    return null;
-  }
-}
-
-async function registerFonts(pdf: jsPDF) {
-  // Try to load Playfair Display and Libre Baskerville
-  const playfairUrl = "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtM.ttf";
-  const playfairBoldUrl = "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKd1unDXbtM.ttf";
-  const playfairItalicUrl = "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTbtbK-F2rA0s.ttf";
-  const libreUrl = "https://fonts.gstatic.com/s/librebaskerville/v14/kmKnZrc3Hgbbcjq75U4uslyuy4kn0pNeYRI4CN2V.ttf";
-  const libreItalicUrl = "https://fonts.gstatic.com/s/librebaskerville/v14/kmKhZrc3Hgbbcjq75U4uslyuy4kn0qNcaxYaDc2V2ro.ttf";
-  const libreBoldUrl = "https://fonts.gstatic.com/s/librebaskerville/v14/kmKiZrc3Hgbbcjq75U4uslyuy4kn0qviTjYwI8Gcw6Oi.ttf";
-
-  const [playfair, playfairBold, playfairItalic, libre, libreItalic, libreBold] = await Promise.all([
-    loadFontAsBase64(playfairUrl),
-    loadFontAsBase64(playfairBoldUrl),
-    loadFontAsBase64(playfairItalicUrl),
-    loadFontAsBase64(libreUrl),
-    loadFontAsBase64(libreItalicUrl),
-    loadFontAsBase64(libreBoldUrl),
-  ]);
-
-  if (playfair) {
-    pdf.addFileToVFS("PlayfairDisplay-Regular.ttf", playfair);
-    pdf.addFont("PlayfairDisplay-Regular.ttf", "PlayfairDisplay", "normal");
-  }
-  if (playfairBold) {
-    pdf.addFileToVFS("PlayfairDisplay-Bold.ttf", playfairBold);
-    pdf.addFont("PlayfairDisplay-Bold.ttf", "PlayfairDisplay", "bold");
-  }
-  if (playfairItalic) {
-    pdf.addFileToVFS("PlayfairDisplay-Italic.ttf", playfairItalic);
-    pdf.addFont("PlayfairDisplay-Italic.ttf", "PlayfairDisplay", "italic");
-  }
-  if (libre) {
-    pdf.addFileToVFS("LibreBaskerville-Regular.ttf", libre);
-    pdf.addFont("LibreBaskerville-Regular.ttf", "LibreBaskerville", "normal");
-  }
-  if (libreItalic) {
-    pdf.addFileToVFS("LibreBaskerville-Italic.ttf", libreItalic);
-    pdf.addFont("LibreBaskerville-Italic.ttf", "LibreBaskerville", "italic");
-  }
-  if (libreBold) {
-    pdf.addFileToVFS("LibreBaskerville-Bold.ttf", libreBold);
-    pdf.addFont("LibreBaskerville-Bold.ttf", "LibreBaskerville", "bold");
-  }
-}
+// Font aliases — jsPDF only reliably supports built-in fonts (helvetica, times, courier).
+// We use times (serif) for body and helvetica for titles to approximate
+// Libre Baskerville and Playfair Display from the app.
+const FONT = {
+  title: "times",       // serif, closest to Playfair Display
+  body: "times",        // serif, closest to Libre Baskerville
+} as const;
 
 // ── Main generator ──
 
