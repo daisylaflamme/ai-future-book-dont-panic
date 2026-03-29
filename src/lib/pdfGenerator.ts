@@ -130,13 +130,7 @@ function drawPageBackground(pdf: jsPDF, bgImg: { dataUrl: string; w: number; h: 
   }
 }
 
-// Font aliases — jsPDF only reliably supports built-in fonts (helvetica, times, courier).
-// We use times (serif) for body and helvetica for titles to approximate
-// Libre Baskerville and Playfair Display from the app.
-const FONT = {
-  title: "times",       // serif, closest to Playfair Display
-  body: "times",        // serif, closest to Libre Baskerville
-} as const;
+// Using built-in "times" serif font as closest match to app's Playfair Display / Libre Baskerville
 
 // ── Main generator ──
 
