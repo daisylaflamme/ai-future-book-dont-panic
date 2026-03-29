@@ -173,20 +173,20 @@ export async function generateBookPdf() {
   }
 
   // Title
-  pdf.setFont("PlayfairDisplay", "bold");
+  pdf.setFont("times", "bold");
   pdf.setFontSize(22);
   pdf.setTextColor(...COLORS.coverText);
   const coverTitle = pdf.splitTextToSize(BOOK_META.title, PAGE_W - 30);
   pdf.text(coverTitle, PAGE_W / 2, PAGE_H * 0.35, { align: "center" });
 
   // Subtitle
-  pdf.setFont("PlayfairDisplay", "italic");
+  pdf.setFont("times", "italic");
   pdf.setFontSize(13);
   pdf.setTextColor(...COLORS.goldLight);
   pdf.text(`— ${BOOK_META.subtitle}`, PAGE_W / 2, PAGE_H * 0.35 + coverTitle.length * 9 + 6, { align: "center" });
 
   // Full subtitle
-  pdf.setFont("LibreBaskerville", "normal");
+  pdf.setFont("times", "normal");
   pdf.setFontSize(9);
   pdf.setTextColor(200, 190, 170);
   const fsLine1 = "Stories from a Future Where";
@@ -195,7 +195,7 @@ export async function generateBookPdf() {
   pdf.text(fsLine2, PAGE_W / 2, PAGE_H * 0.58 + 5, { align: "center" });
 
   // Author
-  pdf.setFont("LibreBaskerville", "normal");
+  pdf.setFont("times", "normal");
   pdf.setFontSize(10);
   pdf.setTextColor(...COLORS.goldLight);
   pdf.text(BOOK_META.author, PAGE_W / 2, PAGE_H - 25, { align: "center" });
@@ -207,18 +207,18 @@ export async function generateBookPdf() {
   pageNum++;
   drawPageBackground(pdf, bgImg);
 
-  pdf.setFont("PlayfairDisplay", "bold");
+  pdf.setFont("times", "bold");
   pdf.setFontSize(22);
   pdf.setTextColor(...COLORS.foreground);
   const tp = pdf.splitTextToSize(BOOK_META.title, PAGE_W - 40);
   pdf.text(tp, PAGE_W / 2, 55, { align: "center" });
 
-  pdf.setFont("PlayfairDisplay", "italic");
+  pdf.setFont("times", "italic");
   pdf.setFontSize(14);
   pdf.setTextColor(...COLORS.gold);
   pdf.text(`— ${BOOK_META.subtitle}`, PAGE_W / 2, 55 + tp.length * 9 + 8, { align: "center" });
 
-  pdf.setFont("LibreBaskerville", "normal");
+  pdf.setFont("times", "normal");
   pdf.setFontSize(9);
   pdf.setTextColor(100, 100, 100);
   const fs2 = pdf.splitTextToSize(BOOK_META.fullSubtitle, PAGE_W - 50);
@@ -226,7 +226,7 @@ export async function generateBookPdf() {
 
   pdf.setFontSize(9);
   pdf.text("Written by", PAGE_W / 2, 130, { align: "center" });
-  pdf.setFont("LibreBaskerville", "italic");
+  pdf.setFont("times", "italic");
   pdf.setFontSize(12);
   pdf.setTextColor(...COLORS.foreground);
   pdf.text(BOOK_META.authorLong, PAGE_W / 2, 140, { align: "center" });
@@ -270,7 +270,7 @@ export async function generateBookPdf() {
     } else {
       pdf.setFillColor(240, 237, 228);
       pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, 2, 2, "F");
-      pdf.setFont("LibreBaskerville", "italic");
+      pdf.setFont("times", "italic");
       pdf.setFontSize(8);
       pdf.setTextColor(170, 160, 145);
       pdf.text("Illustration", contentX + contentW / 2, contentTop + imgAreaH / 2, { align: "center" });
@@ -278,7 +278,7 @@ export async function generateBookPdf() {
 
     // ── Title — more space after image ──
     const titleY = contentTop + imgAreaH + 12; // increased from 8
-    pdf.setFont("PlayfairDisplay", "bold");
+    pdf.setFont("times", "bold");
     pdf.setFontSize(14);
     pdf.setTextColor(...COLORS.foreground);
     const titleLines = pdf.splitTextToSize(story.title, contentW);
@@ -299,7 +299,7 @@ export async function generateBookPdf() {
       if (isMiloNote) {
         cursorY += 4; // more space above Milo's Note
         // "Milo's Note:" in navy blue, bold
-        pdf.setFont("LibreBaskerville", "bold");
+        pdf.setFont("times", "bold");
         pdf.setFontSize(9.5);
         pdf.setTextColor(...COLORS.navy);
         const noteLabel = "Milo's Note: ";
@@ -308,7 +308,7 @@ export async function generateBookPdf() {
 
         // Rest of note in italic
         const noteContent = para.trim().replace("Milo's Note:", "").trim();
-        pdf.setFont("LibreBaskerville", "italic");
+        pdf.setFont("times", "italic");
         pdf.setTextColor(...COLORS.navy);
         const noteLines = pdf.splitTextToSize(noteContent, contentW - labelW);
         if (noteLines.length > 0) {
@@ -322,7 +322,7 @@ export async function generateBookPdf() {
         }
         cursorY += 2;
       } else {
-        pdf.setFont("LibreBaskerville", "normal");
+        pdf.setFont("times", "normal");
         pdf.setFontSize(9.5);
         pdf.setTextColor(...COLORS.bodyText);
         const paraLines = pdf.splitTextToSize(para, contentW);
@@ -347,13 +347,13 @@ export async function generateBookPdf() {
   pdf.setFillColor(25, 30, 50);
   pdf.rect(0, 0, PAGE_W, PAGE_H, "F");
 
-  pdf.setFont("LibreBaskerville", "normal");
+  pdf.setFont("times", "normal");
   pdf.setFontSize(10);
   pdf.setTextColor(200, 192, 175);
   const backLines = pdf.splitTextToSize(BOOK_META.backCoverText, PAGE_W - 40);
   pdf.text(backLines, PAGE_W / 2, 50, { align: "center" });
 
-  pdf.setFont("LibreBaskerville", "normal");
+  pdf.setFont("times", "normal");
   pdf.setFontSize(9);
   pdf.setTextColor(...COLORS.goldLight);
   pdf.text(BOOK_META.author, PAGE_W / 2, PAGE_H - 25, { align: "center" });
