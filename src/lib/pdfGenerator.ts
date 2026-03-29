@@ -253,25 +253,33 @@ export async function generateBookPdf() {
       // Draw image using cover (crops top/bottom to fill width)
       drawCover(pdf, imgData.dataUrl, contentX, contentTop, contentW, imgAreaH, imgData.w, imgData.h);
 
+      // Mask any bleed outside the frame by overdrawing background strips
+      // Top strip (above frame)
+      drawPageBackground(pdf, bgImg, contentX - 1, 0, contentW + 2, contentTop);
+      // Bottom strip (below frame)
+      drawPageBackground(pdf, bgImg, contentX - 1, contentTop + imgAreaH, contentW + 2, PAGE_H - (contentTop + imgAreaH));
+      // Left strip
+      drawPageBackground(pdf, bgImg, 0, contentTop, contentX, imgAreaH);
+      // Right strip
+      drawPageBackground(pdf, bgImg, contentX + contentW, contentTop, PAGE_W - (contentX + contentW), imgAreaH);
+
       // Mask corners with page background to simulate rounded corners
       const cr = cornerR;
-      // Draw background over each corner area, then fill rounded rect border
-      // Top-left
       pdf.setFillColor(...COLORS.pageBg);
-      pdf.rect(contentX, contentTop, cr, cr, "F");
-      // Top-right
-      pdf.rect(contentX + contentW - cr, contentTop, cr, cr, "F");
-      // Bottom-left
-      pdf.rect(contentX, contentTop + imgAreaH - cr, cr, cr, "F");
-      // Bottom-right
-      pdf.rect(contentX + contentW - cr, contentTop + imgAreaH - cr, cr, cr, "F");
-
-      // Re-draw background image in corner areas if available
       if (bgImg) {
-        // Small corner patches - just use page bg color since bg texture is subtle
+        // Redraw bg over corner squares
+        drawPageBackground(pdf, bgImg, contentX, contentTop, cr, cr);
+        drawPageBackground(pdf, bgImg, contentX + contentW - cr, contentTop, cr, cr);
+        drawPageBackground(pdf, bgImg, contentX, contentTop + imgAreaH - cr, cr, cr);
+        drawPageBackground(pdf, bgImg, contentX + contentW - cr, contentTop + imgAreaH - cr, cr, cr);
+      } else {
+        pdf.rect(contentX, contentTop, cr, cr, "F");
+        pdf.rect(contentX + contentW - cr, contentTop, cr, cr, "F");
+        pdf.rect(contentX, contentTop + imgAreaH - cr, cr, cr, "F");
+        pdf.rect(contentX + contentW - cr, contentTop + imgAreaH - cr, cr, cr, "F");
       }
 
-      // Draw rounded border on top to clean up edges
+      // Draw rounded border on top
       pdf.setDrawColor(220, 215, 205);
       pdf.setLineWidth(0.6);
       pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "S");
