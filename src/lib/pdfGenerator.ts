@@ -156,43 +156,9 @@ export async function generateBookPdf() {
   pdf.rect(0, 0, PAGE_W, PAGE_H, "F");
 
   if (coverImg) {
-    // Full-screen cover using object-cover (no black bars)
+    // Full-screen cover — image already contains all text
     drawCover(pdf, coverImg.dataUrl, 0, 0, PAGE_W, PAGE_H, coverImg.w, coverImg.h);
-    // Subtle gradient overlay for text — only at top and bottom
-    pdf.setFillColor(10, 12, 25);
-    pdf.setGState(new (pdf as any).GState({ opacity: 0.35 }));
-    pdf.rect(0, 0, PAGE_W, PAGE_H * 0.25, "F");
-    pdf.rect(0, PAGE_H * 0.7, PAGE_W, PAGE_H * 0.3, "F");
-    pdf.setGState(new (pdf as any).GState({ opacity: 1 }));
   }
-
-  // Title
-  pdf.setFont("times", "bold");
-  pdf.setFontSize(22);
-  pdf.setTextColor(...COLORS.coverText);
-  const coverTitle = pdf.splitTextToSize(BOOK_META.title, PAGE_W - 30);
-  pdf.text(coverTitle, PAGE_W / 2, PAGE_H * 0.35, { align: "center" });
-
-  // Subtitle
-  pdf.setFont("times", "italic");
-  pdf.setFontSize(13);
-  pdf.setTextColor(...COLORS.goldLight);
-  pdf.text(`— ${BOOK_META.subtitle}`, PAGE_W / 2, PAGE_H * 0.35 + coverTitle.length * 9 + 6, { align: "center" });
-
-  // Full subtitle
-  pdf.setFont("times", "normal");
-  pdf.setFontSize(9);
-  pdf.setTextColor(200, 190, 170);
-  const fsLine1 = "Stories from a Future Where";
-  const fsLine2 = "Families and AI Grow Together";
-  pdf.text(fsLine1, PAGE_W / 2, PAGE_H * 0.58, { align: "center" });
-  pdf.text(fsLine2, PAGE_W / 2, PAGE_H * 0.58 + 5, { align: "center" });
-
-  // Author
-  pdf.setFont("times", "normal");
-  pdf.setFontSize(10);
-  pdf.setTextColor(...COLORS.goldLight);
-  pdf.text(BOOK_META.author, PAGE_W / 2, PAGE_H - 25, { align: "center" });
 
   // ═══════════════════════════════════════
   // TITLE PAGE
