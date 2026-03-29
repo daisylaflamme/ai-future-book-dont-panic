@@ -143,8 +143,7 @@ const FONT = {
 export async function generateBookPdf() {
   const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: [PAGE_W, PAGE_H] });
 
-  // Register custom fonts
-  await registerFonts(pdf);
+  // Using built-in serif font (times) as closest match to app fonts
 
   // Pre-load images
   const coverImg = await loadImage(coverImage);
