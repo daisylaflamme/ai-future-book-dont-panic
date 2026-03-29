@@ -212,7 +212,7 @@ export async function generateBookPdf() {
     const contentBottom = PAGE_H - m.bottom;
 
     // ── Image: full width of content area, object-cover ──
-    const imgAreaH = (contentBottom - contentTop) * 0.36;
+    const imgAreaH = contentW; // square frame, full width
     const imgData = imageCache[story.id];
 
     if (imgData) {
