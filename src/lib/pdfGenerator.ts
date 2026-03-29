@@ -293,9 +293,6 @@ export async function generateBookPdf() {
       }
     }
 
-    // ── Bottom divider ──
-    drawBottomDivider(pdf, PAGE_W / 2, dividerY);
-
     // ── Page number ──
     drawPageNumber(pdf, pageNum);
   }
