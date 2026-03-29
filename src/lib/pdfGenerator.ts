@@ -65,6 +65,20 @@ function drawCover(
   pdf.addImage(dataUrl, "JPEG", dx, dy, dw, dh);
 }
 
+/** Draw image contained within an area (object-contain, may have bars) */
+function drawContain(
+  pdf: jsPDF, dataUrl: string,
+  x: number, y: number, boxW: number, boxH: number,
+  natW: number, natH: number
+) {
+  const scale = Math.min(boxW / natW, boxH / natH);
+  const dw = natW * scale;
+  const dh = natH * scale;
+  const dx = x + (boxW - dw) / 2;
+  const dy = y + (boxH - dh) / 2;
+  pdf.addImage(dataUrl, "JPEG", dx, dy, dw, dh);
+}
+
 /** Draw the gold divider line (matches app bottom divider) */
 function drawBottomDivider(pdf: jsPDF, centerX: number, y: number) {
   const lineW = 16;
