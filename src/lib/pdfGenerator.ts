@@ -84,6 +84,25 @@ function drawBottomDivider(pdf: jsPDF, centerX: number, y: number) {
   pdf.line(centerX + gap + dotR, y, centerX + lineW + gap + dotR, y);
 }
 
+/** Mask corners of a rect to simulate rounded corners by drawing background over the sharp corners */
+function drawCornerMasks(pdf: jsPDF, x: number, y: number, w: number, h: number, r: number, bgImg: { dataUrl: string; w: number; h: number } | null) {
+  // Fill corner squares with page background color, then cut out the rounded part
+  // Simple approach: draw filled background-color rectangles at each corner, then fill the rounded rect interior
+  pdf.setFillColor(...COLORS.pageBg);
+  // Top-left corner
+  pdf.rect(x, y, r, r, "F");
+  // Top-right corner
+  pdf.rect(x + w - r, y, r, r, "F");
+  // Bottom-left corner
+  pdf.rect(x, y + h - r, r, r, "F");
+  // Bottom-right corner
+  pdf.rect(x + w - r, y + h - r, r, r, "F");
+
+  // Now re-draw the image only in the corner areas as quarter circles
+  // Since jsPDF can't clip, we approximate by drawing filled arcs
+  pdf.setFillColor(...COLORS.pageBg);
+}
+
 /** Decorated page number */
 function drawPageNumber(pdf: jsPDF, num: number) {
   const y = PAGE_H - MARGIN_BOTTOM + 10;
@@ -191,7 +210,6 @@ export async function generateBookPdf() {
   pdf.setTextColor(...COLORS.foreground);
   pdf.text(BOOK_META.authorLong, PAGE_W / 2, 140, { align: "center" });
 
-  drawBottomDivider(pdf, PAGE_W / 2, PAGE_H - MARGIN_BOTTOM - 5);
   drawPageNumber(pdf, pageNum);
 
   // ═══════════════════════════════════════
@@ -215,21 +233,19 @@ export async function generateBookPdf() {
     const imgAreaH = contentW; // square frame, full width
     const imgData = imageCache[story.id];
 
+    const cornerR = 4;
     if (imgData) {
-      // Clip to rounded rect area and draw cover-style
-      pdf.saveGraphicsState();
-      // Draw border frame
+      // Draw image covering the full area
+      drawCover(pdf, imgData.dataUrl, contentX, contentTop, contentW, imgAreaH, imgData.w, imgData.h);
+      // Mask corners with background color to simulate rounded corners
+      drawCornerMasks(pdf, contentX, contentTop, contentW, imgAreaH, cornerR, bgImg);
+      // Draw rounded border on top
       pdf.setDrawColor(220, 215, 205);
       pdf.setLineWidth(0.5);
-      pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, 2, 2, "S");
-      // Fill image covering the full area
-      drawCover(pdf, imgData.dataUrl, contentX, contentTop, contentW, imgAreaH, imgData.w, imgData.h);
-      // Re-draw border on top
-      pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, 2, 2, "S");
-      pdf.restoreGraphicsState();
+      pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "S");
     } else {
       pdf.setFillColor(240, 237, 228);
-      pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, 2, 2, "F");
+      pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
       pdf.setFont("times", "italic");
       pdf.setFontSize(8);
       pdf.setTextColor(170, 160, 145);
@@ -246,19 +262,22 @@ export async function generateBookPdf() {
     const titleH = titleLines.length * 6;
 
     // ── Body text with increased line spacing ──
-    const textY = titleY + titleH + 6;
+    // Allow text to overflow to additional pages
     const paragraphs = story.text.split("\n").filter(p => p.trim());
-    const lineH = 5.2; // increased from 4.5 for more sentence spacing
-    let cursorY = textY;
-    const dividerY = contentBottom - 8; // reserve space for divider
+    const lineH = 5.2;
+    let cursorY = titleY + titleH + 6;
+    const pageBottom = contentBottom - 8;
 
     for (const para of paragraphs) {
-      if (cursorY > dividerY - 10) break;
-
       const isMiloNote = para.trim().startsWith("Milo's Note:");
       if (isMiloNote) {
-        cursorY += 4; // more space above Milo's Note
-        // "Milo's Note:" in navy blue, bold
+        if (cursorY + 10 > pageBottom) {
+          drawPageNumber(pdf, pageNum);
+          pdf.addPage(); pageNum++;
+          drawPageBackground(pdf, bgImg);
+          cursorY = getMargins(pageNum % 2 === 0 ? "left" : "right").top + 10;
+        }
+        cursorY += 4;
         pdf.setFont("times", "bold");
         pdf.setFontSize(9.5);
         pdf.setTextColor(...COLORS.navy);
@@ -266,7 +285,6 @@ export async function generateBookPdf() {
         const labelW = pdf.getTextWidth(noteLabel);
         pdf.text(noteLabel, contentX, cursorY);
 
-        // Rest of note in italic
         const noteContent = para.trim().replace("Milo's Note:", "").trim();
         pdf.setFont("times", "italic");
         pdf.setTextColor(...COLORS.navy);
@@ -275,7 +293,12 @@ export async function generateBookPdf() {
           pdf.text(noteLines[0], contentX + labelW, cursorY);
           cursorY += lineH;
           for (let nl = 1; nl < noteLines.length; nl++) {
-            if (cursorY > dividerY - 10) break;
+            if (cursorY > pageBottom) {
+              drawPageNumber(pdf, pageNum);
+              pdf.addPage(); pageNum++;
+              drawPageBackground(pdf, bgImg);
+              cursorY = getMargins(pageNum % 2 === 0 ? "left" : "right").top + 10;
+            }
             pdf.text(noteLines[nl], contentX, cursorY);
             cursorY += lineH;
           }
@@ -286,10 +309,17 @@ export async function generateBookPdf() {
         pdf.setFontSize(9.5);
         pdf.setTextColor(...COLORS.bodyText);
         const paraLines = pdf.splitTextToSize(para, contentW);
-        const maxLines = Math.floor((dividerY - 10 - cursorY) / lineH);
-        const fitted = paraLines.slice(0, maxLines);
-        pdf.text(fitted, contentX, cursorY, { lineHeightFactor: 1.9 });
-        cursorY += fitted.length * lineH + 3; // more space between paragraphs
+        for (const line of paraLines) {
+          if (cursorY > pageBottom) {
+            drawPageNumber(pdf, pageNum);
+            pdf.addPage(); pageNum++;
+            drawPageBackground(pdf, bgImg);
+            cursorY = getMargins(pageNum % 2 === 0 ? "left" : "right").top + 10;
+          }
+          pdf.text(line, contentX, cursorY);
+          cursorY += lineH;
+        }
+        cursorY += 3;
       }
     }
 
