@@ -243,23 +243,41 @@ export async function generateBookPdf() {
     const contentTop = m.top;
     const contentBottom = PAGE_H - m.bottom;
 
-    // ── Image: full width of content area, cover-fitted in rectangular frame ──
-    const imgAreaH = contentW * 0.78; // slightly taller rectangular frame
+    // ── Image: full width of content area, cropped top/bottom with rounded corners ──
+    const imgAreaH = contentW * 0.65; // reduced height for more text space
     const imgData = imageCache[story.id];
 
-    const cornerR = 4;
-    // Draw frame background first
-    pdf.setFillColor(240, 237, 228);
-    pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
+    const cornerR = 5;
 
     if (imgData) {
-      // Use cover to fill frame fully, cropping as needed
-      drawCover(pdf, imgData.dataUrl, contentX + 1, contentTop + 1, contentW - 2, imgAreaH - 2, imgData.w, imgData.h);
-      // Draw rounded border on top
+      // Draw image using cover (crops top/bottom to fill width)
+      drawCover(pdf, imgData.dataUrl, contentX, contentTop, contentW, imgAreaH, imgData.w, imgData.h);
+
+      // Mask corners with page background to simulate rounded corners
+      const cr = cornerR;
+      // Draw background over each corner area, then fill rounded rect border
+      // Top-left
+      pdf.setFillColor(...COLORS.pageBg);
+      pdf.rect(contentX, contentTop, cr, cr, "F");
+      // Top-right
+      pdf.rect(contentX + contentW - cr, contentTop, cr, cr, "F");
+      // Bottom-left
+      pdf.rect(contentX, contentTop + imgAreaH - cr, cr, cr, "F");
+      // Bottom-right
+      pdf.rect(contentX + contentW - cr, contentTop + imgAreaH - cr, cr, cr, "F");
+
+      // Re-draw background image in corner areas if available
+      if (bgImg) {
+        // Small corner patches - just use page bg color since bg texture is subtle
+      }
+
+      // Draw rounded border on top to clean up edges
       pdf.setDrawColor(220, 215, 205);
-      pdf.setLineWidth(0.5);
+      pdf.setLineWidth(0.6);
       pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "S");
     } else {
+      pdf.setFillColor(240, 237, 228);
+      pdf.roundedRect(contentX, contentTop, contentW, imgAreaH, cornerR, cornerR, "F");
       pdf.setFont("times", "italic");
       pdf.setFontSize(8);
       pdf.setTextColor(170, 160, 145);
