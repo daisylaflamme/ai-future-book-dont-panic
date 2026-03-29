@@ -191,7 +191,6 @@ export async function generateBookPdf() {
   pdf.setTextColor(...COLORS.foreground);
   pdf.text(BOOK_META.authorLong, PAGE_W / 2, 140, { align: "center" });
 
-  drawBottomDivider(pdf, PAGE_W / 2, PAGE_H - MARGIN_BOTTOM - 5);
   drawPageNumber(pdf, pageNum);
 
   // ═══════════════════════════════════════
