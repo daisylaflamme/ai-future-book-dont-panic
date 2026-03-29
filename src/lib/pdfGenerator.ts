@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import { stories, BOOK_META } from "@/data/bookData";
-import { coverImage } from "@/data/bookImages";
 import pageBackground from "@/assets/page-background.png";
+import pdfCoverImage from "@/assets/pdf-cover.png";
 
 // ── KDP 6×9" trim size ──
 const PAGE_W_IN = 6;
