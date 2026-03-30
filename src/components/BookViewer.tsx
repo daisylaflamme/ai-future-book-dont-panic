@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import BookCover from "./BookCover";
 import TitlePage from "./TitlePage";
+import ContentsPage from "./ContentsPage";
 import BackCover from "./BackCover";
 import BookSpread from "./BookSpread";
 import SectionDivider from "./SectionDivider";
