@@ -272,6 +272,183 @@ export async function generateBookPdf() {
   drawPageNumber(pdf, pageNum);
 
   // ═══════════════════════════════════════
+  // PRE-CALCULATE STORY PAGE NUMBERS
+  // ═══════════════════════════════════════
+  // We need to know which page each story starts on for the Contents page.
+  // First, figure out how many pages the Contents itself takes, then calculate story pages.
+
+  const contentsStartPage = pageNum + 1;
+
+  // Estimate contents page count by simulating layout
+  function estimateContentsPages(): number {
+    const m = getMargins("right");
+    const contentW = PAGE_W - m.left - m.right;
+    const lineH = 5.5;
+    const sectionGap = 10;
+    const titleAreaH = 30; // "Contents" title + spacing
+    const pageBottom = PAGE_H - MARGIN_BOTTOM - 8;
+    let y = MARGIN_TOP + titleAreaH;
+    let pages = 1;
+
+    for (const section of BOOK_META.sections) {
+      y += sectionGap; // section title
+      const sectionStories = stories.filter(s => s.section === section.id);
+      for (const _story of sectionStories) {
+        if (y + lineH > pageBottom) { pages++; y = MARGIN_TOP + 10; }
+        y += lineH;
+      }
+    }
+    return pages;
+  }
+
+  const contentsPageCount = estimateContentsPages();
+
+  // Now calculate which page each story starts on
+  const storyPageNumbers: Record<number, number> = {};
+  {
+    let simPage = contentsStartPage + contentsPageCount; // first story page
+    const tempPdf = new jsPDF({ orientation: "portrait", unit: "mm", format: [PAGE_W, PAGE_H] });
+    tempPdf.setFont("times", "normal");
+
+    for (let i = 0; i < stories.length; i++) {
+      const story = stories[i];
+      storyPageNumbers[story.id] = simPage;
+
+      // Simulate this story's page usage
+      const side: "left" | "right" = simPage % 2 === 0 ? "left" : "right";
+      const m = getMargins(side);
+      const contentW = PAGE_W - m.left - m.right;
+      const contentTop = m.top;
+      const imgAreaH = contentW * STORY_IMAGE_HEIGHT_RATIO;
+      const pageBottom = PAGE_H - MARGIN_BOTTOM - 8;
+
+      // Title
+      tempPdf.setFont("times", "bold");
+      tempPdf.setFontSize(14);
+      const titleLines = tempPdf.splitTextToSize(story.title, contentW);
+      const titleH = titleLines.length * 6;
+      let cursorY = contentTop + imgAreaH + STORY_TITLE_TOP_GAP + titleH + 6;
+
+      // Body
+      const paragraphs = story.text.split("\n").filter(p => p.trim());
+      const lineH = 5.2;
+      for (const para of paragraphs) {
+        const isMiloNote = para.trim().startsWith("Milo's Note:");
+        if (isMiloNote) {
+          if (cursorY + 10 > pageBottom) { simPage++; cursorY = MARGIN_TOP + 10; }
+          cursorY += 4;
+          tempPdf.setFont("times", "bold"); tempPdf.setFontSize(9.5);
+          const labelW = tempPdf.getTextWidth("Milo's Note: ");
+          tempPdf.setFont("times", "italic");
+          const noteContent = para.trim().replace("Milo's Note:", "").trim();
+          const noteLines = tempPdf.splitTextToSize(noteContent, contentW - labelW);
+          cursorY += lineH;
+          for (let nl = 1; nl < noteLines.length; nl++) {
+            if (cursorY > pageBottom) { simPage++; cursorY = MARGIN_TOP + 10; }
+            cursorY += lineH;
+          }
+          cursorY += 2;
+        } else {
+          tempPdf.setFont("times", "normal"); tempPdf.setFontSize(9.5);
+          const paraLines = tempPdf.splitTextToSize(para, contentW);
+          for (const _line of paraLines) {
+            if (cursorY > pageBottom) { simPage++; cursorY = MARGIN_TOP + 10; }
+            cursorY += lineH;
+          }
+          cursorY += 3;
+        }
+      }
+      simPage++;
+    }
+  }
+
+  // ═══════════════════════════════════════
+  // CONTENTS PAGE(S)
+  // ═══════════════════════════════════════
+  {
+    const lineH = 5.5;
+    const sectionGap = 8;
+    let isFirstContentsPage = true;
+
+    function startContentsPage() {
+      pdf.addPage();
+      pageNum++;
+      drawPageBackground(pdf, bgImg);
+    }
+
+    startContentsPage();
+    const m = getMargins(pageNum % 2 === 0 ? "left" : "right");
+    const contentX = m.left;
+    const contentW = PAGE_W - m.left - m.right;
+    const pageBottom = PAGE_H - MARGIN_BOTTOM - 8;
+
+    // Title
+    pdf.setFont("times", "bold");
+    pdf.setFontSize(18);
+    pdf.setTextColor(...COLORS.foreground);
+    pdf.text("Contents", PAGE_W / 2, MARGIN_TOP + 18, { align: "center" });
+
+    let cursorY = MARGIN_TOP + 32;
+
+    for (const section of BOOK_META.sections) {
+      if (cursorY + sectionGap + lineH > pageBottom) {
+        drawPageNumber(pdf, pageNum);
+        startContentsPage();
+        cursorY = MARGIN_TOP + 10;
+      }
+
+      // Section title
+      cursorY += sectionGap;
+      pdf.setFont("times", "bold");
+      pdf.setFontSize(10);
+      pdf.setTextColor(...COLORS.gold);
+      pdf.text(section.title, contentX, cursorY);
+      cursorY += 6;
+
+      // Stories in section
+      const sectionStories = stories.filter(s => s.section === section.id);
+      for (const story of sectionStories) {
+        if (cursorY + lineH > pageBottom) {
+          drawPageNumber(pdf, pageNum);
+          startContentsPage();
+          cursorY = MARGIN_TOP + 10;
+        }
+
+        pdf.setFont("times", "normal");
+        pdf.setFontSize(9);
+        pdf.setTextColor(...COLORS.bodyText);
+
+        const titleText = `${story.id}. ${story.title}`;
+        pdf.text(titleText, contentX + 4, cursorY);
+
+        // Page number right-aligned
+        const pgNum = storyPageNumbers[story.id] ?? "";
+        pdf.setTextColor(...COLORS.muted);
+        pdf.text(`${pgNum}`, contentX + contentW, cursorY, { align: "right" });
+
+        // Dotted leader
+        const titleW = pdf.getTextWidth(titleText) + 6;
+        const numW = pdf.getTextWidth(`${pgNum}`) + 4;
+        const dotsStart = contentX + 4 + titleW;
+        const dotsEnd = contentX + contentW - numW;
+        if (dotsEnd > dotsStart + 5) {
+          pdf.setFontSize(7);
+          pdf.setTextColor(...COLORS.muted);
+          let dx = dotsStart;
+          while (dx < dotsEnd) {
+            pdf.text(".", dx, cursorY);
+            dx += 2.5;
+          }
+        }
+
+        cursorY += lineH;
+      }
+    }
+
+    drawPageNumber(pdf, pageNum);
+  }
+
+  // ═══════════════════════════════════════
   // STORY PAGES
   // ═══════════════════════════════════════
   for (let i = 0; i < stories.length; i++) {
