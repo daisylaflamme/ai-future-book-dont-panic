@@ -53,6 +53,16 @@ const BookViewer = () => {
     }
   }, [toast]);
 
+  const handleNavigateToStory = useCallback((storyId: number) => {
+    // Find which spread contains this story
+    const spreadIdx = spreads.findIndex(
+      (sp) => sp.left.id === storyId || sp.right.id === storyId
+    );
+    if (spreadIdx >= 0) {
+      setCurrentSpread(spreadIdx + 3); // offset by cover + title + contents
+    }
+  }, [spreads]);
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "ArrowLeft") handlePrev();
@@ -64,8 +74,9 @@ const BookViewer = () => {
   const renderCurrentView = () => {
     if (currentSpread === 0) return <BookCover />;
     if (currentSpread === 1) return <TitlePage />;
+    if (currentSpread === 2) return <ContentsPage onNavigateToStory={handleNavigateToStory} />;
     if (currentSpread === totalSpreads - 1) return <BackCover />;
-    const spreadIndex = currentSpread - 2;
+    const spreadIndex = currentSpread - 3;
     const spread = spreads[spreadIndex];
     if (!spread) return null;
 
