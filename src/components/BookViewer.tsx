@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import BookCover from "./BookCover";
 import TitlePage from "./TitlePage";
+import ContentsPage from "./ContentsPage";
 import BackCover from "./BackCover";
 import BookSpread from "./BookSpread";
 import SectionDivider from "./SectionDivider";
@@ -19,9 +20,8 @@ const BookViewer = () => {
   }, []);
 
   const spreads = getSpreadPages();
-  // Pages: cover, title, section1-divider, spreads 0-9 (stories 1-20), section2-divider, spreads 10-18 (stories 21-38), section3-divider, spreads 19-24 (stories 39-50), back-cover
-  // For simplicity, let's use a flat page array
-  const totalSpreads = 2 + spreads.length + 1; // cover + title + story spreads + back cover
+  // Pages: cover, title, contents, spreads..., back-cover
+  const totalSpreads = 3 + spreads.length + 1; // cover + title + contents + story spreads + back cover
   const [currentSpread, setCurrentSpread] = useState(0);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const { toast } = useToast();
@@ -53,6 +53,16 @@ const BookViewer = () => {
     }
   }, [toast]);
 
+  const handleNavigateToStory = useCallback((storyId: number) => {
+    // Find which spread contains this story
+    const spreadIdx = spreads.findIndex(
+      (sp) => sp.left.id === storyId || sp.right.id === storyId
+    );
+    if (spreadIdx >= 0) {
+      setCurrentSpread(spreadIdx + 3); // offset by cover + title + contents
+    }
+  }, [spreads]);
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "ArrowLeft") handlePrev();
@@ -64,8 +74,9 @@ const BookViewer = () => {
   const renderCurrentView = () => {
     if (currentSpread === 0) return <BookCover />;
     if (currentSpread === 1) return <TitlePage />;
+    if (currentSpread === 2) return <ContentsPage onNavigateToStory={handleNavigateToStory} />;
     if (currentSpread === totalSpreads - 1) return <BackCover />;
-    const spreadIndex = currentSpread - 2;
+    const spreadIndex = currentSpread - 3;
     const spread = spreads[spreadIndex];
     if (!spread) return null;
 
