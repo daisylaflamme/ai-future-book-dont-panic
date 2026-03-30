@@ -132,6 +132,7 @@ const BookViewer = () => {
         onPrev={handlePrev}
         onNext={handleNext}
         onGoToCover={handleGoToCover}
+        onGoToContents={handleGoToContents}
         onDownloadPdf={handleDownloadPdf}
         isGeneratingPdf={isGeneratingPdf}
       />
