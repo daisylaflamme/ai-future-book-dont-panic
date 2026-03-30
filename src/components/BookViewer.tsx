@@ -20,9 +20,8 @@ const BookViewer = () => {
   }, []);
 
   const spreads = getSpreadPages();
-  // Pages: cover, title, section1-divider, spreads 0-9 (stories 1-20), section2-divider, spreads 10-18 (stories 21-38), section3-divider, spreads 19-24 (stories 39-50), back-cover
-  // For simplicity, let's use a flat page array
-  const totalSpreads = 2 + spreads.length + 1; // cover + title + story spreads + back cover
+  // Pages: cover, title, contents, spreads..., back-cover
+  const totalSpreads = 3 + spreads.length + 1; // cover + title + contents + story spreads + back cover
   const [currentSpread, setCurrentSpread] = useState(0);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const { toast } = useToast();
