@@ -390,9 +390,9 @@ Milo's Note: Love stays messy. It just gets fewer scams.`,
     id: 25,
     section: "expanding-world",
     title: "Trends Become Tools",
-    text: `Short videos evolved into immersive walk-through lessons. Gaming became training and therapy. Influencers became verified trust networks — finally.
+    text: `Short videos evolved into immersive walkthrough lessons. Gaming became training and therapy. Influencers became verified trust networks — finally.
 
-Zoe practices for internship interviews in a simulation. She fails on purpose to build resilience.
+Zoe practices for internship interviews in a simulation. She intentionally fails to build resilience.
 
 Maya calls it making excuses. Milo calls it both.
 
