@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Download, Home } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, Home, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface BookNavigationProps {
@@ -7,6 +7,7 @@ interface BookNavigationProps {
   onPrev: () => void;
   onNext: () => void;
   onGoToCover: () => void;
+  onGoToContents: () => void;
   onDownloadPdf: () => void;
   isGeneratingPdf: boolean;
 }
