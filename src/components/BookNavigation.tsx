@@ -23,8 +23,9 @@ const BookNavigation = ({
   const getLabel = () => {
     if (currentSpread === 0) return "Front Cover";
     if (currentSpread === 1) return "Title Page";
+    if (currentSpread === 2) return "Contents";
     if (currentSpread === totalSpreads - 1) return "Back Cover";
-    return `Spread ${currentSpread - 1} of ${totalSpreads - 3}`;
+    return `Spread ${currentSpread - 2} of ${totalSpreads - 4}`;
   };
 
   return (
