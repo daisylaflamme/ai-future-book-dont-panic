@@ -18,6 +18,7 @@ const BookNavigation = ({
   onPrev,
   onNext,
   onGoToCover,
+  onGoToContents,
   onDownloadPdf,
   isGeneratingPdf,
 }: BookNavigationProps) => {
