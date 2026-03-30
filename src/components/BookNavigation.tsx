@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Download, Home } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, Home, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface BookNavigationProps {
@@ -7,6 +7,7 @@ interface BookNavigationProps {
   onPrev: () => void;
   onNext: () => void;
   onGoToCover: () => void;
+  onGoToContents: () => void;
   onDownloadPdf: () => void;
   isGeneratingPdf: boolean;
 }
@@ -17,6 +18,7 @@ const BookNavigation = ({
   onPrev,
   onNext,
   onGoToCover,
+  onGoToContents,
   onDownloadPdf,
   isGeneratingPdf,
 }: BookNavigationProps) => {
@@ -40,6 +42,16 @@ const BookNavigation = ({
           title="Go to Cover"
         >
           <Home className="w-4 h-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onGoToContents}
+          disabled={currentSpread === 2}
+          className="font-ui gap-1"
+          title="Go to Contents"
+        >
+          <List className="w-4 h-4" />
         </Button>
         <Button
           variant="ghost"
