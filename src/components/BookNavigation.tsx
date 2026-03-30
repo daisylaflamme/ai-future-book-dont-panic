@@ -46,6 +46,16 @@ const BookNavigation = ({
         <Button
           variant="ghost"
           size="sm"
+          onClick={onGoToContents}
+          disabled={currentSpread === 2}
+          className="font-ui gap-1"
+          title="Go to Contents"
+        >
+          <List className="w-4 h-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={onPrev}
           disabled={currentSpread === 0}
           className="font-ui gap-1"

@@ -38,6 +38,10 @@ const BookViewer = () => {
     setCurrentSpread(0);
   }, []);
 
+  const handleGoToContents = useCallback(() => {
+    setCurrentSpread(2);
+  }, []);
+
   const handleDownloadPdf = useCallback(async () => {
     setIsGeneratingPdf(true);
     toast({ title: "Generating PDF...", description: "This may take a moment." });
