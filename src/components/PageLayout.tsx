@@ -52,7 +52,7 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
         </div>
 
         {/* Title */}
-        <div className="pb-3 pt-5 md:pb-4 md:pt-6 lg:pt-7">
+        <div className="pb-2 pt-3 sm:pb-3 sm:pt-5 md:pb-4 md:pt-6 lg:pt-7">
           {title}
         </div>
 
