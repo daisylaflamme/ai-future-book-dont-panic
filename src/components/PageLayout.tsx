@@ -21,8 +21,8 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
 
   return (
     <div
-      className={`relative flex h-full min-h-0 flex-col p-5 md:p-7 lg:p-8 ${
-        side === "left" ? "border-r border-border/20" : ""
+      className={`relative flex h-full min-h-0 flex-col p-2 sm:p-4 md:p-7 lg:p-8 ${
+        side === "left" ? "md:landscape:border-r lg:border-r border-border/20" : ""
       }`}
       style={{
         backgroundImage: sectionBackground,
@@ -32,7 +32,7 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
     >
       {/* Content outline container */}
         <div
-          className="grid h-full min-h-0 w-full flex-1 grid-rows-[minmax(0,38%)_auto_minmax(0,1fr)_minmax(24px,auto)] overflow-hidden rounded-lg border border-border/65 bg-background/20 p-4 md:p-5"
+          className="grid h-full min-h-0 w-full flex-1 grid-rows-[minmax(0,35%)_auto_minmax(0,1fr)_minmax(20px,auto)] sm:grid-rows-[minmax(0,38%)_auto_minmax(0,1fr)_minmax(24px,auto)] overflow-hidden rounded-lg border border-border/65 bg-background/20 p-2 sm:p-3 md:p-5"
         style={{
           boxShadow:
             "0 2px 12px hsl(var(--book-shadow) / 0.08), inset 0 -1px 0 hsl(var(--border) / 0.7), inset 0 0 0 0.5px hsl(var(--background) / 0.6)",
@@ -52,7 +52,7 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
         </div>
 
         {/* Title */}
-        <div className="pb-3 pt-5 md:pb-4 md:pt-6 lg:pt-7">
+        <div className="pb-2 pt-3 sm:pb-3 sm:pt-5 md:pb-4 md:pt-6 lg:pt-7">
           {title}
         </div>
 

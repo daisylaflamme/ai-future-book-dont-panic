@@ -102,13 +102,14 @@ const ContentsPage = ({ onNavigateToStory }: ContentsPageProps) => {
     </div>
   );
 
+  // On small screens, show single column
   return (
-    <div className="relative grid h-full min-h-0 w-full grid-cols-1 grid-rows-1 items-stretch md:grid-cols-2">
+    <div className="relative grid h-full min-h-0 w-full grid-cols-1 items-stretch md:landscape:grid-cols-2 lg:grid-cols-2">
       {renderPage("left", leftSections, true)}
 
-      {/* Book spine */}
+      {/* Book spine - only in two-column mode */}
       <div
-        className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 z-10"
+        className="hidden md:landscape:block lg:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 z-10"
         style={{
           background:
             "linear-gradient(to bottom, transparent, hsl(var(--book-spine)) 10%, hsl(var(--book-spine)) 90%, transparent)",
@@ -117,7 +118,14 @@ const ContentsPage = ({ onNavigateToStory }: ContentsPageProps) => {
         }}
       />
 
-      {renderPage("right", rightSections, false)}
+      {/* Right page - hidden in single-page mode, show sections inline instead */}
+      <div className="hidden md:landscape:block lg:block h-full">
+        {renderPage("right", rightSections, false)}
+      </div>
+      {/* On single-page mode, show right sections below left */}
+      <div className="md:landscape:hidden lg:hidden">
+        {renderPage("right", rightSections, false)}
+      </div>
     </div>
   );
 };
