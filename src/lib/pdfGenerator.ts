@@ -331,7 +331,7 @@ export async function generateBookPdf() {
 
       // Body
       const paragraphs = story.text.split("\n").filter(p => p.trim());
-      const lineH = 5.2;
+      const lineH = 5.6;
       for (const para of paragraphs) {
         const isMiloNote = para.trim().startsWith("Milo's Note:");
         if (isMiloNote) {
