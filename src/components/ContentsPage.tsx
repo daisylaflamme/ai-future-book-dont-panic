@@ -102,31 +102,33 @@ const ContentsPage = ({ onNavigateToStory }: ContentsPageProps) => {
     </div>
   );
 
-  // On small screens, show single column
+  // On small screens, show all sections in one scrollable page
+  // On wide screens, show two-page spread
   return (
-    <div className="relative grid h-full min-h-0 w-full grid-cols-1 items-stretch md:landscape:grid-cols-2 lg:grid-cols-2">
-      {renderPage("left", leftSections, true)}
+    <>
+      {/* Single-page mode (mobile / tablet portrait) */}
+      <div className="md:landscape:hidden lg:hidden h-full">
+        {renderPage("left", allSectionData, true)}
+      </div>
 
-      {/* Book spine - only in two-column mode */}
-      <div
-        className="hidden md:landscape:block lg:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 z-10"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent, hsl(var(--book-spine)) 10%, hsl(var(--book-spine)) 90%, transparent)",
-          boxShadow:
-            "-2px 0 8px hsl(var(--book-shadow) / 0.1), 2px 0 8px hsl(var(--book-shadow) / 0.1)",
-        }}
-      />
+      {/* Two-page spread mode (tablet landscape / desktop) */}
+      <div className="hidden md:landscape:grid lg:grid relative h-full min-h-0 w-full grid-cols-2 items-stretch">
+        {renderPage("left", leftSections, true)}
 
-      {/* Right page - hidden in single-page mode, show sections inline instead */}
-      <div className="hidden md:landscape:block lg:block h-full">
+        {/* Book spine */}
+        <div
+          className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 z-10"
+          style={{
+            background:
+              "linear-gradient(to bottom, transparent, hsl(var(--book-spine)) 10%, hsl(var(--book-spine)) 90%, transparent)",
+            boxShadow:
+              "-2px 0 8px hsl(var(--book-shadow) / 0.1), 2px 0 8px hsl(var(--book-shadow) / 0.1)",
+          }}
+        />
+
         {renderPage("right", rightSections, false)}
       </div>
-      {/* On single-page mode, show right sections below left */}
-      <div className="md:landscape:hidden lg:hidden">
-        {renderPage("right", rightSections, false)}
-      </div>
-    </div>
+    </>
   );
 };
 
