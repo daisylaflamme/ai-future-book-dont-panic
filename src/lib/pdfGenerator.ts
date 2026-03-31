@@ -559,7 +559,7 @@ export async function generateBookPdf() {
         cursorY += 2;
       } else {
         pdf.setFont("times", "normal");
-        pdf.setFontSize(10.5);
+        pdf.setFontSize(9.5);
         pdf.setTextColor(...COLORS.bodyText);
         const paraLines = pdf.splitTextToSize(para, contentW);
         for (const line of paraLines) {
