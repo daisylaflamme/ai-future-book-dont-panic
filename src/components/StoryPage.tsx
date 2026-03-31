@@ -46,15 +46,9 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
               <img
                 src={story.imageUrl}
                 alt={story.title}
-                className="w-full h-full object-cover hidden md:block md:cursor-zoom-in"
+                className="w-full h-full object-cover cursor-zoom-in"
                 loading="lazy"
                 onClick={() => setShowFull(true)}
-              />
-              <img
-                src={story.imageUrl}
-                alt={story.title}
-                className="w-full h-full object-cover md:hidden"
-                loading="lazy"
               />
             </div>
           ) : (
