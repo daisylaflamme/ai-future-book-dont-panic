@@ -4,11 +4,13 @@ import TitlePage from "./TitlePage";
 import ContentsPage from "./ContentsPage";
 import BackCover from "./BackCover";
 import BookSpread from "./BookSpread";
-import SectionDivider from "./SectionDivider";
+import SingleStoryPage from "./SingleStoryPage";
 import BookNavigation from "./BookNavigation";
 import { getSpreadPages, stories, BOOK_META } from "@/data/bookData";
 import { storyImages, coverImage } from "@/data/bookImages";
 import { useToast } from "@/hooks/use-toast";
+import { useSwipe } from "@/hooks/use-swipe";
+import { useLayoutMode } from "@/hooks/use-layout-mode";
 
 const BookViewer = () => {
   useMemo(() => {
@@ -19,27 +21,33 @@ const BookViewer = () => {
     });
   }, []);
 
+  const layoutMode = useLayoutMode();
   const spreads = getSpreadPages();
-  // Pages: cover, title, contents, spreads..., back-cover
-  const totalSpreads = 3 + spreads.length + 1; // cover + title + contents + story spreads + back cover
-  const [currentSpread, setCurrentSpread] = useState(0);
+
+  // In spread mode: cover, title, contents, spreads..., back-cover
+  // In single mode: cover, title, contents, story1, story2, ..., back-cover
+  const totalPages = layoutMode === "spread"
+    ? 3 + spreads.length + 1
+    : 3 + stories.length + 1;
+
+  const [currentPage, setCurrentPage] = useState(0);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const { toast } = useToast();
 
   const handlePrev = useCallback(() => {
-    setCurrentSpread((s) => Math.max(0, s - 1));
+    setCurrentPage((s) => Math.max(0, s - 1));
   }, []);
 
   const handleNext = useCallback(() => {
-    setCurrentSpread((s) => Math.min(totalSpreads - 1, s + 1));
-  }, [totalSpreads]);
+    setCurrentPage((s) => Math.min(totalPages - 1, s + 1));
+  }, [totalPages]);
 
   const handleGoToCover = useCallback(() => {
-    setCurrentSpread(0);
+    setCurrentPage(0);
   }, []);
 
   const handleGoToContents = useCallback(() => {
-    setCurrentSpread(2);
+    setCurrentPage(2);
   }, []);
 
   const handleDownloadPdf = useCallback(async () => {
@@ -58,14 +66,25 @@ const BookViewer = () => {
   }, [toast]);
 
   const handleNavigateToStory = useCallback((storyId: number) => {
-    // Find which spread contains this story
-    const spreadIdx = spreads.findIndex(
-      (sp) => sp.left.id === storyId || sp.right.id === storyId
-    );
-    if (spreadIdx >= 0) {
-      setCurrentSpread(spreadIdx + 3); // offset by cover + title + contents
+    if (layoutMode === "spread") {
+      const spreadIdx = spreads.findIndex(
+        (sp) => sp.left.id === storyId || sp.right.id === storyId
+      );
+      if (spreadIdx >= 0) {
+        setCurrentPage(spreadIdx + 3);
+      }
+    } else {
+      const storyIdx = stories.findIndex((s) => s.id === storyId);
+      if (storyIdx >= 0) {
+        setCurrentPage(storyIdx + 3);
+      }
     }
-  }, [spreads]);
+  }, [layoutMode, spreads]);
+
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: handleNext,
+    onSwipeRight: handlePrev,
+  });
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -76,27 +95,35 @@ const BookViewer = () => {
   );
 
   const renderCurrentView = () => {
-    if (currentSpread === 0) return <BookCover />;
-    if (currentSpread === 1) return <TitlePage />;
-    if (currentSpread === 2) return <ContentsPage onNavigateToStory={handleNavigateToStory} />;
-    if (currentSpread === totalSpreads - 1) return <BackCover />;
-    const spreadIndex = currentSpread - 3;
-    const spread = spreads[spreadIndex];
-    if (!spread) return null;
+    if (currentPage === 0) return <BookCover />;
+    if (currentPage === 1) return <TitlePage />;
+    if (currentPage === 2) return <ContentsPage onNavigateToStory={handleNavigateToStory} />;
+    if (currentPage === totalPages - 1) return <BackCover />;
 
-    // Check if this spread starts a new section
-    const leftSection = spread.left.section;
-    const prevSpread = spreadIndex > 0 ? spreads[spreadIndex - 1] : null;
-    const isNewSection = spreadIndex === 0 || (prevSpread && prevSpread.right.section !== leftSection);
+    if (layoutMode === "spread") {
+      const spreadIndex = currentPage - 3;
+      const spread = spreads[spreadIndex];
+      if (!spread) return null;
 
-    return (
-      <BookSpread
-        left={spread.left}
-        right={spread.right}
-        spreadIndex={spreadIndex}
-        sectionTitle={isNewSection ? getSectionTitle(leftSection) : undefined}
-      />
-    );
+      const leftSection = spread.left.section;
+      const prevSpread = spreadIndex > 0 ? spreads[spreadIndex - 1] : null;
+      const isNewSection = spreadIndex === 0 || (prevSpread && prevSpread.right.section !== leftSection);
+
+      return (
+        <BookSpread
+          left={spread.left}
+          right={spread.right}
+          spreadIndex={spreadIndex}
+          sectionTitle={isNewSection ? getSectionTitle(leftSection) : undefined}
+        />
+      );
+    } else {
+      // Single page mode
+      const storyIndex = currentPage - 3;
+      const story = stories[storyIndex];
+      if (!story) return null;
+      return <SingleStoryPage story={story} pageIndex={storyIndex} />;
+    }
   };
 
   const getSectionTitle = (section: string) => {
@@ -104,31 +131,56 @@ const BookViewer = () => {
     return s ? s.title : undefined;
   };
 
+  const getLabel = () => {
+    if (currentPage === 0) return "Cover";
+    if (currentPage === 1) return "Title";
+    if (currentPage === 2) return "Contents";
+    if (currentPage === totalPages - 1) return "Back Cover";
+    if (layoutMode === "spread") {
+      return `${currentPage - 2} / ${totalPages - 4}`;
+    }
+    return `${currentPage - 2} / ${totalPages - 4}`;
+  };
+
   return (
-    <div className="flex flex-col h-screen bg-background" onKeyDown={handleKeyDown} tabIndex={0}>
-      <header className="flex items-center justify-center px-4 py-2 border-b border-border bg-card">
+    <div
+      className="flex flex-col h-[100dvh] bg-background touch-pan-y"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
+      {/* Header */}
+      <header className="flex items-center justify-center px-3 py-1.5 md:px-4 md:py-2 border-b border-border bg-card flex-shrink-0">
         <button
           onClick={handleGoToCover}
-          className="font-display text-sm md:text-base text-foreground truncate hover:text-accent transition-colors cursor-pointer bg-transparent border-none"
+          className="font-display text-xs sm:text-sm md:text-base text-foreground truncate hover:text-accent transition-colors cursor-pointer bg-transparent border-none px-2 py-1"
         >
           {BOOK_META.title} — <span className="italic text-accent">{BOOK_META.subtitle}</span>
         </button>
       </header>
-      <div className="flex-1 flex items-center justify-center p-2 md:p-6 overflow-hidden">
+
+      {/* Book content area with swipe */}
+      <div
+        className="flex-1 flex items-center justify-center p-1.5 sm:p-2 md:p-6 overflow-hidden min-h-0"
+        {...swipeHandlers}
+      >
         <div
-          className="w-full max-w-6xl rounded-lg overflow-hidden shadow-xl border border-border/50"
+          className={`w-full rounded-lg overflow-hidden shadow-xl border border-border/50 ${
+            layoutMode === "spread" ? "max-w-6xl" : "max-w-lg sm:max-w-xl md:max-w-2xl"
+          }`}
           style={{
-            aspectRatio: "16 / 10",
-            maxHeight: "calc(100vh - 120px)",
+            aspectRatio: layoutMode === "spread" ? "16 / 10" : "3 / 4",
+            maxHeight: "calc(100dvh - 100px)",
             boxShadow: "0 20px 60px hsl(var(--book-shadow) / 0.2)",
           }}
         >
           {renderCurrentView()}
         </div>
       </div>
+
+      {/* Navigation */}
       <BookNavigation
-        currentSpread={currentSpread}
-        totalSpreads={totalSpreads}
+        currentSpread={currentPage}
+        totalSpreads={totalPages}
         onPrev={handlePrev}
         onNext={handleNext}
         onGoToCover={handleGoToCover}
