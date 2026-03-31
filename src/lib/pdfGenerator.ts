@@ -517,8 +517,8 @@ export async function generateBookPdf() {
     // ── Body text with increased line spacing ──
     // Allow text to overflow to additional pages
     const paragraphs = story.text.split("\n").filter(p => p.trim());
-    const lineH = 5.2;
-    let cursorY = titleY + titleH + 6;
+    const lineH = 5.6;
+    let cursorY = titleY + titleH + 8;
     const pageBottom = contentBottom - 8;
 
     for (const para of paragraphs) {
