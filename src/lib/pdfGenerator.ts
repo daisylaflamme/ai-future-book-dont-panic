@@ -337,7 +337,7 @@ export async function generateBookPdf() {
         if (isMiloNote) {
           if (cursorY + 10 > pageBottom) { simPage++; cursorY = MARGIN_TOP + 10; }
           cursorY += 4;
-          tempPdf.setFont("times", "bold"); tempPdf.setFontSize(9.5);
+          tempPdf.setFont("times", "bold"); tempPdf.setFontSize(10.5);
           const labelW = tempPdf.getTextWidth("Milo's Note: ");
           tempPdf.setFont("times", "italic");
           const noteContent = para.trim().replace("Milo's Note:", "").trim();
