@@ -532,7 +532,7 @@ export async function generateBookPdf() {
         }
         cursorY += 4;
         pdf.setFont("times", "bold");
-        pdf.setFontSize(10.5);
+        pdf.setFontSize(9.5);
         pdf.setTextColor(...COLORS.navy);
         const noteLabel = "Milo's Note: ";
         const labelW = pdf.getTextWidth(noteLabel);
