@@ -35,7 +35,7 @@ const SingleStoryPage = ({ story, pageIndex }: SingleStoryPageProps) => {
         pageNumber={pageIndex + 1}
         image={
           story.imageUrl ? (
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-full cursor-zoom-in" onClick={() => setShowFull(true)}>
               <img
                 src={story.imageUrl}
                 alt={story.title}

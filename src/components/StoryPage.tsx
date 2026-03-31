@@ -75,7 +75,7 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
       {/* Desktop-only fullsize image overlay on hover */}
       {showFull && story.imageUrl && (
         <div
-          className="hidden md:flex fixed inset-0 z-50 items-center justify-center bg-black/60 animate-fade-in cursor-zoom-out"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 animate-fade-in cursor-zoom-out"
           onClick={() => setShowFull(false)}
         >
           <img
