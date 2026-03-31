@@ -349,7 +349,7 @@ export async function generateBookPdf() {
           }
           cursorY += 2;
         } else {
-          tempPdf.setFont("times", "normal"); tempPdf.setFontSize(9.5);
+          tempPdf.setFont("times", "normal"); tempPdf.setFontSize(10.5);
           const paraLines = tempPdf.splitTextToSize(para, contentW);
           for (const _line of paraLines) {
             if (cursorY > pageBottom) { simPage++; cursorY = MARGIN_TOP + 10; }
