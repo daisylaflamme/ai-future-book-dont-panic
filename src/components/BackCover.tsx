@@ -9,7 +9,6 @@ const BackCover = ({ coverImage }: BackCoverProps) => {
     <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded-lg"
       style={{
         background: "linear-gradient(135deg, hsl(220 25% 15%) 0%, hsl(220 20% 22%) 60%, hsl(38 40% 25%) 100%)",
-        minHeight: "70vh",
       }}
     >
       {coverImage && (
