@@ -105,6 +105,15 @@
 .book-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: hsl(35, 25%, 75%) hsl(35, 30%, 90%, 0.4);
+  overflow-y: auto !important;
+}
+
+/* Always show scrollbar on touch / mobile devices */
+@media (pointer: coarse) {
+  .book-scrollbar {
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 .book-scrollbar::-webkit-scrollbar {
   width: 4px;
