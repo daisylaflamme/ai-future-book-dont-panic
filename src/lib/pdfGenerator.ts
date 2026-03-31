@@ -331,13 +331,13 @@ export async function generateBookPdf() {
 
       // Body
       const paragraphs = story.text.split("\n").filter(p => p.trim());
-      const lineH = 5.2;
+      const lineH = 5.6;
       for (const para of paragraphs) {
         const isMiloNote = para.trim().startsWith("Milo's Note:");
         if (isMiloNote) {
           if (cursorY + 10 > pageBottom) { simPage++; cursorY = MARGIN_TOP + 10; }
           cursorY += 4;
-          tempPdf.setFont("times", "bold"); tempPdf.setFontSize(9.5);
+          tempPdf.setFont("times", "bold"); tempPdf.setFontSize(10.5);
           const labelW = tempPdf.getTextWidth("Milo's Note: ");
           tempPdf.setFont("times", "italic");
           const noteContent = para.trim().replace("Milo's Note:", "").trim();
@@ -349,7 +349,7 @@ export async function generateBookPdf() {
           }
           cursorY += 2;
         } else {
-          tempPdf.setFont("times", "normal"); tempPdf.setFontSize(9.5);
+          tempPdf.setFont("times", "normal"); tempPdf.setFontSize(10.5);
           const paraLines = tempPdf.splitTextToSize(para, contentW);
           for (const _line of paraLines) {
             if (cursorY > pageBottom) { simPage++; cursorY = MARGIN_TOP + 10; }
@@ -517,8 +517,8 @@ export async function generateBookPdf() {
     // ── Body text with increased line spacing ──
     // Allow text to overflow to additional pages
     const paragraphs = story.text.split("\n").filter(p => p.trim());
-    const lineH = 5.2;
-    let cursorY = titleY + titleH + 6;
+    const lineH = 5.6;
+    let cursorY = titleY + titleH + 8;
     const pageBottom = contentBottom - 8;
 
     for (const para of paragraphs) {
@@ -532,7 +532,7 @@ export async function generateBookPdf() {
         }
         cursorY += 4;
         pdf.setFont("times", "bold");
-        pdf.setFontSize(9.5);
+        pdf.setFontSize(10.5);
         pdf.setTextColor(...COLORS.navy);
         const noteLabel = "Milo's Note: ";
         const labelW = pdf.getTextWidth(noteLabel);
@@ -559,7 +559,7 @@ export async function generateBookPdf() {
         cursorY += 2;
       } else {
         pdf.setFont("times", "normal");
-        pdf.setFontSize(9.5);
+        pdf.setFontSize(10.5);
         pdf.setTextColor(...COLORS.bodyText);
         const paraLines = pdf.splitTextToSize(para, contentW);
         for (const line of paraLines) {
