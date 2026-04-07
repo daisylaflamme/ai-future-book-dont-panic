@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef } from "react";
 import BookCover from "./BookCover";
 import TitlePage from "./TitlePage";
 import ContentsPage from "./ContentsPage";
@@ -6,6 +6,7 @@ import BackCover from "./BackCover";
 import BookSpread from "./BookSpread";
 import SingleStoryPage from "./SingleStoryPage";
 import BookNavigation from "./BookNavigation";
+import PageTurn from "./PageTurn";
 import { getSpreadPages, stories, BOOK_META } from "@/data/bookData";
 import { storyImages, coverImage } from "@/data/bookImages";
 import { useToast } from "@/hooks/use-toast";
@@ -24,31 +25,41 @@ const BookViewer = () => {
   const layoutMode = useLayoutMode();
   const spreads = getSpreadPages();
 
-  // In spread mode: cover, title, contents, spreads..., back-cover
-  // In single mode: cover, title, contents, story1, story2, ..., back-cover
   const totalPages = layoutMode === "spread"
     ? 3 + spreads.length + 1
     : 3 + stories.length + 1;
 
   const [currentPage, setCurrentPage] = useState(0);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [direction, setDirection] = useState<"forward" | "backward" | null>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
   const { toast } = useToast();
 
+  const navigate = useCallback((newPage: number) => {
+    if (isAnimating) return;
+    setCurrentPage((prev) => {
+      if (newPage === prev) return prev;
+      setDirection(newPage > prev ? "forward" : "backward");
+      setIsAnimating(true);
+      return newPage;
+    });
+  }, [isAnimating]);
+
   const handlePrev = useCallback(() => {
-    setCurrentPage((s) => Math.max(0, s - 1));
-  }, []);
+    if (currentPage > 0) navigate(currentPage - 1);
+  }, [currentPage, navigate]);
 
   const handleNext = useCallback(() => {
-    setCurrentPage((s) => Math.min(totalPages - 1, s + 1));
-  }, [totalPages]);
+    if (currentPage < totalPages - 1) navigate(currentPage + 1);
+  }, [currentPage, totalPages, navigate]);
 
   const handleGoToCover = useCallback(() => {
-    setCurrentPage(0);
-  }, []);
+    navigate(0);
+  }, [navigate]);
 
   const handleGoToContents = useCallback(() => {
-    setCurrentPage(2);
-  }, []);
+    navigate(2);
+  }, [navigate]);
 
   const handleDownloadPdf = useCallback(async () => {
     setIsGeneratingPdf(true);
@@ -70,16 +81,12 @@ const BookViewer = () => {
       const spreadIdx = spreads.findIndex(
         (sp) => sp.left.id === storyId || sp.right.id === storyId
       );
-      if (spreadIdx >= 0) {
-        setCurrentPage(spreadIdx + 3);
-      }
+      if (spreadIdx >= 0) navigate(spreadIdx + 3);
     } else {
       const storyIdx = stories.findIndex((s) => s.id === storyId);
-      if (storyIdx >= 0) {
-        setCurrentPage(storyIdx + 3);
-      }
+      if (storyIdx >= 0) navigate(storyIdx + 3);
     }
-  }, [layoutMode, spreads]);
+  }, [layoutMode, spreads, navigate]);
 
   const swipeHandlers = useSwipe({
     onSwipeLeft: handleNext,
@@ -93,6 +100,10 @@ const BookViewer = () => {
     },
     [handlePrev, handleNext]
   );
+
+  const handleAnimationComplete = useCallback(() => {
+    setIsAnimating(false);
+  }, []);
 
   const renderCurrentView = () => {
     if (currentPage === 0) return <BookCover />;
@@ -118,7 +129,6 @@ const BookViewer = () => {
         />
       );
     } else {
-      // Single page mode
       const storyIndex = currentPage - 3;
       const story = stories[storyIndex];
       if (!story) return null;
@@ -129,17 +139,6 @@ const BookViewer = () => {
   const getSectionTitle = (section: string) => {
     const s = BOOK_META.sections.find(sec => sec.id === section);
     return s ? s.title : undefined;
-  };
-
-  const getLabel = () => {
-    if (currentPage === 0) return "Cover";
-    if (currentPage === 1) return "Title";
-    if (currentPage === 2) return "Contents";
-    if (currentPage === totalPages - 1) return "Back Cover";
-    if (layoutMode === "spread") {
-      return `${currentPage - 2} / ${totalPages - 4}`;
-    }
-    return `${currentPage - 2} / ${totalPages - 4}`;
   };
 
   return (
@@ -173,7 +172,15 @@ const BookViewer = () => {
             boxShadow: "0 20px 60px hsl(var(--book-shadow) / 0.2)",
           }}
         >
-          {renderCurrentView()}
+          <PageTurn
+            pageKey={currentPage}
+            direction={direction}
+            skipAnimation={false}
+            onAnimationComplete={handleAnimationComplete}
+            layoutMode={layoutMode}
+          >
+            {renderCurrentView()}
+          </PageTurn>
         </div>
       </div>
 
