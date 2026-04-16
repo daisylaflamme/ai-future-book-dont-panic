@@ -1,5 +1,6 @@
 import type { Story } from "@/data/bookData";
 import PageLayout from "./PageLayout";
+import StoryImage from "./StoryImage";
 import { useState } from "react";
 
 interface SingleStoryPageProps {
@@ -35,14 +36,7 @@ const SingleStoryPage = ({ story, pageIndex }: SingleStoryPageProps) => {
         pageNumber={pageIndex + 1}
         image={
           story.imageUrl ? (
-            <div className="relative w-full h-full cursor-zoom-in" onClick={() => setShowFull(true)}>
-              <img
-                src={story.imageUrl}
-                alt={story.title}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
+            <StoryImage src={story.imageUrl} alt={story.title} onZoom={() => setShowFull(true)} />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-book-warm">
               <span className="text-lg text-muted-foreground/40">📖</span>
