@@ -1,5 +1,6 @@
 import type { Story } from "@/data/bookData";
 import PageLayout from "./PageLayout";
+import StoryImage from "./StoryImage";
 import { useState } from "react";
 
 interface StoryPageProps {
@@ -8,10 +9,6 @@ interface StoryPageProps {
   side: "left" | "right";
 }
 
-/**
- * Parse story text to separate regular paragraphs from "Milo's Note:" blocks.
- * Milo's Note gets italic Libre Baskerville styling with muted color.
- */
 const renderStoryText = (text: string) => {
   const paragraphs = text.split("\n").filter((p) => p.trim());
 
@@ -40,17 +37,7 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
         pageNumber={pageNumber}
         image={
           story.imageUrl ? (
-            <div
-              className="relative w-full h-full"
-            >
-              <img
-                src={story.imageUrl}
-                alt={story.title}
-                className="w-full h-full object-cover cursor-zoom-in"
-                loading="lazy"
-                onClick={() => setShowFull(true)}
-              />
-            </div>
+            <StoryImage src={story.imageUrl} alt={story.title} onZoom={() => setShowFull(true)} />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-book-warm">
               <span className="text-lg text-muted-foreground/40">📖</span>
@@ -72,7 +59,6 @@ const StoryPage = ({ story, pageNumber, side }: StoryPageProps) => {
         }
       />
 
-      {/* Desktop-only fullsize image overlay on hover */}
       {showFull && story.imageUrl && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 animate-fade-in cursor-zoom-out"
