@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
 interface StoryImageProps {
@@ -9,6 +9,10 @@ interface StoryImageProps {
 
 const StoryImage = ({ src, alt, onZoom }: StoryImageProps) => {
   const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setLoaded(false);
+  }, [src]);
 
   return (
     <div className="relative w-full h-full cursor-zoom-in" onClick={onZoom}>
