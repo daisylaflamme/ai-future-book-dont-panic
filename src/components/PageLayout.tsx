@@ -44,8 +44,7 @@ const PageLayout = ({ section, side, image, title, body }: PageLayoutProps) => {
           style={{
             height: "100%",
             border: "2px solid hsl(var(--border) / 0.55)",
-            boxShadow:
-              "0 4px 24px hsl(var(--book-shadow) / 0.12), inset 0 0 0 1px hsl(var(--background) / 0.35)",
+            boxShadow: "0 4px 24px hsl(var(--book-shadow) / 0.12)",
           }}
         >
           {image}
