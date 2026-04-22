@@ -70,10 +70,13 @@ const PageTurn = ({
 
   const getTransformStyle = (): React.CSSProperties => {
     if (animState === "idle") {
-      return { transform: "perspective(2000px) rotateY(0deg)", opacity: 1 };
+      return {
+        transform: "none",
+        opacity: 1,
+        willChange: "auto",
+      };
     }
 
-    const isSpread = layoutMode === "spread";
     const originX = direction === "forward" ? "left" : "right";
 
     if (animState === "turning-out") {
@@ -131,8 +134,10 @@ const PageTurn = ({
         style={{
           ...getTransformStyle(),
           ...getShadowStyle(),
-          backfaceVisibility: "hidden",
-          transformStyle: "preserve-3d",
+          backfaceVisibility: animState === "idle" ? "visible" : "hidden",
+          WebkitBackfaceVisibility: animState === "idle" ? "visible" : "hidden",
+          transformStyle: animState === "idle" ? "flat" : "preserve-3d",
+          WebkitFontSmoothing: animState === "idle" ? "antialiased" : undefined,
         }}
       >
         {displayedChildren}
