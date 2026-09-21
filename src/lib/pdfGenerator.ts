@@ -254,7 +254,9 @@ export async function generateBookPdf() {
   pdf.setFont("times", "italic");
   pdf.setFontSize(14);
   pdf.setTextColor(...COLORS.gold);
-  pdf.text(`— ${BOOK_META.subtitle}`, PAGE_W / 2, 55 + tp.length * 9 + 8, { align: "center" });
+  if (BOOK_META.subtitle) {
+    pdf.text(`— ${BOOK_META.subtitle}`, PAGE_W / 2, 55 + tp.length * 9 + 8, { align: "center" });
+  }
 
   pdf.setFont("times", "normal");
   pdf.setFontSize(9);
@@ -599,5 +601,5 @@ export async function generateBookPdf() {
   pdf.text(BOOK_META.author, PAGE_W / 2, PAGE_H - 25, { align: "center" });
 
   // ── Save ──
-  pdf.save("AI-Let-Me-Tell-You-What-Ill-Do-With-Humans.pdf");
+  pdf.save("Designing-Tomorrow-Growing-Up-With-AI.pdf");
 }
