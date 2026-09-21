@@ -153,7 +153,8 @@ const BookViewer = () => {
           onClick={handleGoToCover}
           className="font-display text-xs sm:text-sm md:text-base text-foreground truncate hover:text-accent transition-colors cursor-pointer bg-transparent border-none px-2 py-1"
         >
-          {BOOK_META.title} — <span className="italic text-accent">{BOOK_META.subtitle}</span>
+          {BOOK_META.title}
+          {BOOK_META.subtitle && <> — <span className="italic text-accent">{BOOK_META.subtitle}</span></>}
         </button>
       </header>
 

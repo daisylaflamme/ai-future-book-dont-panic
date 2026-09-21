@@ -13,8 +13,8 @@ export interface BookPage {
 }
 
 export const BOOK_META = {
-  title: "AI: Let Me Tell You What I'll Do With Humans",
-  subtitle: "Don't Panic",
+  title: "Designing Tomorrow: Growing Up With AI",
+  subtitle: "",
   fullSubtitle: "Stories from a Future Where Families and AI Grow Together",
   author: "Daisy Laflamme & Milo (AI)",
   authorLong: "Daisy Laflamme (human) & Milo (AI)",

@@ -8,9 +8,11 @@ const TitlePage = () => {
         <h1 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight mb-4">
           {BOOK_META.title}
         </h1>
-        <p className="font-display text-lg md:text-xl italic text-book-gold mb-8">
-          — {BOOK_META.subtitle}
-        </p>
+        {BOOK_META.subtitle && (
+          <p className="font-display text-lg md:text-xl italic text-book-gold mb-8">
+            — {BOOK_META.subtitle}
+          </p>
+        )}
         <p className="font-body text-sm md:text-base text-muted-foreground mb-12 text-center">
           Stories from a Future Where<br />Families and AI Grow Together
         </p>
