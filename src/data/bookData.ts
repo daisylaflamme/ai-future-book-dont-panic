@@ -13,10 +13,10 @@ export interface BookPage {
 }
 
 export const BOOK_META = {
-  title: "Designing Tomorrow with Milo",
-  subtitle: "Stories from a Future Where Families and AI Grow Together",
+  title: "Designing Tomorrow: Growing Up With AI",
+  subtitle: "",
   fullSubtitle: "Stories from a Future Where Families and AI Grow Together",
-  author: "Daisy Laflamme (human) & Milo (AI)",
+  author: "Daisy Laflamme & Milo (AI)",
   authorLong: "Daisy Laflamme (human) & Milo (AI)",
   backCoverText: `In a not-so-distant future, where artificial intelligence is woven into everyday life, one family discovers that living with AI is not just about convenience — it's about connection.
 
