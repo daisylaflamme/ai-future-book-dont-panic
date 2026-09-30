@@ -252,18 +252,15 @@ export async function generateBookPdf() {
   pdf.text(tp, PAGE_W / 2, 55, { align: "center" });
 
   pdf.setFont("times", "italic");
-  pdf.setFontSize(14);
+  pdf.setFontSize(11);
   pdf.setTextColor(...COLORS.gold);
   if (BOOK_META.subtitle) {
-    pdf.text(`— ${BOOK_META.subtitle}`, PAGE_W / 2, 55 + tp.length * 9 + 8, { align: "center" });
+    const subtitleLines = pdf.splitTextToSize(BOOK_META.subtitle, PAGE_W - 50);
+    pdf.text(subtitleLines, PAGE_W / 2, 55 + tp.length * 9 + 14, { align: "center" });
   }
 
   pdf.setFont("times", "normal");
-  pdf.setFontSize(9);
   pdf.setTextColor(100, 100, 100);
-  const fs2 = pdf.splitTextToSize(BOOK_META.fullSubtitle, PAGE_W - 50);
-  pdf.text(fs2, PAGE_W / 2, 100, { align: "center" });
-
   pdf.setFontSize(9);
   pdf.text("Written by", PAGE_W / 2, 130, { align: "center" });
   pdf.setFont("times", "italic");
