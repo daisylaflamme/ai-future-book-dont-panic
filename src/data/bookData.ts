@@ -13,7 +13,7 @@ export interface BookPage {
 }
 
 export const BOOK_META = {
-  title: "Designing Tomorrow: Growing Up With AI",
+  title: "Designing Tomorrow with Milo",
   subtitle: "",
   fullSubtitle: "Stories from a Future Where Families and AI Grow Together",
   author: "Daisy Laflamme & Milo (AI)",

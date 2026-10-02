@@ -601,5 +601,5 @@ export async function generateBookPdf() {
   pdf.text(BOOK_META.author, PAGE_W / 2, PAGE_H - 25, { align: "center" });
 
   // ── Save ──
-  pdf.save("Designing-Tomorrow-Growing-Up-With-AI.pdf");
+  pdf.save("Designing-Tomorrow-with-Milo.pdf");
 }
