@@ -87,4 +87,4 @@ This project is a modern React-based digital publishing app that combines front-
 
 [Digital book app](https://ai-future-book-dont-panic.lovable.app/)
 
-[Amazon paperback](https://www.amazon.com/AI-Humans-Stories-Families-Together/dp/B0GVWCB7RV/ref=sr_1_1?crid=1KZQPXETKEU46&dib=eyJ2IjoiMSJ9.SZNXqCq90NiGrxWE_3VcMA.IIL1-hzKCahlx7szFypq3-mbiNTe7D1f3hLJXvBY5Ws&dib_tag=se&keywords=AI%3A+Let+Me+Tell+You+What+I%E2%80%99ll+Do+With+Humans+%E2%80%94+Don%E2%80%99t+Panic&nsdOptOutParam=true&qid=1776353966&sprefix=ai+let+me+tell+you+what+i+ll+do+with+humans+don+t+panic%2Caps%2C122&sr=8-1)
+[Amazon paperback](https://www.amazon.com/Designing-Tomorrow-Milo-Families-Together/dp/B0HLH8S53G/ref=sr_1_1?crid=1N52D6YV1MG45&dib=eyJ2IjoiMSJ9.gfsm1Y4Ya44_tQxsjJB9GuwSwSWYapaJ5sI9Ypn9wGTGjHj071QN20LucGBJIEps.KJ1Kir1foQc6J13xbHPVr0agDnuwwOVPTQJ23ajifxU&dib_tag=se&keywords=designing+tomorrow+with+milo&qid=1791419481&sprefix=designing+tomorrow+with+milo%2Caps%2C194&sr=8-1)
