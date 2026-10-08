@@ -100,6 +100,6 @@ This project is a modern React-based digital publishing app that combines front-
 
 ### Book Links
 
-[Digital book app](https://ai-future-book-dont-panic.lovable.app/)
+[Digital book app](https://designing-tomorrow-with-milo.lovable.app/)
 
 [Amazon paperback](https://www.amazon.com/Designing-Tomorrow-Milo-Families-Together/dp/B0HLH8S53G/ref=sr_1_1?crid=1N52D6YV1MG45&dib=eyJ2IjoiMSJ9.gfsm1Y4Ya44_tQxsjJB9GuwSwSWYapaJ5sI9Ypn9wGTGjHj071QN20LucGBJIEps.KJ1Kir1foQc6J13xbHPVr0agDnuwwOVPTQJ23ajifxU&dib_tag=se&keywords=designing+tomorrow+with+milo&qid=1791419481&sprefix=designing+tomorrow+with+milo%2Caps%2C194&sr=8-1)
